@@ -86,7 +86,8 @@ function searchOrder(field_name, table_name)
 
     search_form_str85 = "#"+search_form_str;
     my_form  = jQuery(search_form_str85);
-    my_form.submit();
+    elem = document.getElementById(search_form_str);
+    Rails.fire(elem, 'submit');;
 }
 function disableSubmitters()
 {

@@ -14,7 +14,7 @@
       <%= filter.header %>
     <% else %>
       <% on_click_order_string = "searchOrder('#{field_name}','#{table_name}');return false" %>
-      <a href ="#" onclick= <%= raw "#{on_click_order_string}"%> >
+      <a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_click_order_string}"%> >
         <%= filter.header %>
       </a>
     <% end %>
@@ -49,7 +49,7 @@
           <% if row_type == :filter_string && !filter.primary && num_filters > 1 %>
                      <% on_click_string = "deleteColumn('#{field_name}','#{table_name}');return false" %>
                      <div  style="position:absolute;  float:right;top:0; right:0;   height: 100%;    background: #AAAAAA;    border-left: 1px solid;    border-color: #000000;" <%= id_str_x %>
-                     class="remove_column"><a href ="#" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_click_string}"%> >X</a> </div>
+                     class="remove_column"><a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_click_string}"%> >X</a> </div>
 
           <% else %>
                      <div <%= id_str_x %> style ="float:right" class="do_not_remove_column" > &nbsp </div>
@@ -76,7 +76,7 @@
                      <%  raw id_str_x = "id = #{class_id_name}_x" %>
                      <% on_click_string = "deleteColumn('#{field_name}','#{table_name}');return false" %>
                      <div style ="position:absolute; top:0; right:0; width:100%; height: 100%; background-color: #ffffff;">
-                     <div   <%= raw  id_str_x %> style ="float:right;  background: #AAAAAA;    border-left: 1px solid;    border-color: #000000;" class="remove_column"><a href ="#" data-remote="true" rel="nofollow" onclick= <%="#{on_click_string}"%> >X</a> </div>
+                     <div   <%= raw  id_str_x %> style ="float:right;  background: #AAAAAA;    border-left: 1px solid;    border-color: #000000;" class="remove_column"><a href ="/" data-remote="true" rel="nofollow" onclick= <%="#{on_click_string}"%> >X</a> </div>
 
                      <div style ="float:right">
                              <% if filter.argument_class.length>0  %>
