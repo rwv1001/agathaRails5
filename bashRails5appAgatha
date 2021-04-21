@@ -1,0 +1,103 @@
+#!/bin/bash
+rm -rf ~/bashRails5appAgatha
+cp -r ~/rails5app ~/bashRails5appAgatha
+ 
+cp -r ~/agathaRails3/public/images ~/bashRails5appAgatha/public/images
+cp ~/agathaRails3/public/stylesheets/agatha.css ~/bashRails5appAgatha/app/assets/stylesheets
+cp ~/agathaRails3/public/javascripts/display_format.js ~/bashRails5appAgatha/app/assets/javascripts
+cp ~/agathaRails3/public/javascripts/group_filters.js  ~/bashRails5appAgatha/app/assets/javascripts
+cp ~/agathaRails3/public/javascripts/edit.js ~/bashRails5appAgatha/app/assets/javascripts
+cp ~/agathaRails3/public/javascripts/search_ctl.js ~/bashRails5appAgatha/app/assets/javascripts
+cp ~/rails5appAgatha/app/assets/javascripts/template.js ~/bashRails5appAgatha/app/assets/javascripts
+
+perl ~/rails5appAgatha/perl_js_jq.pl ~/bashRails5appAgatha/app/assets/javascripts/template.js
+perl ~/rails5appAgatha/perl_js_jq.pl ~/bashRails5appAgatha/app/assets/javascripts/display_format.js
+perl ~/rails5appAgatha/perl_js_jq.pl ~/bashRails5appAgatha/app/assets/javascripts/group_filters.js
+perl ~/rails5appAgatha/perl_js_jq.pl ~/bashRails5appAgatha/app/assets/javascripts/edit.js
+perl ~/rails5appAgatha/perl_js_jq.pl ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js
+
+cp ~/rails5appAgatha/Gemfile ~/bashRails5appAgatha
+cp ~/rails5appAgatha/config/database.yml ~/bashRails5appAgatha/config
+cp ~/rails5appAgatha/config/routes.rb ~/bashRails5appAgatha/config
+cp ~/rails5appAgatha/config/initializers/session_store.rb ~/bashRails5appAgatha/config/initializers
+cp ~/rails5appAgatha/config/environments/development.rb ~/bashRails5appAgatha/config/environments
+cp ~/rails5appAgatha/config/application.rb ~/bashRails5appAgatha/config
+cp ~/rails5appAgatha/bashRails5appAgatha ~/bashRails5appAgatha/
+cp ~/rails5appAgatha/perl_js_jq.pl ~/bashRails5appAgatha/
+
+rm -rf ~/bashRails5appAgatha/app/views
+cp -r ~/agathaRails3/app/views ~/bashRails5appAgatha/app/
+find ~/bashRails5appAgatha/app/views -name "*.html.erb" -exec perl ~/rails5appAgatha/perl_js_jq.pl {} \;
+find ~/bashRails5appAgatha/app/views/ -type f -exec perl -i -pe 's/<%= javascript_include_tag "prototype" %>//g' {} +
+find ~/bashRails5appAgatha/app/views/ -type f -exec perl -i -pe 's/<%= javascript_include_tag "scriptaculous" %>//g' {} +
+rm -rf ~/bashRails5appAgatha/app/controllers
+cp -r ~/agathaRails3/app/controllers ~/bashRails5appAgatha/app/controllers
+rm -rf ~/bashRails5appAgatha/app/helpers
+cp -r ~/agathaRails3/app/helpers ~/bashRails5appAgatha/app/helpers
+rm -rf ~/bashRails5appAgatha/app/models
+cp -r ~/agathaRails3/app/models  ~/bashRails5appAgatha/app/models
+rm -rf ~/bashRails5appAgatha/db
+cp -r ~/agathaRails3/db ~/bashRails5appAgatha
+find ~/bashRails5appAgatha/app/ -type f -exec perl -i -pe 's/before_filter/before_action/g' {} +
+find ~/bashRails5appAgatha/app/ -type f -exec perl -i -pe 's/\.find\(\s*:first\s*,\s*:conditions\s*\=>\s*\{((.*?)(?=\}))\}\s*\)/.where(\1).first/g' {} +
+find ~/bashRails5appAgatha/app/ -type f -exec perl -i -pe's/\.find\(\s*:first\s*\s*\)/.first/g' {} +
+perl  -i -pe 's/attribute\.primary/eval("#{table_name_}.primary_key==attribute.name")/g' ~/bashRails5appAgatha/app/controllers/attribute_list.rb
+perl  -i -pe 's/search_ctl\.updateFilters/#search_ctl.updateFilters/g' ~/bashRails5appAgatha/app/controllers/welcome_controller.rb
+perl  -i -pe 's/has_attached_file/#has_attached_file/g' ~/bashRails5appAgatha/app/models/agatha_file.rb
+perl  -i -pe "s/require 'paperclip'/#require 'paperclip'/g" ~/bashRails5appAgatha/app/models/agatha_file.rb
+perl -i -pe 's/resizeExternalFilters\(<%= raw "#{search_controller.table_name}"%> \);/resizeExternalFilters(<%= raw "\\\"#{search_controller.table_name}\\\""%> );/g' ~/bashRails5appAgatha/app/views/shared/_search_controller.html.erb
+perl -i -pe 's/(?<!_)elt\./jQuery(this)./g' ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js;
+perl -i -pe 's/function\((.*?)(?=\))\)/function()/g' ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js;
+perl -i -pe 's/(?<!_)elt\./jQuery(this)./g' ~/bashRails5appAgatha/app/assets/javascripts/display_format.js;
+perl -i -pe 's/function\(elt\)/function()/g' ~/bashRails5appAgatha/app/assets/javascripts/display_format.js;
+perl -i -pe 's/(?<!_)elt\./jQuery(this)./g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/(?<!_)element\./jQuery(this)./g' ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js;
+
+perl -i -pe 's/function\(elt\)/function()/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/all_invisible_classes\.each/all_invisible_classes.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/tmp_invisible_classes.clone\(\)/tmp_invisible_classes.map((x) => x)/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/\.fn\./.prototype./g'  ~/bashRails5appAgatha/app/assets/javascripts/template.js; 
+perl -i -pe 's/person_page_views\.each/person_page_views.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/display_divs\.each/display_divs.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/div_ids_\.each/div_ids_.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/visible_classes_\.each/visible_classes_.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+
+perl -i -pe 's/visible_classes\.each/visible_classes.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/page_views\.each/page_views.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/invisible_divs\.each/invisible_divs.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/visible_ids\.each/visible_ids.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/invisible_classes\.each/invisible_classes.forEach/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/body_elt\./jQuery(this)./g'  ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/function\(body_elt\)/function()/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+perl -i -pe 's/jQuery\(window\)\.open/window.open/g' ~/bashRails5appAgatha/app/views/welcome/default.html.erb
+#cat ~/rails5appAgatha/prepend_template.js ~/bashRails5appAgatha/app/assets/javascripts/template.js > ~/bashRails5appAgatha/tmp.js
+#mv ~/bashRails5appAgatha/tmp.js ~/bashRails5appAgatha/app/assets/javascripts/template.js
+find ~/bashRails5appAgatha/app/views -type f -exec perl -i -pe 's/<\/title\>\n/<\/title\>\n      <%= javascript_include_tag "prepend_template" %>\n      <%= javascript_include_tag "application" %>/g' {} +
+
+cp ~/rails5appAgatha/app/views/admin/login.html.erb ~/bashRails5appAgatha/app/views/admin
+cp ~/rails5appAgatha/prepend_template.js ~/bashRails5appAgatha/app/assets/javascripts
+cp ~/rails5appAgatha/app/views/people/destroy.js.erb ~/bashRails5appAgatha/app/views/people
+cp ~/rails5appAgatha/app/views/people/test.js.erb ~/bashRails5appAgatha/app/views/people
+cp ~/rails5appAgatha/app/controllers/people_controller.rb ~/bashRails5appAgatha/app/controllers
+cp ~/rails5appAgatha/app/controllers/welcome_controller.rb ~/bashRails5appAgatha/app/controllers
+cp ~/rails5appAgatha/app/controllers/search_controller.rb ~/bashRails5appAgatha/app/controllers
+cp ~/rails5appAgatha/app/views/welcome/display_page.js.erb ~/bashRails5appAgatha/app/views/welcome
+cp ~/rails5appAgatha/app/views/welcome/table_search.js.erb ~/bashRails5appAgatha/app/views/welcome
+cp ~/rails5appAgatha/app/views/welcome/index.html.erb ~/bashRails5appAgatha/app/views/welcome
+cp ~/rails5appAgatha/app/views/shared/_copyright.html.erb ~/bashRails5appAgatha/app/views/shared
+cp ~/rails5appAgatha/app/views/shared/_template_header.html.erb ~/bashRails5appAgatha/app/views/shared
+cp ~/rails5appAgatha/app/views/shared/_search_results_row_button.html.erb ~/bashRails5appAgatha/app/views/shared
+cp ~/rails5appAgatha/app/views/shared/_search_filter_header.html.erb ~/bashRails5appAgatha/app/views/shared
+
+cp ~/rails5appAgatha/config/environments/development.rb ~/bashRails5appAgatha/config/environments
+perl -i -pe 's/\$\(/jQuery\(/g' ~/bashRails5appAgatha/app/views/welcome/index.html.erb
+perl -i -pe 's/form_elt\.submit\(\)/\/\/form_elt\.submit\(\)/g' ~/bashRails5appAgatha/app/assets/javascripts/template.js;
+#perl -i -pe 's/(\w+)\.submit\(\s*\)/Rails\.fire\(\1, 'submit')/g' ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js
+perl -i -pe "s/jQuery\((.*?)(?=\))\)\.submit\(\s*\)/Rails\.fire\(jQuery\(\1\), 'submit')/g" ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js
+perl -i -pe "s/Rails\.fire\(jQuery\(form_id\), 'submit'\)/form_id = 'search_form_' + table_name;\n    elem = document.getElementById\(form_id\);\n    Rails.fire\(elem, 'submit'\);/g" ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js;
+perl -i -pe "s/form_element\.submit\(\)/elem = document.getElementById\(form_id\);\n    Rails.fire\(elem, 'submit'\)/g" ~/bashRails5appAgatha/app/assets/javascripts/search_ctl.js;
+perl -i -pe "s/Hash/MyHash/g" ~/bashRails5appAgatha/app/assets/javascripts/edit.js
+perl -i -pe "s/Hash/MyHash/g" ~/bashRails5appAgatha/app/assets/javascripts/template.js
+perl -i -pe "s/Hash/MyHash/g" ~/bashRails5appAgatha/app/assets/javascripts/prepend_template.js
+rm ~/bashRails5appAgatha/app/views/layouts/prototype.js
+cp ~/rails5appAgatha/app/assets/javascripts/prototype.js ~/bashRails5appAgatha/app/assets/javascripts

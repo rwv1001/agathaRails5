@@ -1,0 +1,40 @@
+<% class_name = external_filter.class_name %>
+<% filter_id  = external_filter.id  %>
+<% current_elts = external_filter.current_arguments %>
+<% num_elts = current_elts.length %>
+
+<tr id =<%= raw  "external_filter_#{class_name}_#{filter_id}"%> style="background: #CCCCCC"  >
+<th id = <%= raw   "external_filter_header_#{class_name}_#{filter_id}" %> >
+  <%= external_filter.header %>
+</th>
+<th>
+  <div  style="float: left;width:27em;" >
+    <% for elt_id in (0..(num_elts-1)) %>
+
+      <div id =<%= raw "external_filter_selection_#{class_name}_#{filter_id}_#{elt_id}"%> class="external_filter_element" style ="width:25em;float: left;  background: #fff; padding: 0px 0px 0px 0px; border: 1px solid #000; border-right: none;"  >
+        <% if external_filter.group_selector %>
+          <% on_change_string = "onUpdateExternalFilterGroup('#{class_name}','#{filter_id}','#{elt_id}');return false" %>
+          <% group_selection = external_filter.GroupSelection() %>
+          <%= raw  render(:partial =>"shared/external_group_selection", :object => current_elts[elt_id]) %>
+
+        <% end %>  <!-- if external_filter.group_selector -->
+        <%= raw  render(:partial => "shared/external_filter_element", :object => current_elts[elt_id]) %>
+         
+        </div>
+      <% end %> <!-- for elt_id in (0..(num_elts-1)) -->
+  <div style="float: left;" > &nbsp;  </div>
+  <% on_add_string = "addExternalFilterElement('#{class_name}','#{filter_id}');return false" %>
+  <% if external_filter.allow_multiple_arguments %>
+  <div class="add_external_filter_element" style="float: left; padding-top: 0px; height: 100px" ><a href ="#" onclick= <%= raw "#{on_add_string }"%> >+</a></div>
+  <% end %>
+  <div  style="float: left;" > &nbsp;  </div>
+<input type="text" name= <%= raw "number_of_filter_elements_#{filter_id}" %> id= <%= raw  "number_of_filter_elements_#{class_name}_#{filter_id}" %> value = <%=  num_elts %> style="display:none" />
+  </div>
+
+
+</th>
+
+</tr>
+
+
+

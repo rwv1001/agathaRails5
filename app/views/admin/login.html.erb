@@ -1,0 +1,148 @@
+<html>
+  <head>
+    <title tal:content="template/title">Agatha Main Page</title>
+     
+      <%= javascript_include_tag "application" %> 
+      <%= javascript_include_tag "prototype" %>
+      <%= javascript_include_tag "template" %>
+      <%= javascript_include_tag "search_ctl" %>
+      <%= javascript_include_tag "display_format" %>
+      <%= javascript_include_tag "edit" %>
+      <%= javascript_include_tag "group_filters" %>
+    
+
+     <%= stylesheet_link_tag  'agatha' %>
+
+
+
+    <script type="text/JavaScript">
+     jQuery.noConflict();
+<!--
+
+
+
+
+
+var menu_width = 150;
+var white_space_width = 16;
+var logo_width = 150;
+var logo_height = 154;
+var title_div_height =173;
+var black_bar_height = 7;
+var white_bar_height = 7;
+
+
+//-->
+</script>
+<style type="text/css">
+td img {display: block;}
+
+
+      #menu_div { background: #666666; }
+      #content_div, #content_div_1, #content_div_2,  .content_class {background: #ffffff;}
+
+      .pad_class { padding: 3px 13px 3px 13px}
+      .separator_class {background: #ffffff; width: 100%; height:10px}
+
+      
+
+</style>
+
+</head>
+  <body  bgcolor="#ffffff"  onUnload ="on_unload()" >
+
+
+
+
+
+    
+   <script language="javascript">
+ template_header();
+ </script>
+ 
+ <div id ="main_div">
+   <script language="javascript">
+ menu_begin();
+   </script>
+ <div >
+
+ </div>
+ <div style="clear:both; height: 20px"> &nbsp</div>
+
+
+  <div id="first_menu_div"> </div>
+
+
+   <script language="javascript">
+   menu_end();
+
+  </script>
+    
+
+  <script language="javascript">
+  content_begin()
+  </script>
+
+  <script language="javascript">
+    on_load();
+    </script>
+  
+
+
+
+
+
+<div id="first_div" >
+        <td><p>&nbsp;</p>
+	  <%= form_tag do %>
+    <fieldset>
+      <legend>Please Log In</legend>
+
+      <div>
+        <label for="name">Name:</label>
+        <%= text_field_tag :name, params[:name] %>
+      </div>
+
+      <div>
+        <label for="password">Password:</label>
+        <%= password_field_tag :password, params[:password] %>
+      </div>
+
+      <div>
+        <%= submit_tag "Login" %>
+      </div>
+    </fieldset>
+  <% end %>
+<% s = Person.new %>
+<% s.first_name = "r" %>
+<% s.save %>
+<%= link_to 'Destroy', s, method: :delete, data: { confirm: 'Are you sure?', remote: true }, class: "deleteiati", id: "destroy_id" %>
+
+<%= form_with url: "/people/test", id: "test_form", method: :post, remote: true do |form| %>
+
+  <%= form.label :query, "Search for:" %>
+  <%= form.text_field :query %>
+  <%= form.submit "Search" %>
+<% end %>
+
+<a href="#" onclick="testAjax();return" false>X</a>
+
+
+
+</div>
+</div>
+
+
+   <script language="javascript">
+
+
+
+    // $('#two_column_div').hide();
+
+
+
+
+     </script>
+
+</html>
+
