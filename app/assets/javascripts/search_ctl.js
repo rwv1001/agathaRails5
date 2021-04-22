@@ -3,12 +3,13 @@ function wait()
 
     jQuery('#disable_id').show();
     jQuery('#disable_id').css('cursor','wait');
+    
 
 }
 function unwait()
 {
     jQuery('#disable_id').hide();
-    jQuery('#disable_id').css('cursor','');
+    jQuery('#disable_id').css('cursor','default');
 
 }
 
@@ -41,8 +42,8 @@ function deleteColumn(field_name, table_name)
 
         search_div = jQuery('#search_results_'+table_name);
         current_div = jQuery('#current_filters_'+table_name);
-        var x_elements_search = search_div.find('remove_column:first');
-        var x_elements_current = current_div.find('remove_column:first');
+        var x_elements_search = search_div.find('.remove_column').first();
+        var x_elements_current = current_div.find('remove_column.').first();
         if(typeof(x_elements_search) != "undefined")
         {
             x_elements_search.remove();
@@ -266,7 +267,7 @@ function AddFilter(table_name)
 
             header_str224 = "#"+header_str;
             header_elt  = jQuery(header_str224);
-            header_elt.innerHTML = "<label>Search Filters </label>"
+            header_elt.html("<label>Search Filters </label>")
         }
     new_num_filters = current_num_filters+1;
     text_num_filters_elt.attr("value", new_num_filters);
@@ -320,7 +321,9 @@ function onUpdateExternalFilterGroup(class_name, filter_id,  elt_id)
 
     form_str261 = "#"+form_str;
     form_elt  = jQuery(form_str261);
-    form_elt.submit();
+    
+    elem = document.getElementById(form_str);
+    Rails.fire(elem, 'submit');
     
 }
 function addExternalFilterElement(class_name, filter_id)
@@ -344,30 +347,30 @@ function addExternalFilterElement(class_name, filter_id)
 
     
     new_elt.attr('id',"external_filter_selection_"+ class_name + "_" + filter_id +"_" + new_elt_id);
-    external_filter_group_selection = new_elt.down('.external_filter_group_selection_'+class_name);
+    external_filter_group_selection = new_elt.find('.external_filter_group_selection_'+class_name)[0];
     if(typeof(external_filter_group_selection) != "undefined")
         {
-            external_filter_group_selection.attr('id',"group_selection_"+ class_name + "_" + filter_id +"_" + new_elt_id);
+            jQuery(external_filter_group_selection).attr('id',"group_selection_"+ class_name + "_" + filter_id +"_" + new_elt_id);
 
-            external_filter_group_selection.attr("onchange","onUpdateExternalFilterGroup('"+class_name+"','"+filter_id+"','"+new_elt_id+"');return false");
-            old_filter_group_selection = prev_elt.down('.external_filter_group_selection_'+class_name);
-            old_group_selection_value = old_filter_group_selection.val();
+            jQuery(external_filter_group_selection).attr("onchange","onUpdateExternalFilterGroup('"+class_name+"','"+filter_id+"','"+new_elt_id+"');return false");
+            old_filter_group_selection = prev_elt.find('.external_filter_group_selection_'+class_name)[0];
+            old_group_selection_value = jQuery(old_filter_group_selection).val();
             group_class_str = ".group_class_"+old_group_selection_value
-            external_filter_group_selected =  external_filter_group_selection.down(group_class_str);
-            external_filter_group_selected.prop('selected',true);
+            external_filter_group_selected =  external_filter_group_selection.find(group_class_str)[0];
+            jQuery(external_filter_group_selected).prop('selected',true);
 
     }
-    external_filter_argument_span_element = new_elt.find('external_filter_argument_span:first');
+    external_filter_argument_span_element = new_elt.find('.external_filter_argument_span').first();
     external_filter_argument_span_element.attr('id',"external_filter_argument_span_"+ class_name + "_" + filter_id +"_" + new_elt_id);
-    argument_selection_element = new_elt.find('external_filter_argument_selection:first');
+    argument_selection_element = new_elt.find('.external_filter_argument_selection').first();
     argument_selection_element.attr('id',"argument_selection_"+class_name + "_" + filter_id +"_" + new_elt_id);
     argument_selection_element.attr('name',"argument_selection_"+ filter_id +"_" + new_elt_id);
-    filter_element_field= new_elt.find('remove_filter_element_field:first');
-    filter_element_field_a = filter_element_field.find('a:first');
+    filter_element_field= new_elt.find('.remove_filter_element_field').first();;
+    filter_element_field_a = filter_element_field.find('a').first();
     filter_element_field_a.attr('onclick', "deleteExternalFilterElement('"+class_name+"','"+filter_id+"','"+new_elt_id+"');return false");
 
     var new_space = jQuery("<div></div>").attr({ style: 'float: left' });
-        new_space.innerHTML = "&nbsp"
+        new_space.html("&nbsp")
     prev_elt.after(new_space);
     next_space = prev_elt.next('div');
     next_space.after(new_elt);
@@ -405,7 +408,7 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
 
         header_container_str334 = "#"+header_container_str;
         header_container  = jQuery(header_container_str334);
-       header_str = header_container.innerHTML;
+       header_str = header_container.html();
         extended_filter_str = "external_filter_" + class_name + "_" + filter_id;
 
         extended_filter_str337 = "#"+extended_filter_str;
@@ -420,7 +423,7 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
         num_filters_elt.attr("value",new_num_filters);
         if(new_num_filters == 0)
             {
-                header_elt.innerHTML = ""
+                header_elt.html("")
             }
 
 
@@ -429,19 +432,14 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
 
         possible_select_str352 = "#"+possible_select_str;
         possible_select_elt  = jQuery(possible_select_str352);
-        not_set_option = possible_select_elt.find('option:first')
+        not_set_option = possible_select_elt.find('option').first();
         first_option = not_set_option.next();
 
-        var new_option = new Element('option', {
-            id: 'possible_external_filters_' + class_name + '_' +  filter_id,
-            value: filter_id
-        });
-        new_option.innerHTML = header_str
+        var new_option = jQuery("<option>", {id: 'possible_external_filters_' + class_name + '_' +  filter_id,  value: filter_id });
+        new_option.html(header_str)
         if(first_option== null)
         {
-            not_set_option.insert({
-                'after':new_option
-            });
+            not_set_option.after(new_option);
         }
         else
         {

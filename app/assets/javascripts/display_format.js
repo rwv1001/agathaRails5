@@ -85,7 +85,7 @@ function addElement(table, count)
 
      //   jQuery(element).wrap('div').attr({backgroundImage: 'url(images/rounded-corner-top-left.png) top left'});
         var new_a = jQuery("<a></a>").attr({ href: '#', onclick: "deleteElement('"+table+"','0');return false" });
-        new_a.innerHTML = "X"
+        new_a.html("X")
         var new_a_div = new_a.wrap('div',{ 'class': 'remove_format_field' })
         new_a_div.attr('id',"remove_format_"+ table+"_0");
        // var new_x = new Element( 'i' );

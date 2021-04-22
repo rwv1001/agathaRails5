@@ -17,7 +17,7 @@ class SubQuery
     @argument_class = argument_class_;
     if(@argument_class.length>0)
       begin
-       @current_argument_value =  eval("#{@argument_class}.find(:last).id").to_i;
+       @current_argument_value =  eval("#{@argument_class}.last.id").to_i;
       rescue Exception => exc
       @current_argument_value = 0;
       end

@@ -1,16 +1,19 @@
+<% Rails.logger.info("external_filter.html.erb 01") %>
 <% class_name = external_filter.class_name %>
 <% filter_id  = external_filter.id  %>
 <% current_elts = external_filter.current_arguments %>
 <% num_elts = current_elts.length %>
+<% Rails.logger.info("external_filter.html.erb 02 class_name=#{class_name}, filter_id=#{filter_id} ") %>
 
 <tr id =<%= raw  "external_filter_#{class_name}_#{filter_id}"%> style="background: #CCCCCC"  >
 <th id = <%= raw   "external_filter_header_#{class_name}_#{filter_id}" %> >
   <%= external_filter.header %>
 </th>
+<% Rails.logger.info("external_filter.html.erb 03") %>
 <th>
   <div  style="float: left;width:27em;" >
     <% for elt_id in (0..(num_elts-1)) %>
-
+<% Rails.logger.info("external_filter.html.erb 04") %>
       <div id =<%= raw "external_filter_selection_#{class_name}_#{filter_id}_#{elt_id}"%> class="external_filter_element" style ="width:25em;float: left;  background: #fff; padding: 0px 0px 0px 0px; border: 1px solid #000; border-right: none;"  >
         <% if external_filter.group_selector %>
           <% on_change_string = "onUpdateExternalFilterGroup('#{class_name}','#{filter_id}','#{elt_id}');return false" %>
@@ -22,16 +25,21 @@
          
         </div>
       <% end %> <!-- for elt_id in (0..(num_elts-1)) -->
+      <% Rails.logger.info("external_filter.html.erb 05") %>
   <div style="float: left;" > &nbsp;  </div>
   <% on_add_string = "addExternalFilterElement('#{class_name}','#{filter_id}');return false" %>
+  <% Rails.logger.info("external_filter.html.erb 06") %>
   <% if external_filter.allow_multiple_arguments %>
-  <div class="add_external_filter_element" style="float: left; padding-top: 0px; height: 100px" ><a href ="#" onclick= <%= raw "#{on_add_string }"%> >+</a></div>
+  <% Rails.logger.info("external_filter.html.erb 07") %>
+  <div class="add_external_filter_element" style="float: left; padding-top: 0px; height: 100px" ><a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_add_string }"%> >+</a></div>
   <% end %>
+  <% Rails.logger.info("external_filter.html.erb 08") %>
   <div  style="float: left;" > &nbsp;  </div>
+  <% Rails.logger.info("external_filter.html.erb 09") %>
 <input type="text" name= <%= raw "number_of_filter_elements_#{filter_id}" %> id= <%= raw  "number_of_filter_elements_#{class_name}_#{filter_id}" %> value = <%=  num_elts %> style="display:none" />
   </div>
 
-
+<% Rails.logger.info("external_filter.html.erb 10") %>
 </th>
 
 </tr>

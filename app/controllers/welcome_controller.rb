@@ -281,6 +281,7 @@ class WelcomeController < ApplicationController
     search_ctl = @search_ctls[table_name];
     external_filters = search_ctl.external_filters;
     # number_of_external_filters = params[:number_of_external_filters];
+    stupid_count = 0;
 
     for external_filter in external_filters
       current_arguments = external_filter.filter_object.current_arguments;
@@ -290,6 +291,7 @@ class WelcomeController < ApplicationController
         num_elts = params[num_elements_str].to_i;
         if num_elts < current_arguments.length
           current_arguments = current_arguments[0, num_elts];
+          Rails.logger.info("update_external_filters num_elts:#{num_elts}, current_arguments:#{current_arguments.length}");
         end
         for elt_id in (0..(num_elts-1))
           group_name_str = "group_selection_#{filter_id}_#{elt_id}"
@@ -309,11 +311,16 @@ class WelcomeController < ApplicationController
             current_arguments[elt_id].group_id = group_id;
             current_arguments[elt_id].member_id = member_id;
           end
+          Rails.logger.info("update_external_filters hum current_arguments:#{current_arguments.length}");
+          Rails.logger.info("update_external_filters, group_id:#{group_id}, member_id:#{member_id}");
         end
       else
         external_filter.filter_object.current_arguments =[];
       end
+      search_ctl.external_filters[stupid_count].filter_object.current_arguments = current_arguments;
+      stupid_count = stupid_count+1;
     end
+    Rails.logger.info("update_external_filters, search_ctl.external_filters[0].filter_object.current_arguments.length=#{search_ctl.external_filters[0].filter_object.current_arguments.length}");
     search_ctl.save_external_filters_to_db();    
   end
 
@@ -388,7 +395,11 @@ class WelcomeController < ApplicationController
     search_ctl = @search_ctls[table_name];
     # search_ctl.AddExternalFilter(filter_id);
     external_filter = search_ctl.CreateNewExternalFilter(filter_id);
-
+    
+    respond_to do |format|
+      format.js { render "add_external_filter", :locals => {:external_filter => external_filter, :table_name => table_name } } 
+    end
+=begin
     respond_to do |format|
       format.js  do
         render :update do |page|
@@ -398,7 +409,7 @@ class WelcomeController < ApplicationController
         end
       end
     end
-    
+=end
   end
   def update_external_filter
     class_name = params[:class_name];
@@ -413,7 +424,9 @@ class WelcomeController < ApplicationController
     external_filter_element.group_id = group_id;
 
     respond_to do |format|
-      format.js  do
+      format.js  { render "update_external_filter", :locals => {:external_filter_element => external_filter_element, :class_name => class_name, :filter_id => filter_id, :elt_index=> elt_index} } 
+    end
+=begin
         render :update do |page|
           page.replace("external_filter_argument_span_#{class_name}_#{filter_id}_#{elt_index}",  :partial => "shared/external_filter_element", :object=> external_filter_element)
           page << "resizeExternalFilters(\"#{class_name}\")"
@@ -421,6 +434,7 @@ class WelcomeController < ApplicationController
         end
       end
     end
+=end    
   end
 
   def new

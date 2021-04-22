@@ -1069,7 +1069,7 @@ class SearchController
   end
 
   def GetLastShortField()
-    min_id_str = "#{@table_name}.find(:last).id"
+    min_id_str = "#{@table_name}.last.id"
     begin
       min_id =eval(min_id_str)
     rescue Exception => exc
@@ -1625,13 +1625,17 @@ class SearchController
   def save_external_filters_to_db
     
     sql_str = "ExternalFilterValue.find_by_sql(\"SELECT id, table_name, filter_id, member_id, group_id, in_use FROM external_filter_values WHERE (user_id = " + @user_id.to_s +  " AND table_name = '" + @tables_name + "') ORDER BY id asc\")"
- #   Rails.logger.error( "DEBUG: before eval(#{sql_str})" );
+    Rails.logger.info( "save_external_filters_to_db: before eval(#{sql_str})" );
     old_external_filter_elts = eval(sql_str);
     old_external_filter_elt_count  = old_external_filter_elts.length;
     filter_count = 0;
+    Rails.logger.info( "save_external_filters_to_db:  old_external_filter_elt_count: #{old_external_filter_elt_count}" );
+    
     
     for external_filter in @external_filters
-      for arg_value in external_filter.filter_object.current_arguments
+      Rails.logger.info( "save_external_filters_to_db:  current_arguments: #{external_filter.filter_object.current_arguments.length}" );
+      for arg_value in external_filter.filter_object.current_arguments       
+        
         if filter_count >= old_external_filter_elt_count
           external_filter_elt  = ExternalFilterValue.new;
         else
@@ -1645,6 +1649,7 @@ class SearchController
         external_filter_elt.group_id = arg_value.group_id;        
         external_filter_elt.save;
         filter_count = filter_count+1;
+        Rails.logger.info("save_exteral_filters_to_db arg_value.member_id:#{arg_value.member_id}, arg_value.group_id:#{arg_value.group_id}");
       end
     end
 
@@ -1659,13 +1664,16 @@ class SearchController
   end
   
   def CreateNewExternalFilter(filter_id)
+    Rails.logger.info("CreateNewExternalFilter begin");
     external_filter = @external_filters[filter_id].filter_object;
     external_filter.current_arguments = [];
     new_arg =  GetExternalFilterElement(filter_id, 0);
     new_arg.group_id = 0;
-    new_member_id_str = "#{external_filter.class_name}.find(:last)";
+    new_member_id_str = "#{external_filter.class_name}.last";
+    Rails.logger.info("CreateNewExternalFilter before eval str #{new_member_id_str}");
     new_arg.member_id = eval(new_member_id_str).id;
     external_filter.current_arguments << new_arg;
+    Rails.logger.info("CreateNewExternalFilter end");
     return external_filter;    
   end
 

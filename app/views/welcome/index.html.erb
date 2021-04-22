@@ -1,9 +1,10 @@
 <html>
   <head>
     <title tal:content="template/title">Agatha Main Page</title>
-      <%= javascript_include_tag "prepend_template" %>
+      
       <%= javascript_include_tag "application" %>     
       <%= javascript_include_tag "prototype" %>
+      <%= javascript_include_tag "prepend_template" %>
       <%= javascript_include_tag "template" %>
       <%= javascript_include_tag "search_ctl" %>
       <%= javascript_include_tag "display_format" %>
@@ -634,7 +635,13 @@ td img {display: block;}
         jQuery('#two_column_div').hide();
         load_pages();
         jQuery('#disable_id').hide();
-        jQuery(window).name = "main_window"
+        jQuery(window).name = "main_window";
+        jQuery.fn.down = function() {
+             var el = this[0] && this[0].firstChild;
+             while (el && el.nodeType != 1)
+             el = el.nextSibling;
+         return jQuery(el);
+        };
     
 </script>
 </html>

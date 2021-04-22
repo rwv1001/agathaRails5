@@ -9,3 +9,4 @@ MyHash.prototype.get = function(key){
    return this.exists(key)?this.hash_table[key]:null;
 }
 
+

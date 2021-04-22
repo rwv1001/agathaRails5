@@ -113,7 +113,7 @@ function on_edit( table_name,class_name,id)
     span_aref_obj  = jQuery(span_aref_obj_str120 );
     aref_obj = span_aref_obj.find('a:first');
     var  disabled_a = jQuery("<label></label>").attr({'class': 'alabel'});
-    disabled_a.innerHTML = 'Edit '
+    disabled_a.html('Edit ')
     aref_obj.remove();
     span_aref_obj.insert(disabled_a)
 
@@ -1114,7 +1114,7 @@ function emailBlur()
 
 
   my_body = my_iframe._document().body;
-  text_content = my_body.innerHTML;
+  text_content = my_body.html();
   if(/&lt;/.test(text_content))
       {
           text_content = text_content.replace(/&lt;/g,'<');
