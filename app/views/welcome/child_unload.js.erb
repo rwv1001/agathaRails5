@@ -1,0 +1,12 @@
+<%eval("#{edited_table_name}.set_controller(search_ctl)"); %>
+<% updated_objects = search_ctl.GetUpdateObjects(edited_table_name, "id", ids); %>  
+<% if updated_objects.length>0 %>
+    <% row = updated_objects[0]; %>
+    if (jQuery('#<%="#{row.id}_#{ edited_table_name}"%>')) {
+      jQuery('#<%="#{row.id}_#{ edited_table_name}"%>').replaceWith("<%= j render(:partial => 'shared/search_results_row_button', :object => row) %>");
+    }
+open_windows.unset('#<%="#{edited_table_name}_#{row.id}"%>')
+recolour('#<%="#{edited_table_name}"%>');
+action_select_no_js();
+
+<% end %>

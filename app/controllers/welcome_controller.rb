@@ -98,11 +98,13 @@ class WelcomeController < ApplicationController
 
   def display_page
     respond_to do |format|
-      format.js  do
+      format.js  { render "display_page"}
+=begin      
         render :update do |page|
           page << "unwait();";
         end
       end
+=end      
     end
     Rails.logger.flush
       
@@ -158,8 +160,11 @@ class WelcomeController < ApplicationController
     id = params[:id];
     ids = [];
     ids << id.to_i;
+    @search_ctls = session[:search_ctls][edited_table_name]
     respond_to do |format|
-      format.js  do
+      format.js  { render "child_unload", :locals => {:search_ctl => session[:search_ctls][edited_table_name], :edited_table_name => edited_table_name, :ids => ids, :id => id  } }
+=begin      
+      do
         render :update do |page|
           search_ctl = @search_ctls = session[:search_ctls][edited_table_name];
           eval("#{edited_table_name}.set_controller(search_ctl)");
@@ -182,6 +187,7 @@ class WelcomeController < ApplicationController
           end
         end
       end
+=end      
     end
     Rails.logger.debug("child_unload_end");
     Rails.logger.flush
@@ -203,7 +209,9 @@ class WelcomeController < ApplicationController
     @search_ctls = session[:search_ctls];
     @search_ctls.each {|key, value| puts "#{key} is #{value}" }
     respond_to do |format|
-      format.js  do
+      format.js { render "update_name", :locals => {:search_ctls => @search_ctls, :attribute_name => attribute_name, :ids => ids, :id => id, :table_name => table_name   } }  
+=begin      
+      do
         render :update do |page|
           @search_ctls.each do |table_name, search_ctl|
             eval("#{table_name}.set_controller(search_ctl)");
@@ -222,6 +230,7 @@ class WelcomeController < ApplicationController
             page << "action_select_no_js();";
         end
       end
+=end      
     end
     Rails.logger.debug("update_main end");
   end
@@ -448,13 +457,16 @@ class WelcomeController < ApplicationController
     id = new_obj.id;
 
     respond_to do |format|
-      format.js  do
+      format.js { render "new", :locals=>{:table_name => table_name, :id => id, :class_name => class_name } }
+      
+=begin
         render :update do |page|
        
-       page << "open_edit_window( '',1,'#{table_name}','#{class_name}','#{id}')";
+       page << "open_edit_window( '', 1,'#{table_name}','#{class_name}','#{id}')";
      
         end
       end
+=end      
     end
     x =1;
 #        result = RubyProf.stop
@@ -465,7 +477,7 @@ class WelcomeController < ApplicationController
 # printer.print(file, :min_percent=>0)
 # Rails.logger.error("Does this work?");
 # file.close
- 
+
   end
 
   def suggest_tutorial
@@ -532,12 +544,14 @@ class WelcomeController < ApplicationController
     suggested_tutorial_schedule = SuggestedTutorial.new(@search_ctls["TutorialSchedule"],tutorial_schedule);
     suggested_tutorial_schedule.previous_suggestions = previous_suggestions;
     respond_to do |format|
-      format.js  do
+      format.js  { render "suggest_tutorial", :locals => {:suggested_tutorial_schedule => suggested_tutorial_schedule}  }
+=begin
         render :update do |page|
         page.replace_html("tutorial_schedule_div",:partial => "shared/suggested_tutorial", :object =>  suggested_tutorial_schedule);
         page << "unwait();"
         end
       end
+=end      
     end
   end
   
@@ -609,13 +623,15 @@ class WelcomeController < ApplicationController
     suggested_lecture = SuggestedLecture.new(@search_ctls["Lecture"],lecture);
     suggested_lecture.previous_suggestions = previous_suggestions;
     respond_to do |format|
-      format.js  do
+      format.js  { render "suggest_lecture", :locals =>{:suggested_lecture => suggested_lecture, :class_name => class_name  } }
+=begin      
         render :update do |page|
         #  page["#{class_name}_action_div"].select(".schedule_div")[0].replace_html(:partial => "shared/suggested_lecture", :object =>  suggested_lecture);
         page.replace_html("schedule_div",:partial => "shared/suggested_lecture", :object =>  suggested_lecture);
         page << "unwait();"
         end
       end
+=end      
     end
     Rails.logger.flush
   end
@@ -750,7 +766,9 @@ class WelcomeController < ApplicationController
 
     end
       respond_to do |format|
-        format.js  do
+        format.js { render "add_tutorial_student", :locals => {:error_str => error_str, :success_str => success_str } }  
+=begin        
+        do
           render :update do |page|
             if error_str.length >0
               page << "alert('#{error_str}')";
@@ -762,6 +780,7 @@ class WelcomeController < ApplicationController
           end
 
       end
+=end      
     end
   end
   def attach_to_emails(ids)
@@ -809,9 +828,11 @@ class WelcomeController < ApplicationController
       success_str << "You have attached file #{agatha_file.agatha_data_file_name} to #{@pluralize_num} " + pl("email");
 
     end
-
+    @search_ctls = session[:search_ctls]
     respond_to do |format|
-      format.js  do
+      format.js { render "attach_to_emails", :locals => {:error_str => error_str, :search_ctls => session[:search_ctls], :ids => ids, :success_str => success_str } }
+=begin      
+       do
         render :update do |page|
           if error_str.length >0
             page << "alert('#{error_str}')";
@@ -836,7 +857,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
-
+=end
     end
   end
 
@@ -887,8 +908,11 @@ class WelcomeController < ApplicationController
     end
 
     x = 1;
+    @search_ctls = session[:search_ctls];
     respond_to do |format|
-      format.js  do
+      format.js {render  "attach_files", :locals => {:error_str => error_str, :search_ctls => session[:search_ctls], :agatha_email_id => agatha_email_id, :success_str => success_str } }
+=begin      
+        do
         render :update do |page|
           if error_str.length >0
             page << "alert('#{error_str}')";
@@ -915,7 +939,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
-
+=end
     end
   end
 
@@ -1005,7 +1029,8 @@ class WelcomeController < ApplicationController
 
     
       respond_to do |format|
-      format.js  do
+      format.js  { render "send_emails", :locals => { :status_val => status_val, :error_str => error_str } } 
+=begin
         render :update do |page|
           if error_str.length >0
             page << "alert('#{status_val["error_str"]}')";
@@ -1015,7 +1040,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
-
+=end
     end
   end
 
@@ -1050,11 +1075,14 @@ class WelcomeController < ApplicationController
 
   def create_email_from_template(ids, send_flag)
     string_update
+    error_str = ""
+    warning_str=""
+    success_str = ""
     if(ids == nil || ids.length==0)
       error_str = "You have not selected any tutorial schedules"
     else
       email_ids = []
-      error_str = ""
+      
       email_template_id = params[:email_template_id].to_i;
       term_id = params[:term_id].to_i;
       course_id = params[:course_id].to_i;
@@ -1066,7 +1094,7 @@ class WelcomeController < ApplicationController
       else
         term = Term.find(term_id);
         course = Course.find(course_id);
-        warning_str=""
+        
         if template.global_warnings != nil && template.global_warnings.length>0
         eval(template.global_warnings);
         end
@@ -1109,15 +1137,18 @@ class WelcomeController < ApplicationController
 
         end
         @pluralize_num = ids.length;
-        success_str = pl(@pluralize_num.to_s) + " " +  pl("email") + " " + pl("was") + " created. ";
+         success_str = pl(@pluralize_num.to_s) + " " +  pl("email") + " " + pl("was") + " created. ";
         if send_flag
           status_val = send_emails_routine(email_ids);
           success_str = success_str + status_val["success_str"] + status_val["error_str"];
         end
       end      
     end
+    
     respond_to do |format|
-      format.js  do
+      format.js  {render "create_email_from_template", :locals => {:error_str => error_str, :success_str => success_str, :warning_str=> warning_str } }
+=begin      
+      do
         render :update do |page|
           page << "unwait()";
           if error_str.length >0
@@ -1128,10 +1159,11 @@ class WelcomeController < ApplicationController
           end
         end
       end
-
+=end
     end
   end
   def max_tutorials(ids)
+    success_str = "";
     if(ids == nil || ids.length==0)
       error_str = "You have not selected any people"
     else
@@ -1176,7 +1208,9 @@ class WelcomeController < ApplicationController
 
     end
     respond_to do |format|
-      format.js  do
+      format.js  {render "max_tutorials", :local => {:success_str => success_str, :error_str => error_str} } 
+=begin      
+      do
         render :update do |page|
           if error_str.length >0
             page << "alert('#{error_str}')";
@@ -1186,11 +1220,13 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
+=end      
     end
 
   end
 
   def assign_tutor(ids)
+    success_str = "";
     if(ids == nil || ids.length==0)
       error_str = "You have not selected any tutorial schedules"
     else
@@ -1218,7 +1254,9 @@ class WelcomeController < ApplicationController
       end
     end
     respond_to do |format|
-      format.js  do
+      format.js  {render "max_tutorials", :local => {:success_str => success_str, :error_str => error_str} }
+=begin      
+      do
         render :update do |page|
           if error_str.length >0
             page << "alert('#{error_str}')";
@@ -1228,6 +1266,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
+=end      
     end
     
   end
@@ -1267,12 +1306,15 @@ class WelcomeController < ApplicationController
       alert_str = "You did not select any courses. "
     end
     respond_to do |format|
-      format.js  do
+      format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+=begin      
+      do
         render :update do |page|
           page << "alert('#{alert_str}')"
           page << "unwait();"
         end
       end
+=end      
     end
   end
 
@@ -1311,12 +1353,15 @@ class WelcomeController < ApplicationController
       alert_str = "You did not select any courses. "
     end
     respond_to do |format|
-      format.js  do
+      format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+=begin      
+do
         render :update do |page|
           page << "alert('#{alert_str}')"
           page << "unwait();"
         end
       end
+=end
     end
   end
   
@@ -1353,8 +1398,11 @@ class WelcomeController < ApplicationController
       ids = [];
       alert_str = "You did not select any students. "
     end
+    @search_ctls = session[:search_ctls];
     respond_to do |format|
-      format.js  do
+      format.js  {render "create_tutorial_schedules", :locals => {:ids => ids, :search_ctls => @search_ctls, :alert_str => alert_str} }
+=begin      
+      do
         render :update do |page|
 
             if ids.length >0
@@ -1378,6 +1426,7 @@ class WelcomeController < ApplicationController
           end
           
       end
+=end      
     end
   end
   
@@ -1406,14 +1455,18 @@ class WelcomeController < ApplicationController
           willing_lecturer.order_of_preference = 1;
           willing_lecturer.save;
         end
+    alert_str = "Lecture schedule created";
 
     respond_to do |format|
-      format.js  do
+      format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+=begin      
+do
         render :update do |page|
           page << "alert('Lecture schedule created')"
           page << "unwait();"
         end
       end
+=end
     end
   end
   def make_attendee(lecture_ids)
@@ -1504,9 +1557,11 @@ class WelcomeController < ApplicationController
       end
     end
 
-
+        @search_ctls = session[:search_ctls];
         respond_to do |format|
-      format.js  do
+      format.js { render "make_attendee", :locals => { :error_str => error_str, :search_ctls => @search_ctls, :person_id => person_id, :lecture_ids => lecture_ids, :compulsory_ids => compulsory_ids, :exam_ids => exam_ids, :success_str => success_str } }
+=begin      
+       do
         render :update do |page|
           if error_str.length >0
             page << "alert('#{error_str}')";
@@ -1550,6 +1605,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
+=end      
     end
   end
 
@@ -1645,9 +1701,11 @@ class WelcomeController < ApplicationController
 
     
 
-    
+    @search_ctls = session[:search_ctls];
     respond_to do |format|
-      format.js  do
+      format.js { render "add_to_lectures", :locals => { :error_str => error_str, :search_ctls => @search_ctls, :people_ids => people_ids, :lecture_id => lecture_id, :compulsory_ids => compulsory_ids, :exam_ids => exam_ids, :success_str => success_str } }
+=begin      
+       do
         render :update do |page|
           if error_str.length >0
             page << "alert('#{error_str}')";
@@ -1691,6 +1749,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
+=end      
     end
   end
 
@@ -1735,7 +1794,9 @@ class WelcomeController < ApplicationController
     end
 
    respond_to do |format|
-      format.js  do
+      format.js  { render "remove_from_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :not_present_members => not_present_members, :num_existing => num_existing } }
+=begin      
+      do
         render :update do |page|
           if(db_group== nil)
           page << "alert('Remove Selected Failed: Could not find group id #{group_id} in database')"
@@ -1762,6 +1823,7 @@ class WelcomeController < ApplicationController
           page << "unwait();"
         end
       end
+=end      
     end
 Rails.logger.flush
   end
@@ -1805,7 +1867,9 @@ Rails.logger.flush
     end
 
     respond_to do |format|
-      format.js  do
+      format.js { render "add_to_groups", :locals => { :group_ids => group_ids, :permissioned => permissioned, :unpresent => unpresent, :class_name => class_name, :present => present, :wrong_types => wrong_types, :unpermissioned => unpermissioned } }
+=begin      
+      do
         render :update do |page|
           if(group_ids.length == 0)
             page << "alert('Add Selected Failed: You did not select any groups')"
@@ -1838,6 +1902,7 @@ Rails.logger.flush
           page << "unwait();"
         end
       end
+=end      
     end    
   end
   def remove_from_groups(group_ids, class_id, class_name)
@@ -1876,7 +1941,9 @@ Rails.logger.flush
     end
 
     respond_to do |format|
-      format.js  do
+      format.js  { render "remove_from_groups", :locals => {:group_ids => group_ids, :permissioned => permissioned, :present => present, :unpresent => unpresent, :wrong_types => wrong_types, :unpermissioned => unpermissioned  } }
+=begin      
+      do
         render :update do |page|
           if(group_ids.length == 0)
             page << "alert('Remove Selected Failed: You did not select any groups')"
@@ -1909,6 +1976,7 @@ Rails.logger.flush
           page << "unwait();"
         end
       end
+=end      
     end
   end
 
@@ -1956,7 +2024,9 @@ Rails.logger.flush
     end
   
    respond_to do |format|
-      format.js  do
+      format.js { render "add_to_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :ids => ids, :already_existing => already_existing, :new_members => new_members  } }
+=begin      
+       do
         render :update do |page|
           if(db_group== nil)
           page << "alert('Add Selected Failed: Could not find group id #{group_id} in database')"
@@ -1983,6 +2053,7 @@ Rails.logger.flush
           page << "unwait();"
         end
       end
+=end      
     end
 
   end
@@ -1990,13 +2061,17 @@ Rails.logger.flush
   def new_group(ids, class_name, group_name, group_privacy)
     group_name = group_name.gsub(/^\s+/,'').gsub(/\s+$/,'');
     if(group_name.length ==0)
+      alert_str = "Group creation failed: the chosen group name #{group_name} can't be an empty string.";
       respond_to do |format|
-        format.js  do
+        format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+=begin      
+do
           render :update do |page|
        page << "alert(\"Group creation failed: the chosen group name #{group_name} can't be an empty string.\")"
        page << "unwait();"
           end
         end
+=end
       end
       return;
     end
@@ -2027,7 +2102,9 @@ Rails.logger.flush
 
     end
     respond_to do |format|
-        format.js  do
+        format.js  { render "new_group", :locals => { :existing_group => existing_group, :class_name => class_name, :group_name => group_name } }
+=begin        
+        do
           render :update do |page|
             if(existing_group ==nil)
              page << "alert(\"Successfully created #{class_name} group with name #{group_name}\")"
@@ -2038,6 +2115,7 @@ Rails.logger.flush
             page << "unwait();"
           end
         end
+=end        
       end
 
   end
@@ -2072,8 +2150,11 @@ Rails.logger.flush
     else
       success_str = "no tutorials were selected"
     end
+      @search_ctls = session[:search_ctls];
       respond_to do |format|
-        format.js  do
+        format.js  { render "update_collection_status", :locals => {:search_ctls => @search_ctls, :ids => ids, :success_str => success_str } }
+=begin        
+        do
           render :update do |page|
             table_name = "Tutorial"
             @search_ctls = session[:search_ctls];
@@ -2092,6 +2173,7 @@ Rails.logger.flush
             page << "unwait();"
           end
         end
+=end        
       end
     end
 
@@ -2315,7 +2397,9 @@ Rails.logger.flush
 
 
     respond_to do |format|
-      format.js  do
+      format.js  { render "delete_array" , :locals => { :success_str => success_str, :error_str => error_str, :deleted_ids => deleted_ids, :table_name => table_name, :delete_hash_str => delete_hash_str } }
+=begin
+      do
         render :update do |page|
 
           page << "alert(\"#{success_str}#{error_str}\")"
@@ -2330,6 +2414,7 @@ Rails.logger.flush
 
         end
       end
+=end      
     end
     
   end
@@ -2409,13 +2494,16 @@ Rails.logger.flush
     @format_controller.Update();
 
     respond_to do |format|
-      format.js  do
+      format.js { render "update_formats", :locals => {:format_controller => @format_controller } }
+=begin      
+      do
         render :update do |page|
           page.replace_html("format_controller_div", :partial => "shared/format_controller", :object => @format_controller);
           page << "resizeFormat()";
           page << "unwait();"
         end
       end
+=end      
     end
   end
 
@@ -2463,13 +2551,15 @@ Rails.logger.flush
     group_filter.save;
     group_filters = FilterController.GetGroupFilters(table_name, @user_id)
     respond_to do |format|
-      format.js  do
+      format.js {render "update_group_filters",  :locals => {:table_name =>table_name, :group_filters => group_filters } }
+=begin     
         render :update do |page|
          
           page.replace_html("group_filters_#{table_name}", :partial => "shared/group_filters", :object => group_filters);
           page << "unwait();"
         end
       end
+=end
     end
   end
 
@@ -2524,12 +2614,15 @@ Rails.logger.flush
       :personal_warnings=>"");
 
     respond_to do |format|
-      format.js  do
+      format.js  { render "div_test" }
+=begin      
+      do
         render :update do |page|
 
           page << "alert('div_test!')"
         end
       end
+=end      
     end
   end
 

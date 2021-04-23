@@ -1,4 +1,5 @@
-<%= form_tag  :url => { :action => :new} , :remote=>true do %>
+<%= form_with url: "/welcome/new", method: :post, remote: true do |form| %>
+
 
      <div style ="display:none">
        <input  name="class_name" type="text" value= '<%= create_entry %>'  >

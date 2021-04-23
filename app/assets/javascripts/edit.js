@@ -3,7 +3,9 @@ function div_test()
 {
 
     
-    jQuery('#div_test').submit();
+    //jQuery('#div_test').submit();
+    elem = document.getElementById('div_test');
+    Rails.fire(elem, 'submit');    
 
 }
 
@@ -12,8 +14,12 @@ function div_test()
 function on_load()
 {
     win_load_obj = jQuery('#win_load')
-    if(win_load_obj)
-    win_load_obj.submit();
+    if(win_load_obj.get(0)){
+    //win_load_obj.submit();
+    elem = document.getElementById('win_load');
+    Rails.fire(elem, 'submit');;
+
+    }
 }
 
 function file_change()
@@ -26,14 +32,18 @@ function file_change()
         } );
      disable_div.css('cursor','wait');
     submit_upload_obj = jQuery('#file_upload');
-    submit_upload_obj.submit();
+   // submit_upload_obj.submit();
+    elem = document.getElementById('file_upload');
+    Rails.fire(elem, 'submit');
  
 }
 
 function file_change2()
 {
     submit_upload_obj = jQuery('#edit_agatha_file');
-    submit_upload_obj.submit();
+    elem = document.getElementById('edit_agatha_file');
+    Rails.fire(elem, 'submit');
+  //  submit_upload_obj.submit();
     x = 1;
 }
 function myBlur()
@@ -63,12 +73,16 @@ function on_unload()
             table_obj.val(  unload_table_obj.val());
             
             submit_obj = parent_win.document.getElementById('child_unload_main');
-            submit_obj.submit();
+            Rails.fire(submit_obj, 'submit');
+           // submit_obj.submit();
         }
 
     win_unload_obj = jQuery('#win_unload')
-    if(win_unload_obj)
-    win_unload_obj.submit();
+    if(win_unload_obj.get(0)){
+    	//win_unload_obj.submit();
+    	elem = document.getElementById('win_unload');
+        Rails.fire(elem, 'submit');;
+    }
 }
 
 function open_win()
@@ -101,7 +115,8 @@ function update_parent(table_name, attribute_name, id)
             update_opener_attribute_name_obj.val( jQuery('#sensible_update_opener_attribute_name').val());
             update_opener_id_obj.val( jQuery('#sensible_update_opener_id').val());
             submit_obj = parent_win.document.getElementById('update_main');
-            submit_obj.submit();
+            //submit_obj.submit();
+            Rails.fire(submit_obj, 'submit');
         }
 }
 
@@ -111,11 +126,11 @@ function on_edit( table_name,class_name,id)
 
     span_aref_obj_str120 = "#"+span_aref_obj_str;
     span_aref_obj  = jQuery(span_aref_obj_str120 );
-    aref_obj = span_aref_obj.find('a:first');
+    aref_obj = span_aref_obj.find('a').first();
     var  disabled_a = jQuery("<label></label>").attr({'class': 'alabel'});
     disabled_a.html('Edit ')
     aref_obj.remove();
-    span_aref_obj.insert(disabled_a)
+    span_aref_obj.replaceWith(disabled_a);
 
     attribute_opener =''
     opener_id = 1;
@@ -143,10 +158,10 @@ function open_edit_window(attribute_opener, opener_id, table_name,class_name,id)
     
     win_ref = window.open(url,new_name, config_window);
     update_opener_attribute_name_obj = win_ref.document.getElementById('update_opener_attribute_name');
-    update_opener_attribute_name_obj.val( attribute_opener);
+    jQuery(update_opener_attribute_name_obj).val( attribute_opener);
 
     update_opener_id_obj = win_ref.document.getElementById('update_opener_id');
-    update_opener_id_obj.val( opener_id);
+    jQuery(update_opener_id_obj).val( opener_id);
     open_windows.set(new_name , win_ref );
 
 }
@@ -255,7 +270,10 @@ function on_assign(id)
       });
 
     form_obj = jQuery('#action_form');
-    form_obj.submit();
+   // form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');;
+
 }
 
 function on_willing(id)
@@ -279,7 +297,10 @@ function on_willing(id)
       });
 
     form_obj = jQuery('#action_form');
-    form_obj.submit();
+    //form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');;
+
 }
 
 function on_agatha_send(id,test_flag)
@@ -296,7 +317,9 @@ function on_agatha_send(id,test_flag)
      specific_div.insert({ 'bottom': sent_test_flag  });
     jQuery('#action_type').val( "send_email")
     form_obj = jQuery('#action_form');
-    form_obj.submit();
+   // form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');
 }
 
 function on_sends(test_flag)
@@ -321,7 +344,10 @@ function on_sends(test_flag)
      specific_div.insert({ 'bottom': sent_test_flag  });
     jQuery('#action_type').val( "send_emails")
     form_obj = jQuery('#action_form');
-    form_obj.submit();
+   // form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');;
+    
 }
 function on_create_send(id)
 {
@@ -359,7 +385,10 @@ function on_create_send(id)
             });
 
         form_obj = jQuery('#action_form');
-        form_obj.submit();
+      //  form_obj.submit();
+        elem = document.getElementById('action_form');
+        Rails.fire(elem, 'submit');;
+      
 }
 
 function on_create(id)
@@ -494,7 +523,10 @@ function on_create(id)
             break;
         }
         form_obj = jQuery('#action_form');
-        form_obj.submit();
+        //form_obj.submit();
+        elem = document.getElementById('action_form');
+        Rails.fire(elem, 'submit');;
+        
 
 
 }
@@ -561,7 +593,10 @@ function on_action( id)
 
     }
     form_obj = jQuery('#action_form');
-    form_obj.submit(); 
+ //   form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');;
+     
 }
 function set_suggestion_class(suggest_type_str, suggestion_class)
 {
@@ -677,7 +712,9 @@ function on_suggest(course_id)
   //          descended_elt = descended_elt.next();
   //      }
         make_suggestion_form = jQuery('#make_suggestion')
-        make_suggestion_form.submit();    
+        //make_suggestion_form.submit();    
+        elem = document.getElementById('make_suggestion');
+        Rails.fire(elem, 'submit');        
 }
 
 
@@ -711,7 +748,9 @@ function SetMaxTutorials()
     action_table.val( "Person");
 
     form_obj = jQuery('#action_form');
-    form_obj.submit();
+  //  form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');  
 
 }
 
@@ -745,7 +784,9 @@ function CreateGroup(class_name)
     action_table.val( class_name);
 
     form_obj = jQuery('#action_form');
-    form_obj.submit();
+ //   form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');;
 }
 
 function GetRadioValue(radio_list)
@@ -790,8 +831,9 @@ function UpdateCollectionStatus()
     action_table.val( class_name);
 
     form_obj = jQuery('#action_form');
-    form_obj.submit();
-
+ //   form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');
 
 
 
@@ -887,8 +929,9 @@ if (!answer)
     action_table.val( class_name);
    
     form_obj = jQuery('#action_form');
-    form_obj.submit();
-
+//    form_obj.submit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');
    
 }
 
@@ -923,7 +966,10 @@ if (!answer)
    ids = new Array;
    ids[0] = id;
    
-   form_obj.submit();
+   //form_obj.submit();
+   elem = document.getElementById('form_obj_str');
+   Rails.fire(elem, 'submit');;  
+   
 }
 
 var row_count = 0;
@@ -1077,7 +1123,9 @@ function editBlur(attribute_name, data_type)
     }
 
     form_obj = jQuery('#update_form');
-    form_obj.submit();
+    elem = document.getElementById('update_form');
+    Rails.fire(elem, 'submit');
+    //form_obj.submit();
 }
 
 function editFocus(attribute_name, data_type)
@@ -1094,7 +1142,7 @@ function emailBlur()
 
     body_id1027 = "#"+body_id;
     body_obj  = jQuery(body_id1027);
-    if(body_obj == null)
+    if(body_obj.get(0) == null)
      {
          return;
     }

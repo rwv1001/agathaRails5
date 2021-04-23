@@ -10,22 +10,12 @@ function hideHeader()
     jQuery('#title_div').hide();
     jQuery('#black_bar_div').hide();
     jQuery('#shrink_button_div').hide();
-    jQuery('#menu_div').attr({
-        top: '17px'
-    });
-    jQuery('#content_div').attr({
-        top: '17px'
-    });
-        jQuery('#content_div_1').attr({
-        top: '17px'
-    });
-        jQuery('#content_div_2').attr({
-        top: '17px'
-    });
+    jQuery('#menu_div').css('top', '17px');
+    jQuery('#content_div').css('top', '17px');
+    jQuery('#content_div_1').css('top', '17px');
+    jQuery('#content_div_2').css('top', '17px');
 
-            jQuery('#black_bar_separator_div').attr({
-        top: '17px'
-    });
+    jQuery('#black_bar_separator_div').css('top', '17px');
     jQuery('#expand_button_div').show();
 }
 function showHeader()
@@ -34,21 +24,11 @@ function showHeader()
     jQuery('#title_div').show();
     jQuery('#black_bar_div').show();
     jQuery('#shrink_button_div').show();
-    jQuery('#menu_div').attr({
-        top: '187px'
-    });
-    jQuery('#content_div').attr({
-        top: '187px'
-    });
-        jQuery('#content_div_1').attr({
-        top: '187px'
-    });
-        jQuery('#content_div_2').attr({
-        top: '187px'
-    });
-            jQuery('#black_bar_separator_div').attr({
-        top: '187px'
-    });
+    jQuery('#menu_div').css('top', '187px');
+    jQuery('#content_div').css('top', '187px');
+    jQuery('#content_div_1').css('top', '187px');
+    jQuery('#content_div_2').css('top', '187px');
+    jQuery('#black_bar_separator_div').css('top', '187px');
        
     jQuery('#expand_button_div').hide();
 }

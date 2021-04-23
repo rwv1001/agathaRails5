@@ -46,7 +46,7 @@
       <td class ="select-cell"> <input type="checkbox" name ="row_in_list[]" class="check"  <%=id_str%> <%= click_str %> value= <%=row.id.to_s %>  ></td>
       <td class="update-cell">      <% onclick_str = "on_edit('#{table_name.tableize}','#{table_name}','#{row.id.to_s}');return false" %>
       <span id=<%= raw "a_edit_#{table_name.tableize}_#{row.id.to_s}" %> >
-      <a href="#" onclick= <%= raw "#{onclick_str}"%>   >Edit </a> </span>
+      <a href="/" data-remote="true" rel="nofollow"   onclick= <%= raw "#{onclick_str}"%>   >Edit </a> </span>
       </td>
       <% if table_name == "Course" %>
       <td class="create-cell">      <% onclick_str = "on_create('#{row.id.to_s}');return false" %>

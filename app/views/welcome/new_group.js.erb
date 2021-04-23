@@ -1,0 +1,9 @@
+<% if(existing_group ==nil) %>
+    <% str1 = "Successfully created #{class_name} group with name #{group_name}" %>
+       alert('<%="#{str}"%>');
+    add_group('<%="#{class_name}"%>',<%="#{group_name}"%>',<%="#{new_group_id}"%>');
+<% else %>
+       alert('<%="Group creation failed: #{class_name} group with name #{group_name} already exists."%>');
+<% end %>
+unwait();
+    
