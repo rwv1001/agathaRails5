@@ -711,8 +711,9 @@ class SearchController
     table_filters = extended_filters[table_name];
    # table_filters_str = "#{table_name}::ExtendedFilters"
    # table_filters =  eval(table_filters_str);
-    for filter in table_filters
+    for filter in table_filters     
       filter_object = filter.filter_object;
+      Rails.logger("search initialize RWV, filter_object.class = #{filter_object.class}, filter_object.tag = #{filter_object.tag}");
       if filter_object.class == SubQuery
         @hash_to_index[filter_object.tag] = @extended_filters.length
         @extended_filters << filter;
@@ -899,7 +900,7 @@ class SearchController
          ret_val << group_member;
       end
       eval_str1 = "#{@table_name}.find_by_sql(\"SELECT id FROM #{tables_name} WHERE group_id=#{group_id} AND #{member_attribute_name}=#{member_id} \").length";
-
+      Rails.logger.info("GetSelectFields rwv ret_str = #{eval_str1}")
       id_pres_count = eval(eval_str1);
 
 
@@ -949,7 +950,7 @@ class SearchController
     end
 
     eval_str = "#{@table_name}.find_by_sql(\"#{@sql_str}\")";
-
+    Rails.logger.info("GetAllShortFieldsWhere rwv ret_str = #{eval_str}")
     begin
       ret_val =[]
       results = eval(eval_str);
@@ -987,6 +988,7 @@ class SearchController
     @where_str = "WHERE a0.id = #{id_}";
     @sql_str << @where_str;
     eval_str = "#{@table_name}.find_by_sql(\"#{@sql_str}\")";
+    Rails.logger.info("GetShortField rwv ret_str = #{eval_str}")
     begin
       ret_val = eval(eval_str)[0].short_string;
 
@@ -1325,12 +1327,14 @@ class SearchController
   def get_eval_string2()
     get_sql_string()
     ret_str = "#{@table_name}.find_by_sql(\"#{@sql_str}\")"
+    Rails.logger.info("get_eval_string2 rwv ret_str = #{ret_str}")
     return ret_str;
   end
 
   def get_eval_string_no_sub
     get_sql_string_no_sub
     ret_str = "#{@table_name}.find_by_sql(\"#{@sql_str}\")"
+    Rails.logger.info("get_eval_string_no_sub rwv ret_str = #{ret_str}")
     return ret_str;
   end
 
@@ -1349,6 +1353,7 @@ class SearchController
     else
       get_update_sql_string(ids_);
       eval_str = "#{@table_name}.find_by_sql(\"#{@sql_str}\")";
+      Rails.logger.info("GetUpdateObjects rwv eval_str = #{eval_str}")
       ret_val = eval(eval_str);
     end
     x = 1;

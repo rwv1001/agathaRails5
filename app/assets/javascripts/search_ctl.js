@@ -384,9 +384,9 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
 
     filter_selection_str316 = "#"+filter_selection_str;
     filter_selection_elt  = jQuery(filter_selection_str316);
-    div_space = filter_selection_elt.next('div');
+    //div_space = filter_selection_elt.next('div');
     filter_selection_elt.remove();
-    div_space.remove();
+  //  div_space.remove();
 
     num_elts_str = "number_of_filter_elements_" + class_name + "_" + filter_id;
 
@@ -464,6 +464,22 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
     else
     {
         num_elts_elt.attr("value", new_current_num);
+        
+        for (reorder_index = parseInt(elt_id)+1; reorder_index <= new_current_num; reorder_index++) {
+             filter_selection_str = "external_filter_selection_" + class_name + "_" + filter_id + "_" + reorder_index;
+             new_id = "external_filter_selection_" + class_name + "_" + filter_id + "_" + (reorder_index-1);
+
+             filter_selection_str316 = "#"+filter_selection_str;
+             filter_selection_elt  = jQuery(filter_selection_str316);
+             filter_selection_elt.prop('id', new_id);
+             
+             argument_selection_str = '#argument_selection_'+ class_name +'_'+ filter_id + '_' + reorder_index; 
+             new_namer = 'argument_selection_' + filter_id + '_' + (reorder_index-1);
+             new_idr = 'argument_selection_' + class_name +'_'+ filter_id + (reorder_index-1);
+             argument_selection_elt = jQuery(argument_selection_str);
+             argument_selection_elt.prop('id', new_idr);
+             argument_selection_elt.prop('name',new_namer);
+        }
     }
     
 }

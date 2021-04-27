@@ -296,8 +296,11 @@ class WelcomeController < ApplicationController
       current_arguments = external_filter.filter_object.current_arguments;
       filter_id = external_filter.filter_object.id;
       num_elements_str = "number_of_filter_elements_#{filter_id}";
+      
       if(params.has_key?(num_elements_str))
+        
         num_elts = params[num_elements_str].to_i;
+        Rails.logger.info("update_external_filters  param #{num_elements_str} = #{num_elts} ");
         if num_elts < current_arguments.length
           current_arguments = current_arguments[0, num_elts];
           Rails.logger.info("update_external_filters num_elts:#{num_elts}, current_arguments:#{current_arguments.length}");
@@ -324,7 +327,9 @@ class WelcomeController < ApplicationController
           Rails.logger.info("update_external_filters, group_id:#{group_id}, member_id:#{member_id}");
         end
       else
+        Rails.logger.info("update_external_filters no param #{num_elements_str}");
         external_filter.filter_object.current_arguments =[];
+        current_arguments = [];
       end
       search_ctl.external_filters[stupid_count].filter_object.current_arguments = current_arguments;
       stupid_count = stupid_count+1;
