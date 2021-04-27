@@ -713,7 +713,7 @@ class SearchController
    # table_filters =  eval(table_filters_str);
     for filter in table_filters     
       filter_object = filter.filter_object;
-      Rails.logger("search initialize RWV, filter_object.class = #{filter_object.class}, filter_object.tag = #{filter_object.tag}");
+     # Rails.logger.info("search initialize RWV, filter_object.class = #{filter_object.class}, filter_object.tag = #{filter_object.tag}");
       if filter_object.class == SubQuery
         @hash_to_index[filter_object.tag] = @extended_filters.length
         @extended_filters << filter;
