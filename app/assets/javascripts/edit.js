@@ -259,8 +259,8 @@ function on_assign(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
         });
      sent_tutor = jQuery("<input></input>").attr({ type: 'text', name: 'id',  value: id  });
      specific_div.insert({ 'bottom': sent_tutor  });
@@ -269,9 +269,9 @@ function on_assign(id)
 
      search_results_div_str239 = "#"+search_results_div_str;
      search_results_div  = jQuery(search_results_div_str239)
-     search_results_div.find('.check').each(function(elt)
+     search_results_div.find('.check').each(function()
      {
-            new_elt = elt.clone(true); new_elt.removeAttribute('id');
+            new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
             specific_div.append(new_elt  )
       });
 
@@ -286,8 +286,8 @@ function on_willing(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
         });
      sent_willing = jQuery("<input></input>").attr({ type: 'text', name: 'willing_id',  value: id  });
      specific_div.insert({ 'bottom': sent_willing   });
@@ -296,9 +296,9 @@ function on_willing(id)
 
      search_results_div_str261 = "#"+search_results_div_str;
      search_results_div  = jQuery(search_results_div_str261)
-     search_results_div.find('.check').each(function(elt)
+     search_results_div.find('.check').each(function()
      {
-            new_elt = elt.clone(true); new_elt.removeAttribute('id');
+            new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
             specific_div.append(new_elt  )
       });
 
@@ -313,8 +313,8 @@ function on_agatha_send(id,test_flag)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
         });
 
     sent_email = jQuery("<input></input>").attr({ type: 'text', name: 'email_id',  value: id  })
@@ -332,8 +332,8 @@ function on_sends(test_flag)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
         });
 
    
@@ -341,9 +341,9 @@ function on_sends(test_flag)
 
      search_results_div_str299 = "#"+search_results_div_str;
      search_results_div  = jQuery(search_results_div_str299)
-     search_results_div.find('.check').each(function(elt)
+     search_results_div.find('.check').each(function()
      {
-            new_elt = elt.clone(true); new_elt.removeAttribute('id');
+            new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
             specific_div.append(new_elt  )
       });
      sent_test_flag = jQuery("<input></input>").attr({ type: 'text', name: 'test_flag',  value: test_flag  })
@@ -359,8 +359,8 @@ function on_create_send(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
         });
     jQuery('#action_type').val(  "create_send_email_from_template");
              class_name = jQuery('#action_class').val();
@@ -384,9 +384,9 @@ function on_create_send(id)
 
             search_results_div_str335 = "#"+search_results_div_str;
             search_results_div  = jQuery(search_results_div_str335)
-            search_results_div.find('.check').each(function(elt)
+            search_results_div.find('.check').each(function()
             {
-                new_elt = elt.clone(true); new_elt.removeAttribute('id');
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
                 specific_div.append(new_elt  )
             });
 
@@ -401,8 +401,8 @@ function on_create(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
         });
     action_type = jQuery('#action_type').val();
     switch (action_type)
@@ -493,9 +493,9 @@ function on_create(id)
 
             search_results_div_str435 = "#"+search_results_div_str;
             search_results_div  = jQuery(search_results_div_str435)
-            search_results_div.find('.check').each(function(elt)
+            search_results_div.find('.check').each(function()
             {
-                new_elt = elt.clone(true); new_elt.removeAttribute('id');
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
                 specific_div.append(new_elt  )
             });
             break;
@@ -521,9 +521,9 @@ function on_create(id)
 
             search_results_div_str459 = "#"+search_results_div_str;
             search_results_div  = jQuery(search_results_div_str459)
-            search_results_div.find('.check').each(function(elt)
+            search_results_div.find('.check').each(function()
             {
-                new_elt = elt.clone(true); new_elt.removeAttribute('id');
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
                 specific_div.append(new_elt  )
             });
             break;
@@ -546,8 +546,8 @@ function on_action( id)
     wait();
     action_type = jQuery('#action_type').val();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){
-        elt.remove()
+    specific_div.descendants().each(function(){
+        jQuery(this).remove()
     });
 
     id_elt = new Element('input',{
@@ -566,8 +566,8 @@ function on_action( id)
 
             search_results_div_str499 = "#"+search_results_div_str;
             search_results_div  = jQuery(search_results_div_str499)
-            search_results_div.find('.check').each(function(elt){
-                new_elt = elt.clone(true); new_elt.removeAttribute('id');
+            search_results_div.find('.check').each(function(){
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
                 specific_div.insert({
                     'bottom': new_elt
                 })
@@ -580,18 +580,18 @@ function on_action( id)
 
             search_results_div_str511 = "#"+search_results_div_str;
             search_results_div  = jQuery(search_results_div_str511)
-            search_results_div.find('.check').each(function(elt){
-                new_elt = elt.clone(true); new_elt.removeAttribute('id'); specific_div.insert({
+            search_results_div.find('.check').each(function(){
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id'); specific_div.insert({
                     'bottom': new_elt
                 })
             });
-            search_results_div.find('.examcheck').each(function(elt){
-                new_elt = elt.clone(true); new_elt.removeAttribute('id');specific_div.insert({
+            search_results_div.find('.examcheck').each(function(){
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');specific_div.insert({
                     'bottom': new_elt
                 })
             });
-            search_results_div.find('.compulsorycheck').each(function(elt){
-                new_elt = elt.clone(true); new_elt.removeAttribute('id');specific_div.insert({
+            search_results_div.find('.compulsorycheck').each(function(){
+                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');specific_div.insert({
                     'bottom': new_elt
                 })
             });
@@ -642,9 +642,9 @@ function on_suggest(course_id)
     new_suggest_div = jQuery("<div></div>").attr({id: 'specific_suggest_variables'});
     jQuery('#make_suggestion_div').append(new_suggest_div);
     suggest_div = jQuery('#specific_suggest_variables'); 
-    //suggest_div.descendants().each(function(elt)
+    //suggest_div.descendants().each(function()
     //{
-      //  elt.remove()
+      //  jQuery(this).remove()
     //});
     suggest_id = jQuery('#suggest_id');
     suggest_id.val( course_id)
@@ -729,7 +729,7 @@ function SetMaxTutorials()
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){elt.remove()});
+    specific_div.descendants().each(function(){jQuery(this).remove()});
     term_elt = jQuery('#max_tutorials_term')
     term_id = term_elt.val();
     sent_term = jQuery("<input></input>").attr({type: 'text', name: 'term_id', value: term_id})
@@ -744,7 +744,7 @@ function SetMaxTutorials()
 
     search_results_div_str666 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str666)
-    search_results_div.find('.check').each(function(elt){new_elt = elt.clone(true); specific_div.append(new_elt)});
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
 
   
 
@@ -764,7 +764,7 @@ function CreateGroup(class_name)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){elt.remove()});
+    specific_div.descendants().each(function(){jQuery(this).remove()});
     group_name_id = "new_group_name_" + class_name;
 
     group_name_id687 = "#"+group_name_id;
@@ -776,12 +776,12 @@ function CreateGroup(class_name)
 
     search_results_div_str692 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str692)
-    search_results_div.find('.check').each(function(elt){new_elt = elt.clone(true); specific_div.append(new_elt)});
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
 
 
     class_name695 = "#"+class_name;
     action_div  = jQuery(class_name695 +'_action_div');
-    action_div.find('.group_privacy').each(function(elt){new_elt = elt.clone(true); specific_div.append(new_elt)});
+    action_div.find('.group_privacy').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
 
 
     action_obj = jQuery('#action_type')
@@ -813,13 +813,13 @@ function UpdateCollectionStatus()
     wait();
     class_name = "Tutorial"
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(elt){elt.remove()});
+    specific_div.descendants().each(function(){jQuery(this).remove()});
 
     search_results_div_str = "search_results_" + class_name;
 
     search_results_div_str729 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str729)
-    search_results_div.find('.check').each(function(elt){new_elt = elt.clone(true); specific_div.append(new_elt)});
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
 
 
 
@@ -849,12 +849,12 @@ function add_group(class_name, group_name, new_group_id)
 {
    external_filter_group_selection_class =  ".external_filter_group_selection_"+class_name;
    external_filter_group_selection_classes = jQuery(external_filter_group_selection_class)
-   external_filter_group_selection_classes.each(function(select_elt)
+   external_filter_group_selection_classes.each(function()
    {
        insert_option(select_elt, group_name, new_group_id);
    });
    argument_selection_group_span_class = ".argument_selection_group_" + class_name;
-   jQuery(argument_selection_group_span_class).each(function(span_sibling)
+   jQuery(argument_selection_group_span_class).each(function()
    {
        select_elt = span_sibling.next('select');
        if(select_elt !=null)
@@ -887,8 +887,8 @@ function any_selected(class_name)
 
     search_results_div_str792 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str792)
-    search_results_div.find('.check').each(function(elt){
-        if(elt.checked)
+    search_results_div.find('.check').each(function(){
+        if(jQuery(this).checked)
         {
             ret_val = true;
             throw $break;
@@ -922,12 +922,12 @@ if (!answer)
 
     specific_action_variables825 = "#"+specific_action_variables;
     specific_div  = jQuery(specific_action_variables825);
-    specific_div.descendants().each(function(elt){elt.remove()});
+    specific_div.descendants().each(function(){jQuery(this).remove()});
     search_results_div_str = "search_results_" + class_name;
 
     search_results_div_str828 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str828)
-    search_results_div.find('.check').each(function(elt){new_elt = elt.clone(true); elt.removeAttribute('id'); specific_div.append(new_elt)});
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); jQuery(this).removeAttribute('id'); specific_div.append(new_elt)});
 
     action_obj = jQuery('#action_type')
     action_obj.val( "delete")
@@ -984,7 +984,7 @@ function recolour(table_name)
 {
     row_objs_str = ".row_" + table_name
     row_count = 0;
-    jQuery(row_objs_str).each(function(row){
+    jQuery(row_objs_str).each(function(){
         if( row_count  % 2 == 0)
         {
             row.attr({
@@ -1004,9 +1004,9 @@ function recolour(table_name)
 function on_del(table_name, ids)
 {
 //    alert_str = "table = " + table_name + ", ids = ";
-//   ids.each(function(id){alert_str = alert_str + id + ", "});
+//   ids.each(function(){alert_str = alert_str + id + ", "});
 //    alert(alert_str);
-    ids.each(function(id){
+    ids.each(function(){
         name = table_name + '_' + id;
         win_ref = open_windows.get(name);
         if(win_ref!=null && !win_ref.closed)
@@ -1025,7 +1025,7 @@ function on_del(table_name, ids)
     });
     row_objs_str = ".row_" + table_name
     row_count = 0;
-    jQuery(row_objs_str).each(function(row){
+    jQuery(row_objs_str).each(function(){
         if( row_count  % 2 == 0)
         {
             row.attr({

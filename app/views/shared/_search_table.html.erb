@@ -110,11 +110,11 @@
           <h3> Select options</h3>
           <% check_box_str = "'\#search_results_#{table_name} input.check'"   %>
            <input type="button" class ="check" value="Select All"
-              onClick="jQuery(<%= check_box_str %>).each(function(box){box.checked=true})">
+              onClick="jQuery(<%= check_box_str %>).each(function(){jQuery(this).prop( 'checked', true ) })">
            <input type="button" class ="check"  value="Deselect All"
-              onClick="jQuery(<%=check_box_str%>).each(function(box){box.checked=false})">
+              onClick="jQuery(<%=check_box_str%>).each(function(box){jQuery(this).prop( 'checked', false );})">
            <input type="button" class ="check" value="Invert Selection"
-              onClick="jQuery(<%=check_box_str%>).each(function(box){box.checked=!box.checked})">
+              onClick="jQuery(<%=check_box_str%>).each(function(box){jQuery(this).prop( 'checked', !jQuery(this).is(':checked') ) })">
         </div>
 
       <% if table_name == "Person" || table_name == "Lecture" %>
