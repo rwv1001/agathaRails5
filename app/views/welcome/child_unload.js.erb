@@ -7,6 +7,8 @@
     }
 open_windows.unset('#<%="#{edited_table_name}_#{row.id}"%>')
 recolour('#<%="#{edited_table_name}"%>');
+<% Rails.logger.info("child unload.js.erb rwv ") %>
 action_select_no_js();
-
+display_select_action("action_select_Person", 1, false);
+<% Rails.logger.info("child unload.js.erb rwv 2") %>
 <% end %>

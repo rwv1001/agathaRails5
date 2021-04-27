@@ -1,7 +1,11 @@
 <% search_ctls.each do |table_name, search_ctl|  %>
+<% Rails.logger.info("update_main.js.erb rwv table name: #{table_name}") %>
     <% eval("#{table_name}.set_controller(search_ctl)");  %>  
+    <% Rails.logger.info("update_main.js.erb rwv after eval") %>
   <% updated_objects = search_ctl.GetUpdateObjects(edited_table_name, attribute_name, ids); %>
+  <% Rails.logger.info("update_main.js.erb rwv after updated_objects") %>
   <% for row in updated_objects  %>
+ <% Rails.logger.info("update_main.js.erb rwv #{row.id}") %>
     if (jQuery('#<%="#{row.id}_#{table_name}"%>') ){
       jQuery('#<%="#{row.id}_#{table_name}"%>').replaceWith("<%= j render(:partial => 'shared/search_results_row_button', :object => row) %>");
     }

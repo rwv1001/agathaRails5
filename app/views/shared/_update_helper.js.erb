@@ -1,0 +1,3 @@
+jQuery('#<%="#{@table_name}_#{field_name}"%>').replaceWith("<%= j render(:partial => 'shared/edit_cell', :object => edit_cell1) %>");
+jQuery('#<%="#{@table_name}_updated_at"%>').replaceWith("<%= j render(:partial => 'shared/edit_cell', :object => edit_cell2) %>");
+

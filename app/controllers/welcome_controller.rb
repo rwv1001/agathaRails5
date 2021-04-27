@@ -207,9 +207,9 @@ class WelcomeController < ApplicationController
     edited_table_name = params[:table_name];
     attribute_name = params[:attribute_name];
     @search_ctls = session[:search_ctls];
-    @search_ctls.each {|key, value| puts "#{key} is #{value}" }
+    #@search_ctls.each {|key, value| puts "#{key} is #{value}" }
     respond_to do |format|
-      format.js { render "update_name", :locals => {:search_ctls => @search_ctls, :attribute_name => attribute_name, :ids => ids, :id => id, :table_name => table_name   } }  
+      format.js { render "update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_name => attribute_name, :ids => ids, :id => id } }  
 =begin      
       do
         render :update do |page|

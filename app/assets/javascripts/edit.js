@@ -63,17 +63,23 @@ function on_unload()
     parent_win=window.opener;
     if(parent_win!=null)
         {
-            id_obj = parent_win.document.getElementById('child_unload_main_id');
-            table_obj = parent_win.document.getElementById('child_unloade_main_table_name');
-            attribute_obj = parent_win.document.getElementById('child_unload_main_attribute_name');
+            id_obj = jQuery(parent_win.document.getElementById('child_unload_main_id'));
+            table_obj = jQuery(parent_win.document.getElementById('child_unloade_main_table_name'));
+            attribute_obj = jQuery(parent_win.document.getElementById('child_unload_main_attribute_name'));
 
             unload_id_obj = jQuery('#unload_id_value');
             unload_table_obj = jQuery('#unload_table_name');
+            unload_attribute_obj =  jQuery('#unload_attribute_name');
+            unload_data_type_obj =  jQuery('#unload_data_type');
+            
             id_obj.val(  unload_id_obj.val());
             table_obj.val(  unload_table_obj.val());
-            
-            submit_obj = parent_win.document.getElementById('child_unload_main');
-            Rails.fire(submit_obj, 'submit');
+            attribute_obj.val( unload_attribute_obj.val());
+            attr_val = unload_attribute_obj.val();
+            data_type_val = unload_data_type_obj.val();
+            editBlur(attr_val, data_type_val);
+            //submit_obj = parent_win.document.getElementById('child_unload_main');
+           // Rails.fire(submit_obj, 'submit');
            // submit_obj.submit();
         }
 
@@ -109,11 +115,11 @@ function update_parent(table_name, attribute_name, id)
             attribute_obj = parent_win.document.getElementById('update_main_attribute_name');
             update_opener_attribute_name_obj = parent_win.document.getElementById('update_opener_attribute_name');
             update_opener_id_obj = parent_win.document.getElementById('update_opener_id');
-            id_obj.val( id);
-            table_obj.val( table_name);
-            attribute_obj.val( attribute_name);
-            update_opener_attribute_name_obj.val( jQuery('#sensible_update_opener_attribute_name').val());
-            update_opener_id_obj.val( jQuery('#sensible_update_opener_id').val());
+            jQuery(id_obj).val( id);
+            jQuery(table_obj).val( table_name);
+            jQuery(attribute_obj).val( attribute_name);
+            jQuery(update_opener_attribute_name_obj).val( jQuery('#sensible_update_opener_attribute_name').val());
+            jQuery(update_opener_id_obj).val( jQuery('#sensible_update_opener_id').val());
             submit_obj = parent_win.document.getElementById('update_main');
             //submit_obj.submit();
             Rails.fire(submit_obj, 'submit');
@@ -174,7 +180,7 @@ function silly_update()
           
          stupid_update_opener_attribute_name_obj = parent_win.document.getElementById('stupid_update_opener_attribute_name');
          stupid_update_opener_id_obj = parent_win.document.getElementById('stupid_update_opener_id');
-         jQuery('#sensible_update_opener_attribute_name').val( stupid_update_opener_attribute_name_obj.val());
+         jQuery('#sensible_update_opener_attribute_name').val( jQuery(stupid_update_opener_attribute_name_obj).val());
         
          jQuery('#sensible_update_opener_id').val( stupid_update_opener_id_obj.val());
          
