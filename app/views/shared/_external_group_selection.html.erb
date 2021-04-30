@@ -8,7 +8,7 @@
 
 <% on_change_string = "onUpdateExternalFilterGroup('#{class_name}','#{filter_id}','#{elt_id}');return false" %>
           
- <select class= <%= raw "external_filter_group_selection_#{class_name}"%> id= <%= raw   "group_selection_#{class_name}_#{filter_id}_#{elt_id}" %> name= <%= raw "group_selection_#{filter_id}_#{elt_id}"%> style="width:20em;border:none; background-color: transparent; overflow:hidden" onchange = <%= raw "#{on_change_string}" %>   >
+ <select class= <%= raw "external_filter_group_selection_#{class_name} Group_select"%> id= <%= raw   "group_selection_#{class_name}_#{filter_id}_#{elt_id}" %> name= <%= raw "group_selection_#{filter_id}_#{elt_id}"%> style="width:20em;border:none; background-color: transparent; overflow:hidden" onchange = <%= raw "#{on_change_string}" %>   >
               <option value = 0 class= <%= raw "group_class_0"%>  > <%=  "Group for #{external_filter.argument_class} selection" %> </option>
                 <% for group_option in group_selection  %>
                   <% if group_option.id ==  current_elts[elt_id].group_id %>

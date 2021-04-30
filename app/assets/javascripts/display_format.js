@@ -1,13 +1,3 @@
-MyHash = function(){this.hash_table={};}
-MyHash.prototype.set = function(key, value){
-   return this.hash_table[key] = value;
-}
-MyHash.prototype.exists = function(key){
-   return key in this.hash_table;
-}
-MyHash.prototype.get = function(key){
-   return this.exists(key)?this.hash_table[key]:null;
-}
 
 function deleteElement(table, count)
 {
@@ -95,7 +85,7 @@ function addElement(table, count)
         parent_textbox = first_textbox.getOffsetParent();
 
      //   jQuery(element).wrap('div').attr({backgroundImage: 'url(images/rounded-corner-top-left.png) top left'});
-        var new_a = jQuery("<a></a>").attr({ href: '#', onclick: "deleteElement('"+table+"','0');return false" });
+        var new_a = jQuery('<a href ="/" data-remote="true" rel="nofollow"></a>').attr({ onclick: "deleteElement('"+table+"','0');return false" });
         new_a.html("X")
         var new_a_div = new_a.wrap('div',{ 'class': 'remove_format_field' })
         new_a_div.attr('id',"remove_format_"+ table+"_0");
@@ -103,9 +93,7 @@ function addElement(table, count)
        // new_x.update("<div class=\"remove_format_field\"><a href =\"#\">X</a> </div>");
        // new_x.attr("onclick","deleteElement('"+table+"','0');return false");
        // new_x.attr('id',"remove_format_"+ table+"_0");
-        first_textbox.insert( {
-            'after':new_a_div
-        } );
+        new_a_div.insertAfter(first_textbox );
     }
 
     
@@ -178,15 +166,11 @@ function addElement(table, count)
 
     if(pos_str == 'before')
     {
-        first_div_obj.insert({
-            'before':div_obj
-        } );
+        div_obj.insertBefore(first_div_obj );
     }
     else
     {
-        first_div_obj.insert({
-            'after':div_obj
-        } );
+        div_obj.insertAfter(first_div_obj);
 
     }
     

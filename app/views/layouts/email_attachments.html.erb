@@ -1,10 +1,7 @@
-
 <html>
   <head>
-    <title tal:content="template/title">Agatha People Page</title>      
-      <%= javascript_include_tag "application" %>     
-       <%= javascript_include_tag "prototype" %>
-       <%= javascript_include_tag "prepend_template" %>
+    <title tal:content="template/title">Agatha People Page</title>
+     <%= javascript_include_tag "prototype" %>
       <%= javascript_include_tag "template" %>
       <%= javascript_include_tag "search_ctl" %>
       <%= javascript_include_tag "display_format" %>
@@ -57,7 +54,7 @@ td img {display: block;}
 
  <div style="clear:both; height: 20px"> &nbsp</div>
 
-<div style="clear:both; background-color: #FD3; padding-left: 10px"> <p> You are logged in as user <%=User.where(:id => session[:user_id]).first.name %> </p></div>
+<div style="clear:both; background-color: #FD3; padding-left: 10px"> <p> You are logged in as user <%=User.find(:first, :conditions=> {:id => session[:user_id]}).name %> </p></div>
 <div id ="flash" style="padding: 3px 13px 3px 13px">
 
 
@@ -83,5 +80,5 @@ td img {display: block;}
   content_end()
   </script>
   </div>
-</body>
+
 </html>

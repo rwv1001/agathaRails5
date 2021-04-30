@@ -81,10 +81,10 @@
                      <div style ="float:right">
                              <% if filter.argument_class.length>0  %>
                                   <%  raw value_str =  "value= #{filter_string}"  %>
-                                  <select class="select_filter" name = "<%=filter.tag%>"  <%= id_str  %> <%="#{on_change_str }"%> style="border:none; background-color: #ffffff; overflow:hidden" >
+                                  <select class="select_filter select_<%=filter.argument_class %> " name = "<%=filter.tag%>"  <%= id_str  %> <%="#{on_change_str }"%> style="border:none; background-color: #ffffff; overflow:hidden" >
                                             <% selection_list = filter.selection_controller.GetAllShortFields(true, "desc", false); %>
                                             <% for group_member in selection_list -%>
-                                                       <%  if filter.current_argument_value == group_member.id%>
+                                                       <%  if filter.current_argument_value == group_member.id  && group_member.name.length > 0%>
                                                                   <option selected value = "<%=  group_member.id %>"><%= group_member.name %></option>
                                                        <%  else %>
                                                                   <option  value = "<%=  group_member.id %>"><%= group_member.name %></option>

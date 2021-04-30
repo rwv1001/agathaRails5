@@ -71,7 +71,12 @@ def edit_helper(table_name, readonly_fields)
 
     else
     user = User.find(open_record.user_id)
-    @bar_edit_message = "User " + user.name+ " is currently working on the " + @table_name + " record, id = " + id + ". Last updated: " + open_record.updated_at.to_s;
+    bar_edit_message = "User " + user.name+ " is currently working on the " + @table_name + " record, id = " + id + ". Last updated: " + open_record.updated_at.to_s;
+    bar_table_name = @table_name.tableize;
+    bar_class_name = @table_name;
+    bar_id = id;
+    @bar_object = BarObject.new(bar_edit_message,bar_table_name, bar_class_name , bar_id)
+    
     respond_to do |format|
         format.html {render :controller => @table_name.tableize, :action => "bar_record"  }
     end

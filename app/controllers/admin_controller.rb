@@ -47,7 +47,7 @@ class AdminController < ApplicationController
 
       else
         flash.now[:notice] = "Invalid user/password combination"
-
+        redirect_to :controller => :admin, :action => :accessdenied
       end
     else
 
@@ -61,7 +61,7 @@ class AdminController < ApplicationController
       return;
     end
     year = max_year_objs[0].year;
-    upper_year = (2+today.year)
+    upper_year = (5+today.year)
     if year  < upper_year
       max_term_obj  = TermName.find_by_sql("SELECT * FROM term_names  ORDER BY id DESC LIMIT 1");
       max_term = max_term_obj[0].id

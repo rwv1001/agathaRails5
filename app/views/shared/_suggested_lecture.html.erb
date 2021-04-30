@@ -5,12 +5,14 @@
 
 <%  possible_lecturers = filter_controller.GetOptions("lecturer","Person", lecture.person_id, false,false) %>
         <label>Lecturer</label><br>
-        <select  style="width: 115px" name = "person_id"  id= "new_lecturer">
+        <select  style="width: 115px" name = "person_id" class ="Person_select" id= "new_lecturer">
           <% for p in possible_lecturers -%>
             <% if p.id == lecture.person_id %>
               <option selected value = "<%=p.id %>"><%= p.name %></option>
             <% else %>
+            <% if  p.name !=nil %>
               <option  value = "<%= p.id %>"><%= p.name %></option>
+              <% end %>
             <% end  %>
           <% end -%>
         </select>

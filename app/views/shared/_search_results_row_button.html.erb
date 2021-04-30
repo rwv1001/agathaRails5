@@ -51,14 +51,14 @@
       <% if table_name == "Course" %>
       <td class="create-cell">      <% onclick_str = "on_create('#{row.id.to_s}');return false" %>
       <span id=<%= raw "a_create_#{table_name.tableize}_#{row.id.to_s}" %> >
-      <a href="#" onclick= <%= raw "#{onclick_str}"%>   >Create| </a> </span>
+      <a href="/" data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str}"%>   >Create| </a> </span>
       </td>
       <% end %>
   <% if table_name == "EmailTemplate" %>
      <td class="create-email-cell">
       <% onclick_str2 = "on_create('#{row.id.to_s}');return false" %>
        <% onclick_str3 = "on_create_send('#{row.id.to_s}');return false" %>
-      <span > <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Create Emails </a>  <a href=# onclick= <%= raw "#{onclick_str3}"%>   >| Create & Send  </a></span>
+      <span > <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str2}"%>   >Create Emails </a>  <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str3}"%>   >| Create & Send  </a></span>
       </td>
      
       <% end %>
@@ -78,28 +78,28 @@
       <% if table_name == "Course" %>
       <td class="suggest-cell">      <% onclick_str = "on_suggest('#{row.id.to_s}');return false" %>
       <span id=<%= raw "a_suggest_#{table_name.tableize}_#{row.id.to_s}" %> >
-      <a href="#" onclick= <%= raw "#{onclick_str}"%>   >Suggest</a> </span>
+      <a href="/" data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str}"%>   >Suggest</a> </span>
       </td>
       <% end %>
 
       <td class="delete-cell">
       <% onclick_str2 = "on_delete('#{table_name}','#{row.id.to_s}');return false" %>
-      <span > <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Delete </a> </span>
+      <span > <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str2}"%>   >Delete </a> </span>
       </td>
       <% if table_name == "AgathaEmail" %>
       <td class="send-cell">
       <% onclick_str2 = "on_agatha_send('#{row.id.to_s}','0');return false" %><% onclick_str3 = "on_agatha_send('#{row.id.to_s}','1');return false" %>
-      <span style="white-space: nowrap"> <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Send|</a><a href=# onclick= <%= raw "#{onclick_str3}"%> >Test</a> </span>
+      <span style="white-space: nowrap"> <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str2}"%>   >Send|</a><a href=# onclick= <%= raw "#{onclick_str3}"%> >Test</a> </span>
       </td>
        <td class="attach-cell">
       <% onclick_str2 = "on_action('#{row.id.to_s}');return false" %>
-      <span > <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Attach Selected </a> </span>
+      <span > <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str2}"%>   >Attach Selected </a> </span>
       </td>
       <% end %>
       <% if table_name == "AgathaFile" %>
        <td class="attach_to-cell">
       <% onclick_str2 = "on_action('#{row.id.to_s}');return false" %>
-      <span > <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Attach to Selected </a> </span>
+      <span > <a href='/' data-remote="true" rel="nofollow" onclick= <%= raw "#{onclick_str2}"%>   >Attach to Selected </a> </span>
       </td>
       <td class="download-cell">
     
@@ -113,24 +113,24 @@
       <% end %>
       <td class="add-cell">
       <% onclick_str2 = "on_action('#{row.id.to_s}');return false" %>
-      <span > <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Add Selected </a> </span>
+      <span > <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str2}"%>   >Add Selected </a> </span>
       </td>
 
       <td class="remove-cell">
       <% onclick_str2 = "on_action('#{row.id.to_s}');return false" %>
-      <span > <a href=# onclick= <%= raw "#{onclick_str2}"%>   >Remove Selected </a> </span>
+      <span > <a href='/' data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str2}"%>   >Remove Selected </a> </span>
       </td>
       <% if table_name == "Person" %>
       <td class="assign-cell">
           <% onclick_str = "on_assign('#{row.id.to_s}');return false" %>
       <span id=<%= raw "assign_#{table_name.tableize}_#{row.id.to_s}" %> >
-      <a href="#" onclick= <%= raw "#{onclick_str}"%>   >Assign</a> </span>
+      <a href="/" data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str}"%>   >Assign</a> </span>
       </td>
 
       <td class ="willing-cell">
       <% onclick_str = "on_willing('#{row.id.to_s}');return false" %>
       <span id=<%= raw "willing_#{table_name.tableize}_#{row.id.to_s}" %> >
-      <a href="#" onclick= <%= raw "#{onclick_str}"%>   >Make Willing </a> </span>
+      <a href="/" data-remote="true" rel="nofollow"  onclick= <%= raw "#{onclick_str}"%>   >Make Willing </a> </span>
       </td>
       <% end %>
 

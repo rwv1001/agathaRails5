@@ -1,3 +1,18 @@
+MyHash = function(){this.hash_table={};}
+MyHash.prototype.set = function(key, value){
+   return this.hash_table[key] = value;
+}
+MyHash.prototype.unset = function(name){
+   delete this.hash_table[name];
+}
+MyHash.prototype.exists = function(key){
+   return key in this.hash_table;
+}
+MyHash.prototype.get = function(key){
+   return this.exists(key)?this.hash_table[key]:null;
+}
+
+
 var open_windows = new MyHash();
 function div_test()
 {
@@ -27,9 +42,7 @@ function file_change()
 
     disable_div = jQuery("<div></div>").attr({style: "position:absolute; top:0; right:0; width:100%; height: 100%; background-color: #ff0000;  opacity:0.0" });
     main_div = jQuery('#main_div');
-    main_div.insert( {
-            'after':disable_div
-        } );
+    disable_div.insertAfter( main_div);
      disable_div.css('cursor','wait');
     submit_upload_obj = jQuery('#file_upload');
    // submit_upload_obj.submit();
@@ -56,10 +69,13 @@ function myBlur()
 
 
 
-
 function on_unload()
 {
-
+    unload_attribute_obj = jQuery("#unload_attribute");
+    unload_data_type_obj = jQuery("#unload_data_type");
+    attribute_name = unload_attribute_obj.val();
+    data_type = unload_data_type_obj.val(); 
+    editBlur(attribute_name, data_type); 
     parent_win=window.opener;
     if(parent_win!=null)
         {
@@ -69,17 +85,11 @@ function on_unload()
 
             unload_id_obj = jQuery('#unload_id_value');
             unload_table_obj = jQuery('#unload_table_name');
-            unload_attribute_obj =  jQuery('#unload_attribute_name');
-            unload_data_type_obj =  jQuery('#unload_data_type');
-            
             id_obj.val(  unload_id_obj.val());
             table_obj.val(  unload_table_obj.val());
-            attribute_obj.val( unload_attribute_obj.val());
-            attr_val = unload_attribute_obj.val();
-            data_type_val = unload_data_type_obj.val();
-            editBlur(attr_val, data_type_val);
-            //submit_obj = parent_win.document.getElementById('child_unload_main');
-           // Rails.fire(submit_obj, 'submit');
+
+            submit_obj = parent_win.document.getElementById('child_unload_main');
+            Rails.fire(submit_obj, 'submit');
            // submit_obj.submit();
         }
 
@@ -119,7 +129,9 @@ function update_parent(table_name, attribute_name, id)
             jQuery(table_obj).val( table_name);
             jQuery(attribute_obj).val( attribute_name);
             jQuery(update_opener_attribute_name_obj).val( jQuery('#sensible_update_opener_attribute_name').val());
-            jQuery(update_opener_id_obj).val( jQuery('#sensible_update_opener_id').val());
+            if(update_opener_id_obj!=null){
+                jQuery(update_opener_id_obj).val( jQuery('#sensible_update_opener_id').val());
+            }
             submit_obj = parent_win.document.getElementById('update_main');
             //submit_obj.submit();
             Rails.fire(submit_obj, 'submit');
@@ -164,10 +176,14 @@ function open_edit_window(attribute_opener, opener_id, table_name,class_name,id)
     
     win_ref = window.open(url,new_name, config_window);
     update_opener_attribute_name_obj = win_ref.document.getElementById('update_opener_attribute_name');
-    jQuery(update_opener_attribute_name_obj).val( attribute_opener);
+    if(update_opener_attribute_name_obj!=null){
+        jQuery(update_opener_attribute_name_obj).val( attribute_opener);
+    }
 
     update_opener_id_obj = win_ref.document.getElementById('update_opener_id');
-    jQuery(update_opener_id_obj).val( opener_id);
+    if(update_opener_id_obj!=null){
+        jQuery(update_opener_id_obj).val( opener_id);
+    }
     open_windows.set(new_name , win_ref );
 
 }
@@ -217,7 +233,7 @@ function setcheck(check_id, value)
 
     check_id199 = "#"+check_id;
     check_obj  = jQuery(check_id199);
-    check_obj.checked = value;
+    check_obj.prop( 'checked', value);
 }
 
 function on_checkbox_click(row_id, type_name, class_name)
@@ -226,14 +242,14 @@ function on_checkbox_click(row_id, type_name, class_name)
 
      check_str206 = "#"+check_str;
      check_obj  = jQuery(check_str206)
-    if( check_obj != null && check_obj.checked)
+    if( check_obj[0] != null && check_obj.is(':checked'))
         {
 
             class_name209 = "#"+class_name;
             select_box  = jQuery(class_name209 + "_check_"+row_id);
-            select_box.checked = true;
+            select_box.prop( 'checked', true);
         }
-        return check_obj.checked
+        return check_obj.is(':checked')
 }
 
 function on_select_check_click(row_id, class_name)
@@ -242,28 +258,28 @@ function on_select_check_click(row_id, class_name)
     class_name217 = "#"+class_name;
     select_box  = jQuery(class_name217 +"_check_"+row_id);
     
-    if(select_box && !select_box.checked)
+    if(select_box && !select_box.is(':checked'))
         {
 
             class_name221 = "#"+class_name;
             compulosry_box  = jQuery(class_name221 + "_compulsorycheck_"+row_id);
-            compulosry_box.checked = false;
+            compulosry_box.prop( 'checked',false);
 
             class_name223 = "#"+class_name;
             exam_box  = jQuery(class_name223 + "_examcheck_"+row_id);
-            exam_box.checked = false;
+            exam_box.prop( 'checked',false);
         }
-        return select_box.checked
+        return select_box.is(':checked')
 }
 function on_assign(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
         });
      sent_tutor = jQuery("<input></input>").attr({ type: 'text', name: 'id',  value: id  });
-     specific_div.insert({ 'bottom': sent_tutor  });
+     specific_div.append(sent_tutor  );
      class_name = jQuery('#action_class').val();
      search_results_div_str = "search_results_" + class_name;
 
@@ -286,11 +302,11 @@ function on_willing(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
         });
      sent_willing = jQuery("<input></input>").attr({ type: 'text', name: 'willing_id',  value: id  });
-     specific_div.insert({ 'bottom': sent_willing   });
+     specific_div.append(sent_willing   );
      class_name = jQuery('#action_class').val();
      search_results_div_str = "search_results_" + class_name;
 
@@ -313,14 +329,14 @@ function on_agatha_send(id,test_flag)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
         });
 
     sent_email = jQuery("<input></input>").attr({ type: 'text', name: 'email_id',  value: id  })
     sent_test_flag = jQuery("<input></input>").attr({ type: 'text', name: 'test_flag',  value: test_flag  })
-    specific_div.insert({ 'bottom': sent_email });
-     specific_div.insert({ 'bottom': sent_test_flag  });
+    specific_div.append( sent_email );
+     specific_div.append( sent_test_flag  );
     jQuery('#action_type').val( "send_email")
     form_obj = jQuery('#action_form');
    // form_obj.submit();
@@ -332,7 +348,7 @@ function on_sends(test_flag)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
         });
 
@@ -347,7 +363,7 @@ function on_sends(test_flag)
             specific_div.append(new_elt  )
       });
      sent_test_flag = jQuery("<input></input>").attr({ type: 'text', name: 'test_flag',  value: test_flag  })
-     specific_div.insert({ 'bottom': sent_test_flag  });
+     specific_div.append( sent_test_flag  );
     jQuery('#action_type').val( "send_emails")
     form_obj = jQuery('#action_form');
    // form_obj.submit();
@@ -359,7 +375,7 @@ function on_create_send(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
         });
     jQuery('#action_type').val(  "create_send_email_from_template");
@@ -376,9 +392,9 @@ function on_create_send(id)
             sent_template = jQuery("<input></input>").attr({ type: 'text', name: 'email_template_id',  value: id  })
             sent_term = jQuery("<input></input>").attr({ type: 'text',  name: 'term_id', value: term_id });
             sent_course = jQuery("<input></input>").attr({ type: 'text',  name: 'course_id', value: course_id });
-            specific_div.insert({  'bottom': sent_template});
-            specific_div.insert({  'bottom': sent_term});
-            specific_div.insert({  'bottom': sent_course});
+            specific_div.append( sent_template);
+            specific_div.append(  sent_term);
+            specific_div.append(  sent_course);
             class_name2 = jQuery('#action_class2').val();
             search_results_div_str = "search_results_" + class_name2;
 
@@ -401,7 +417,7 @@ function on_create(id)
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
         });
     action_type = jQuery('#action_type').val();
@@ -439,14 +455,14 @@ function on_create(id)
             sent_num_classes = jQuery("<input></input>").attr({  type: 'text',  name: 'number_of_classes',  value: number_of_classes })
             sent_previous_suggestions =  jQuery("<input></input>").attr({ type: 'text',  name: 'previous_suggestions', value: previous_suggestions  })
 
-            specific_div.insert({ 'bottom': sent_course  });
-            specific_div.insert({  'bottom': sent_lecturer   });
-            specific_div.insert({  'bottom': sent_term});
-            specific_div.insert({  'bottom': sent_day  });
-            specific_div.insert({  'bottom': sent_time  });
-            specific_div.insert({  'bottom': sent_num_lectures });
-            specific_div.insert({  'bottom': sent_num_classes});
-            specific_div.insert({   'bottom': sent_previous_suggestions });
+            specific_div.append(sent_course  );
+            specific_div.append( sent_lecturer   );
+            specific_div.append( sent_term);
+            specific_div.append( sent_day  );
+            specific_div.append( sent_time );
+            specific_div.append( sent_num_lectures);
+            specific_div.append( sent_num_classes);
+            specific_div.append( sent_previous_suggestions );
             break;
         case 'create_tutorials_from_course':
             class_name = jQuery('#action_class').val();
@@ -461,9 +477,10 @@ function on_create(id)
 
             num_tutorials_elt = jQuery('#number_of_tutorials');
             number_of_tutorials = num_tutorials_elt.val();
-
+            tutorial_class_size_elt = jQuery("#tutorial_class_size");
+            tutorial_class_size = tutorial_class_size_elt.val();
             collection_required_elt = jQuery('#collection_required');
-            if(collection_required_elt.checked)
+            if(collection_required_elt.is(':checked'))
             {
                 collection_required = "1"
             }
@@ -478,15 +495,17 @@ function on_create(id)
             sent_tutor = jQuery("<input></input>").attr({type: 'text',name: 'tutor_id',  value: tutor_id })
             sent_term = jQuery("<input></input>").attr({ type: 'text',  name: 'term_id', value: term_id })
             sent_num_tutorials = jQuery("<input></input>").attr({ type: 'text',   name: 'number_of_tutorials',  value: number_of_tutorials   })
+            sent_tutorial_class_size = jQuery("<input></input>").attr({ type: 'text',   name: 'tutorial_class_size',  value: tutorial_class_size   })
             sent_collection_required =  jQuery("<input></input>").attr({ type: 'text',   name: 'collection_required',  value: collection_required   })
             sent_previous_suggestions =  jQuery("<input></input>").attr({ type: 'text',  name: 'previous_suggestions', value: previous_suggestions  })
 
-            specific_div.insert({ 'bottom': sent_course  });
-            specific_div.insert({  'bottom': sent_tutor   });
-            specific_div.insert({  'bottom': sent_term});
-            specific_div.insert({  'bottom': sent_num_tutorials });
-            specific_div.insert({  'bottom': sent_collection_required });
-            specific_div.insert({   'bottom': sent_previous_suggestions });
+            specific_div.append(sent_course  );
+            specific_div.append( sent_tutor   );
+            specific_div.append( sent_term);
+            specific_div.append( sent_num_tutorials );
+            specific_div.append(sent_tutorial_class_size );
+            specific_div.append( sent_collection_required );
+            specific_div.append( sent_previous_suggestions );
 
             class_name2 = jQuery('#action_class2').val();
             search_results_div_str = "search_results_" + class_name2;
@@ -513,9 +532,9 @@ function on_create(id)
             sent_template = jQuery("<input></input>").attr({ type: 'text', name: 'email_template_id',  value: id  })
             sent_term = jQuery("<input></input>").attr({ type: 'text',  name: 'term_id', value: term_id });
             sent_course = jQuery("<input></input>").attr({ type: 'text',  name: 'course_id', value: course_id });
-            specific_div.insert({  'bottom': sent_template});
-            specific_div.insert({  'bottom': sent_term});
-            specific_div.insert({  'bottom': sent_course});
+            specific_div.append(  sent_template);
+            specific_div.append(  sent_term);
+            specific_div.append( sent_course);
             class_name2 = jQuery('#action_class2').val();
             search_results_div_str = "search_results_" + class_name2;
 
@@ -540,13 +559,26 @@ function on_add_attendees(lecture_id)
 {
 
 }
+function insert_specific_div_checks(specific_div, search_results_div, check_class)
+{
+    
 
+    search_results_div.find(check_class).each(function(){
+    new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+                specific_div.append(new_elt)
+            });
+}
+
+function insert_specific_div_multi_values(specific_div, class_name2)
+{
+
+}
 function on_action( id)
 {
     wait();
     action_type = jQuery('#action_type').val();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){
+    specific_div.children().each(function(){
         jQuery(this).remove()
     });
 
@@ -555,46 +587,17 @@ function on_action( id)
         name: 'id',
         value: id
     });
-    specific_div.insert({
-        'bottom': id_elt
-    });
+    specific_div.append( id_elt);
     switch (action_type)
     {
         case 'add_to_group': case 'remove_from_group': case 'add_to_groups': case 'remove_from_groups': case 'attach_files': case 'attach_to_emails':
-            class_name2 = jQuery('#action_class2').val();
-            search_results_div_str = "search_results_" + class_name2;
-
-            search_results_div_str499 = "#"+search_results_div_str;
-            search_results_div  = jQuery(search_results_div_str499)
-            search_results_div.find('.check').each(function(){
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
-                specific_div.insert({
-                    'bottom': new_elt
-                })
-            });
+            insert_specific_div_checks(specific_div, search_results_div, '.check');
             break;
 
         case 'add_to_lectures':
-            class_name2 = jQuery('#action_class2').val();
-            search_results_div_str = "search_results_" + class_name2;
-
-            search_results_div_str511 = "#"+search_results_div_str;
-            search_results_div  = jQuery(search_results_div_str511)
-            search_results_div.find('.check').each(function(){
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id'); specific_div.insert({
-                    'bottom': new_elt
-                })
-            });
-            search_results_div.find('.examcheck').each(function(){
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');specific_div.insert({
-                    'bottom': new_elt
-                })
-            });
-            search_results_div.find('.compulsorycheck').each(function(){
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');specific_div.insert({
-                    'bottom': new_elt
-                })
-            });
+            insert_specific_div_checks(specific_div, search_results_div, '.check');
+            insert_specific_div_checks(specific_div, search_results_div, '.examcheck');
+            insert_specific_div_checks(specific_div, search_results_div, '.compulsorycheck');
             break;
 
     }
@@ -623,7 +626,25 @@ function set_action_class(class_name, class_name2, action_type)
 
     action_obj.val(  action_type);
 }
+function create_multi_change_table(table_name)
+{
+    multi_change_present_obj = jQuery("#multi_change_present_"+table_name);
+    
 
+
+    if(!multi_change_present_obj.checked)
+    {
+        multi_change_present_obj.prop('checked', true);
+        multi_table_create_table_name_obj = jQuery("#multi_table_create_table_name");
+        multi_table_create_table_name.val( table_name);
+        multi_table_create_obj = jQuery("#multi_table_create");
+        //multi_table_create.onsubmit();
+        elem = document.getElementById('multi_table_create');
+        Rails.fire(elem, 'submit');;
+
+    }
+
+}
 function on_remove(class_name, id)
 {
     on_action(class_name, id, "remove_from_group")
@@ -642,7 +663,7 @@ function on_suggest(course_id)
     new_suggest_div = jQuery("<div></div>").attr({id: 'specific_suggest_variables'});
     jQuery('#make_suggestion_div').append(new_suggest_div);
     suggest_div = jQuery('#specific_suggest_variables'); 
-    //suggest_div.descendants().each(function()
+    //suggest_div.children().each(function()
     //{
       //  jQuery(this).remove()
     //});
@@ -729,7 +750,7 @@ function SetMaxTutorials()
 {
     wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){jQuery(this).remove()});
+    specific_div.children().each(function(){jQuery(this).remove()});
     term_elt = jQuery('#max_tutorials_term')
     term_id = term_elt.val();
     sent_term = jQuery("<input></input>").attr({type: 'text', name: 'term_id', value: term_id})
@@ -753,18 +774,43 @@ function SetMaxTutorials()
     action_table = jQuery('#action_class');
     action_table.val( "Person");
 
-    form_obj = jQuery('#action_form');
+    //form_obj = jQuery('#action_form');
   //  form_obj.submit();
     elem = document.getElementById('action_form');
     Rails.fire(elem, 'submit');  
 
 }
-
-function CreateGroup(class_name)
+function MultiUpdate(class_name)
 {
     wait();
+    specific_div = jQuery("#specific_action_variables");
+    specific_div.children().each(function(){jQuery(this).remove()});
+    action_obj = jQuery("#action_type")
+    action_obj.val( "multi_update")
+    action_table = jQuery("#action_class");
+    action_table.val( class_name);
+    
+    search_results_div_str = "search_results_" + class_name;
+    search_results_div = jQuery(search_results_div_str);
+
+    insert_specific_div_checks(specific_div, search_results_div, '.check');
+
+    multi_change_table_div = jQuery("#multi_change_table_div_"+class_name);
+    multi_change_table_div.find('.radio').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
+    multi_change_table_div.find('.edit_text').each(function(){new_elt = jQuery(this).clone(true); specific_div.append( new_elt)});
+    multi_change_table_div.find('.select').each(function(){new_elt =  jQuery("<input></input>").attr({ type: 'text',   name: elt.name,  value: jQuery(this).val()   }); specific_div.append( new_elt)});
+
+    //form_obj = $("action_form");
+    //form_obj.onsubmit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');  
+}
+function CreateGroup(class_name)
+{
+ //   add_group('Person', '11', 204)
+    wait();
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){jQuery(this).remove()});
+    specific_div.children().each(function(){jQuery(this).remove()});
     group_name_id = "new_group_name_" + class_name;
 
     group_name_id687 = "#"+group_name_id;
@@ -795,13 +841,54 @@ function CreateGroup(class_name)
     Rails.fire(elem, 'submit');;
 }
 
+function SetChecks(ids, check_type)
+{
+     
+     ids.forEach(function(id){
+        check_id = check_type + '_'+id;
+        check_obj = jQuery(check_id);
+        if(check_obj[0]!=null)
+        {
+            check_obj.prop('checked', true);
+        }
+        
+    });
+}
+function SetTutorialNumber()
+{
+    wait();
+    specific_div = jQuery("#specific_action_variables");
+    specific_div.children().each(function(){jQuery(this).remove()});
+    tutorial_number_id = "#tutorial_number";
+    tutorial_number_elt = jQuery(tutorial_number_id);
+    cloned_tutorial_number_elt = jQuery("<input></input>").attr({type: 'text', name: 'tutorial_number', value: tutorial_number_elt.val()})
+    
+    specific_div.append( cloned_tutorial_number_elt);
+    search_results_div_str = "#search_results_TutorialSchedule";
+    search_results_div = jQuery(search_results_div_str);
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).cloneNode(true); specific_div.append( new_elt)});
+
+    action_div = jQuery('#TutorialSchedule_action_div');
+  
+    action_obj = jQuery("#action_type");
+    action_obj.val( "set_tutorial_number");
+    action_table = jQuery("action_class");
+    action_table.val( "TutorialSchedule");
+
+    form_obj = $("action_form");
+   // form_obj.onsubmit();
+    elem = document.getElementById('action_form');
+    Rails.fire(elem, 'submit');;
+}
+
+
 function GetRadioValue(radio_list)
 {
     default_ret_val = radio_list[0].val();
     length = radio_list.length;
     for(i=0;i<length; i++)
     {
-        if(radio_list[i].checked == true)
+        if(radio_list[i].is(':checked') == true)
         {
             return radio_list[i].val();
         }
@@ -813,7 +900,7 @@ function UpdateCollectionStatus()
     wait();
     class_name = "Tutorial"
     specific_div = jQuery('#specific_action_variables');
-    specific_div.descendants().each(function(){jQuery(this).remove()});
+    specific_div.children().each(function(){jQuery(this).remove()});
 
     search_results_div_str = "search_results_" + class_name;
 
@@ -851,34 +938,168 @@ function add_group(class_name, group_name, new_group_id)
    external_filter_group_selection_classes = jQuery(external_filter_group_selection_class)
    external_filter_group_selection_classes.each(function()
    {
-       insert_option(select_elt, group_name, new_group_id);
+       insert_option(jQuery(this), group_name, new_group_id);
    });
    argument_selection_group_span_class = ".argument_selection_group_" + class_name;
    jQuery(argument_selection_group_span_class).each(function()
    {
+       span_sibling = jQuery(this);
        select_elt = span_sibling.next('select');
-       if(select_elt !=null)
+       if(select_elt[0] !=null)
            {
        insert_option(select_elt, group_name, new_group_id);
            }
    });   
 }
+function select_remove(table_name,id)
+{
+   select_class = "."+ table_name + "_select > option[value="+id+"]";
+   jQuery(select_class).each(function()
+   { 
+       jQuery(this).remove();
+   });
 
+}
+
+function select_update(table_name,id,new_option_str)
+{
+ 
+   count = 0;
+ 
+   select_class = "."+ table_name + "_select > option[value="+id+"]";
+   jQuery(select_class).each(function()
+   {
+       count = count + 1;
+       jQuery(this).text(new_option_str);
+   });
+   
+   if(count == 0 && new_option_str.length>0)
+   {
+       insert_new_obj(table_name, new_option_str, id);
+   }
+     
+}
+
+function edit_alert(test_str)
+{
+   alert(test_str);
+}
+
+function update_edit_link(table_name, class_name,id)
+{
+    
+    parent_win=window.opener;
+    if(parent_win == null)
+        {
+            first_parent = window.open('','main_window');
+            if(first_parent != window)
+            {
+                    parent_win = first_parent
+            }
+        }
+    if(parent_win!=null)
+        {
+            span_aref_obj_str = "a_edit_"+table_name +"_" + id;
+            span_aref_obj = parent_win.document.getElementById(span_aref_obj_str);
+            aref_obj = jQuery(span_aref_obj).find('label:first');
+            var new_a = jQuery("<a></a>").attr({ href: '#', onclick: "on_edit('"+table_name+"','"+class_name+"','"+id+"');return false" });
+
+            new_a.html('Edit ')          
+            aref_obj.remove();
+            span_aref_obj.replaceWith(new_a);  
+       }
+
+}
 function insert_option(select_elt, group_name, new_group_id)
 {
     first_option = select_elt.find('option:first');
 
     current_option = first_option;
     next_option = first_option.next('option');
-    while(next_option != null && next_option.text.toLowerCase() < group_name.toLowerCase())
+    while(next_option[0] != null && next_option.text().trim().toLowerCase() < group_name.toLowerCase().trim())
         {
             current_option = next_option;
             next_option = current_option.next('option');
         }
-        var new_option = jQuery("<option></option>").attr({'value': new_group_id, 'class': 'group_class_' + new_group_id })
-        new_option.text = group_name;
-        current_option.after(new_option);
+        //var new_option = jQuery("<option></option>").attr({'value': new_group_id, 'class': 'group_class_' + new_group_id }) I'm not sure why I'm setting class to group_class_.
+        var new_option = jQuery("<option></option>").attr({'value': new_group_id}) 
+        new_option.text(group_name);
+        new_option.insertAfter(current_option);
 }
+
+function insert_new_obj(class_name, new_obj_name, new_obj_id)
+{
+    
+    select_class = "."+ class_name + "_select:first";
+    done = false;
+
+    jQuery(select_class).each(function()
+    {
+        select_elt = jQuery(this);
+       if(done)
+       {
+               return;
+       }
+
+       select_length = Math.round(select_elt.children().length);
+       n = Math.round(select_elt.children().length/2);
+       offset = n;
+       n_shift = Math.floor(n/2);
+       
+
+       
+       while(n_shift>0)
+       {
+          comp_done = false
+          select_class_n = "."+ class_name + "_select > option:nth-child("+offset+")";
+          jQuery(select_class_n).each(function()
+          {
+              option_elt = jQuery(this)
+              if(comp_done == false)
+              {
+                  if(option_elt.text().trim().toLowerCase()<new_obj_name.trim().toLowerCase())
+                  {
+                      offset = offset + n_shift;
+                  }
+                  else
+                  {
+                      offset = offset - n_shift;
+                  }
+                  n_shift = Math.floor(n_shift/2);
+              }
+              if(offset>=select_length)
+              {
+          //        offset = select_length -1;
+              }
+              
+              comp_done = true;
+           });
+        }
+        select_class_n = "."+ class_name + "_select > option:nth-child("+offset+")";
+        jQuery(select_class_n).each(function()
+        {
+            var option_elt = jQuery(this)
+            var new_option = jQuery("<option></option>").attr({'value': new_obj_id })
+            new_option.text( new_obj_name);
+            if(option_elt.text().trim().toLowerCase()<new_obj_name.trim().toLowerCase())
+            {
+                new_option.insertAfter(option_elt );
+            }
+            else
+            {
+                new_option.insertBefore(option_elt );
+            }
+        });
+
+
+        done = true;
+      // insert_option(select_elt, new_group_name, new_group_id);
+    });
+    y = 2;
+    
+}
+
+
 function any_selected(class_name)
 {
     var ret_val = false
@@ -888,7 +1109,7 @@ function any_selected(class_name)
     search_results_div_str792 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str792)
     search_results_div.find('.check').each(function(){
-        if(jQuery(this).checked)
+        if(jQuery(this).is(':checked'))
         {
             ret_val = true;
             throw $break;
@@ -922,7 +1143,7 @@ if (!answer)
 
     specific_action_variables825 = "#"+specific_action_variables;
     specific_div  = jQuery(specific_action_variables825);
-    specific_div.descendants().each(function(){jQuery(this).remove()});
+    specific_div.children().each(function(){jQuery(this).remove()});
     search_results_div_str = "search_results_" + class_name;
 
     search_results_div_str828 = "#"+search_results_div_str;
@@ -973,7 +1194,7 @@ if (!answer)
    ids[0] = id;
    
    //form_obj.submit();
-   elem = document.getElementById('form_obj_str');
+   elem = document.getElementById(form_obj_str);
    Rails.fire(elem, 'submit');;  
    
 }
@@ -985,15 +1206,16 @@ function recolour(table_name)
     row_objs_str = ".row_" + table_name
     row_count = 0;
     jQuery(row_objs_str).each(function(){
+        row = jQuery(this)
         if( row_count  % 2 == 0)
         {
-            row.attr({
+            row.css({
                 background:'#CCCCCC'
             });
         }
         else
         {
-            row.attr({
+            row.css({
                 background:'#EEEEEE'
             });
         }
@@ -1006,7 +1228,7 @@ function on_del(table_name, ids)
 //    alert_str = "table = " + table_name + ", ids = ";
 //   ids.each(function(){alert_str = alert_str + id + ", "});
 //    alert(alert_str);
-    ids.each(function(){
+    ids.forEach(function(id){        
         name = table_name + '_' + id;
         win_ref = open_windows.get(name);
         if(win_ref!=null && !win_ref.closed)
@@ -1018,7 +1240,7 @@ function on_del(table_name, ids)
 
         row_obj_str907 = "#"+row_obj_str;
         row_obj  = jQuery(row_obj_str907);
-        if(row_obj != null)
+        if(row_obj[0] != null)
         {
             row_obj.remove();
         }
@@ -1026,17 +1248,14 @@ function on_del(table_name, ids)
     row_objs_str = ".row_" + table_name
     row_count = 0;
     jQuery(row_objs_str).each(function(){
+        row = jQuery(this);
         if( row_count  % 2 == 0)
         {
-            row.attr({
-                background:'#CCCCCC'
-            });
+            row.css({background:'#CCCCCC'});
         }
         else
         {
-            row.attr({
-                background:'#EEEEEE'
-            });
+            row.css({background:'#EEEEEE'});
         }
         row_count  = row_count +1;
     });
@@ -1045,7 +1264,7 @@ function on_del(table_name, ids)
 
   //  action_obj_str = "action_" + table_name
 
-  action_obj_str934 = "#"+action_obj_str;
+  //action_obj_str934 = "#"+action_obj_str;
   //  action_obj  = jQuery(action_obj_str934)
   //  action_obj.val( "delete")
 
@@ -1098,7 +1317,7 @@ function editBlur(attribute_name, data_type)
         num_elts=radio_elts.length;
         for(i=0;i<num_elts && !found; i++)
         {
-            if(radio_elts[i].checked)
+            if(radio_elts[i].is(':checked'))
             {
                found=true;
                found_val = radio_elts[i].val();
@@ -1124,7 +1343,7 @@ function editBlur(attribute_name, data_type)
         }
     else
         {
-            field_value_obj.val( current_attribute_obj.checked);
+            field_value_obj.val( current_attribute_obj.is(':checked'));
         }
     }
 

@@ -191,6 +191,7 @@ function display_page(page_name, option_str)
     page_name_elt.attr("value", page_name);
     option_elt.attr("value", option_str);
     //form_elt.submit();
+
 }
 function hide_div(div_id)
 {
@@ -232,7 +233,7 @@ function insert_div(div_id, insert_id)
 
     insert_id245 = "#"+insert_id;
     insert_elt  = jQuery(insert_id245);
-    insert_elt.after(div_elt);
+    div_elt.insertAfter(insert_elt);
 }
 function set_body_id(body_id_str)
 {
@@ -247,7 +248,7 @@ function set_option(table_name, option_id)
 
     option_id258 = "#"+option_id;
     option_elt  = jQuery(option_id258)
-    if(option_elt != null)
+    if(option_elt[0] != null)
         {
             option_elt.prop('selected',true);
         }
@@ -283,6 +284,8 @@ var all_invisible_classes = [
     ".exam-cell",
     ".help-cell",
     ".group_div",
+    ".multi_change_div",
+    ".tutorial_no_div",    
     ".max_tutorials_div",
     ".remove-cell",
     ".remove_from_group_title",
@@ -391,6 +394,9 @@ function load_pages()
     person_page_views.push(new PageView("people", "Person", "Edit", true,
       [new DisplayDiv("welcome_Person", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"],""),
        new DisplayDiv("Person_action_div", "first_menu_div", [], [], [],"")]));
+    person_page_views.push(new PageView("people", "Person", "Multi-edit", true,
+      [new DisplayDiv("welcome_Person", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("Person_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('Person')")]));
     person_page_views.push(new PageView("people", "Person", "Create group", true,
       [new DisplayDiv("welcome_Person", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
        new DisplayDiv("Person_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -508,6 +514,9 @@ function load_pages()
     lecture_page_views.push(new PageView("lectures", "Lecture", "Edit",true,
       [new DisplayDiv("welcome_Lecture", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
        new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [], "")]));
+    lecture_page_views.push(new PageView("lectures", "Lecture",  "Multi-edit",true,
+      [new DisplayDiv("welcome_Lecture", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"],""),
+       new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('Lecture')")]));    
     lecture_page_views.push(new PageView("lectures", "Lecture", "Add attendees",true,
       [new DisplayDiv("welcome_Lecture", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], [".remove-cell",".update-cell",".select_options", ".select-cell", ".delete-cell"],"group_unrestriction()"),
        new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [], [".delete_div",".group_div"],""),
@@ -543,6 +552,9 @@ function load_pages()
     willing_lecturer_page_views.push(new PageView("willing_lecturers", "WillingLecturer", "Edit",true,
       [new DisplayDiv("welcome_WillingLecturer", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
        new DisplayDiv("WillingLecturer_action_div", "first_menu_div", [], [], [], "")]));
+    willing_lecturer_page_views.push(new PageView("willing_lecturers", "WillingLecturer",  "Multi-edit",true,
+      [new DisplayDiv("welcome_WillingLecturer", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("WillingLecturer_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('WillingLecturer')")]));
     willing_lecturer_page_views.push(new PageView("willing_lecturers", "WillingLecturer",  "Create group",true,
       [new DisplayDiv("welcome_WillingLecturer", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
        new DisplayDiv("WillingLecturer_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -574,6 +586,9 @@ function load_pages()
     attendee_page_views.push(new PageView("attendees", "Attendee", "Edit",true,
       [new DisplayDiv("welcome_Attendee", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
        new DisplayDiv("Attendee_action_div", "first_menu_div", [], [], [], "")]));
+    attendee_page_views.push(new PageView("attendees", "Attendee",  "Multi-edit",true,
+      [new DisplayDiv("welcome_Attendee", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("Attendee_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('Attendee')")]));
     attendee_page_views.push(new PageView("attendees", "Attendee",  "Create group",true,
       [new DisplayDiv("welcome_Attendee", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
        new DisplayDiv("Attendee_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -638,6 +653,9 @@ function load_pages()
     tutorial_schedule_page_views.push(new PageView("tutorial_schedules", "TutorialSchedule",  "Edit",true,
       [new DisplayDiv("welcome_TutorialSchedule", "first_div", ["content_div","content_div"],["two_column_div"], [".update-cell",".dummy-cell"], [".select_options", ".select-cell", ".delete-cell"],""),
        new DisplayDiv("TutorialSchedule_action_div", "first_menu_div", [], [], [], "")]));
+    tutorial_schedule_page_views.push(new PageView("tutorial_schedules", "TutorialSchedule",  "Multi-edit",true,
+      [new DisplayDiv("welcome_TutorialSchedule", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("TutorialSchedule_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('TutorialSchedule')")]));
     tutorial_schedule_page_views.push(new PageView("tutorial_schedules", "TutorialSchedule", "Add student",true,
       [new DisplayDiv("welcome_TutorialSchedule", "first_div_1", ["two_column_div"],["content_div"], [".select_options", ".select-cell"], "group_unrestriction()"),
        new DisplayDiv("TutorialSchedule_action_div", "first_menu_div", [], [], [], [".delete_div",".group_div"],""),
@@ -647,6 +665,9 @@ function load_pages()
       [new DisplayDiv("welcome_TutorialSchedule", "first_div_1", ["two_column_div"],["content_div"], [".select_options", ".select-cell"], "group_unrestriction()"),
        new DisplayDiv("TutorialSchedule_action_div", "first_menu_div", [], [], [], [".delete_div",".group_div"],""),
        new DisplayDiv("welcome_Person", "first_div_2", [], ["Person_action_div"], [".assign-cell", ".tutorial_assign_title",".dummy-cell"], "set_action_class('TutorialSchedule','Person','assign_tutor')")]));
+    tutorial_schedule_page_views.push(new PageView("tutorial_schedules", "TutorialSchedule",  "Set tutorial number",true,
+      [new DisplayDiv("welcome_TutorialSchedule", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("TutorialSchedule_action_div", "first_menu_div", [], [], [".tutorial_no_div"], "")]));
     tutorial_schedule_page_views.push(new PageView("tutorial_schedules", "TutorialSchedule",  "Create group",true,
       [new DisplayDiv("welcome_TutorialSchedule", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
        new DisplayDiv("TutorialSchedule_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -678,6 +699,9 @@ function load_pages()
     tutorial_page_views.push(new PageView("tutorials", "Tutorial",  "Edit",true,
       [new DisplayDiv("welcome_Tutorial", "first_div", ["content_div","content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
        new DisplayDiv("Tutorial_action_div", "first_menu_div", [], [], [], "")]));
+    tutorial_page_views.push(new PageView("tutorials", "Tutorial",  "Multi-edit",true,
+      [new DisplayDiv("welcome_Tutorial", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("Tutorial_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('Tutorial')")]));
     tutorial_page_views.push(new PageView("tutorials", "Tutorial",  "Create group",true,
       [new DisplayDiv("welcome_Tutorial", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
        new DisplayDiv("Tutorial_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -712,6 +736,9 @@ function load_pages()
     willing_tutor_page_views.push(new PageView("willing_tutors", "WillingTutor", "Edit",true,
       [new DisplayDiv("welcome_WillingTutor", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
        new DisplayDiv("WillingTutor_action_div", "first_menu_div", [], [], [], "")]));
+    willing_tutor_page_views.push(new PageView("willing_tutors", "WillingTutor",  "Multi-edit",true,
+      [new DisplayDiv("welcome_WillingTutor", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+       new DisplayDiv("WillingTutor_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('WillingTutor')")]));
     willing_tutor_page_views.push(new PageView("willing_tutors", "WillingTutor",  "Create group",true,
       [new DisplayDiv("welcome_WillingTutor", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
        new DisplayDiv("WillingTutor_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -1186,6 +1213,9 @@ group_page_views.push(new PageView("groups", "Group", "Remove users",false,
   agatha_email_page_views.push(new PageView("agatha_emails", "AgathaEmail", "Edit",true,
     [ new DisplayDiv("welcome_AgathaEmail", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
       new DisplayDiv("AgathaEmail_action_div", "first_menu_div", [], [], [], "")]));
+  agatha_email_page_views.push(new PageView("agatha_emails", "AgathaEmail",  "Multi-edit",true,
+    [ new DisplayDiv("welcome_AgathaEmail", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+      new DisplayDiv("AgathaEmail_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('AgathaEmail')")]));
   agatha_email_page_views.push(new PageView("agatha_emails", "AgathaEmail", "Attach Files",true,
     [ new DisplayDiv("welcome_AgathaEmail", "first_div_1", ["two_column_div"],["content_div"], [".attach-cell",".dummy-cell"], "group_unrestriction()"),
       new DisplayDiv("AgathaEmail_action_div", "first_menu_div", [], [], [],""),
@@ -1249,6 +1279,9 @@ group_page_views.push(new PageView("groups", "Group", "Remove users",false,
   emal_attachment_page_views.push(new PageView("email_attachments", "EmailAttachment", "Edit",true,
     [ new DisplayDiv("welcome_EmailAttachment", "first_div", ["content_div"],["two_column_div"], [".update-cell",".dummy-cell"], ""),
       new DisplayDiv("EmailAttachment_action_div", "first_menu_div", [], [], [], "")]));
+  emal_attachment_page_views.push(new PageView("email_attachments", "EmailAttachment",  "Multi-edit",true,
+    [ new DisplayDiv("welcome_EmailAttachment", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"], ""),
+      new DisplayDiv("EmailAttachment_action_div", "first_menu_div", [], [], [".multi_change_div"], "create_multi_change_table('EmailAttachment')")]));  
   emal_attachment_page_views.push(new PageView("email_attachments", "EmailAttachment", "Delete email_attachments",true,
     [ new DisplayDiv("welcome_EmailAttachment", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell", ".delete-cell"], ""),
       new DisplayDiv("EmailAttachment_action_div", "first_menu_div", [], [], [".delete_div"],"")]));
@@ -1285,6 +1318,7 @@ group_page_views.push(new PageView("groups", "Group", "Remove users",false,
 
     form_id1294 = "#"+form_id;
     form_elt  = jQuery(form_id1294);
+
     //form_elt.submit();
 
 
@@ -1305,14 +1339,14 @@ function add_action_items(page_views)
  
     
  
-    if(page_views.length > 1 && select_obj != null)
+    if(page_views.length > 1 && select_obj[0] != null)
     {
         
         page_views.forEach(function(page_view)
         {
             
             
-            if(page_view.unrestricted || administrator_div != null)
+            if(page_view.unrestricted || administrator_div[0] != null)
             {
                
                 
@@ -1345,7 +1379,7 @@ function action_select0()
 
     select_str1350 = "#"+select_str;
     select_elt  = jQuery(select_str1350);
-    if(select_elt != null)
+    if(select_elt[0] != null)
         {
     option_id = parseInt(select_elt.val());
     do_js = true;
@@ -1359,7 +1393,7 @@ function action_select_no_js()
 
     select_str1362 = "#"+select_str;
     select_elt  = jQuery(select_str1362);
-    if(select_elt!= null)
+    if(select_elt[0] != null)
         {
     option_id = parseInt(select_elt.val());
     do_js = false;
@@ -1373,7 +1407,7 @@ function action_select2(table_name)
 
     select_str1374 = "#"+select_str;
     select_elt  = jQuery(select_str1374);
-        if(select_elt!= null)
+        if(select_elt[0] != null)
         {
     option_id = parseInt(select_elt.val());
     do_js = true;
@@ -1460,7 +1494,7 @@ function action_select(table_name)
 
     select_str1459 = "#"+select_str;
     select_elt  = jQuery(select_str1459);
-        if(select_elt!= null)
+        if(select_elt[0] != null)
         {
     option_name = select_elt.val();
     page_name_id = "display_page_name"
@@ -1477,6 +1511,7 @@ function action_select(table_name)
     form_elt  = jQuery(form_id1468);
     page_name_elt.attr("value", table_name);
     option_elt.attr("value",option_name);
+
     //form_elt.submit();
     }
     else

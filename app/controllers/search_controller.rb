@@ -378,7 +378,7 @@ class SearchField
     safe_string = safe_string.gsub(/\r/){|s| '\\r'}
     safe_string = safe_string.gsub(/\v/){|s| '\\v'}
     safe_string = safe_string.gsub(/\f/){|s| '\\f'}
-
+    safe_string = safe_string.gsub(/\s+$/){|s| ''}
 
 
     safe_string = safe_string.gsub(/\'+/){|s| '\'\''}
@@ -636,7 +636,10 @@ class SearchController
   attr_reader :external_filters;
   attr_accessor :user_id;
   attr_reader :filter_controller;
-
+  attr_accessor :row_ids;
+  attr_accessor :exam_ids;
+  attr_accessor :compulsory_ids;
+  
   attr_reader :search_ctls
   
   
@@ -649,7 +652,9 @@ class SearchController
     @administrator = administrator_
     @active = false;
     @compulsory_indices = [];
-
+    @row_ids = [];
+    @exam_ids = [];
+    @compulsory_ids = [];
     
 
     @order_updated = false;
@@ -767,7 +772,7 @@ class SearchController
     for index in @search_order
       @search_direction << :asc ;
     end
-
+    @search_indices ="";
 
     #group_person2 = GroupPerson.find(:all, :conditions => "people.second_name like '%Verr%'" , :include => :person);
 
@@ -788,13 +793,76 @@ class SearchController
     return ret_val;
 
   end
-
+  def process_node(field_node)
+    if @processed_child_nodes.index(field_node.id) == nil
+      current_node = field_node
+      @processed_child_nodes << current_node.id;
+      parent_node = current_node.parent;
+      while(parent_node!=nil)
+        if(@processed_nodes.index(parent_node.id) == nil)
+          @processed_nodes << parent_node.id
+          parent_node.current_children = []
+        end
+        parent_node.current_children << current_node
+        @processed_child_nodes << current_node.id
+        current_node = parent_node
+        parent_node = parent_node.parent
+        if @processed_child_nodes.index(current_node.id) != nil
+          break;
+        end
+      end
+    end
+  end
 
 
   #this fuction finds all the possible fields names for a table and puts them in @available_fields.
   #It traces through the associations, and it uses recursion to do this.
   #to prevent call stack overflows, @max_level puts a limit on the number of recursive calls.
+  def construct_current_field_tree_with_subquery()
+    
+    @processed_nodes = [];
+    @processed_child_nodes = [];
+    @alias_id = 0;
+    if(@current_filter_indices.index(0) == nil)
+      field = @available_fields[0]; #id must be retrieved
+      field_node = field.field_node;
+      process_node(field_node)
+    end
+    @current_attribute_flag = @current_attribute_flag+1;
 
+    @compulsory_indices.each  do |complusory_index|
+      if(@current_filter_indices.index(complusory_index) == nil)
+        field = @available_fields[complusory_index]; #complusory_index must be retrieved
+        field_node = field.field_node;
+        field_node.current_flag = @current_attribute_flag;
+        @foreign_fields = [];
+        @f_f_level = 0;
+        find_foreign_fields(field)
+        for foreign_field in @foreign_fields
+          process_node(foreign_field.field_node)
+        end
+        process_node(field_node)
+      end
+    end
+
+    
+    for index in @current_filter_indices
+      filter_object = @extended_filters[index].filter_object;
+      if filter_object.class == SearchField || filter_object.class == SubQuery
+        field = filter_object;
+        field_node = field.field_node;
+        field_node.current_flag = @current_attribute_flag;
+        @foreign_fields = [];
+        @f_f_level = 0;
+        find_foreign_fields(field)
+        for foreign_field in @foreign_fields
+          process_node(foreign_field.field_node)
+        end
+        process_node(field_node)
+      end
+    end
+  end
+  
   def construct_current_field_tree()
     
     @processed_nodes = [];
@@ -1092,61 +1160,29 @@ class SearchController
     end
     return child_field;
   end
-
-  def process_node(field_node)
-    if @processed_child_nodes.index(field_node.id) == nil
-      current_node = field_node
-      @processed_child_nodes << current_node.id;
-      parent_node = current_node.parent;
-      while(parent_node!=nil)
-        if(@processed_nodes.index(parent_node.id) == nil)
-          @processed_nodes << parent_node.id
-          parent_node.current_children = []
-        end
-        parent_node.current_children << current_node
-        @processed_child_nodes << current_node.id
-        current_node = parent_node
-        parent_node = parent_node.parent
-        if @processed_child_nodes.index(current_node.id) != nil
-          break;
-        end
-      end
-    end
+  
+  def get_sql_id_string(ids)
+    construct_current_field_tree()
+    @sql_str = "SELECT "
+    get_select_string(@field_tree )
+    @sql_str[@sql_str.length - 1] = ' '
+    get_sub_query_string()
+    @sql_str << "FROM #{@tables_name} a#{@field_tree.id} "
+    @join_str = ""
+    get_join_string(@field_tree)
+    @sql_str << @join_str
+              id_list = "";
+          ids.each do |id|
+            if id_list.length >0
+              id_list << ", "
+             end
+            id_list <<  id.to_s 
+          end
+          id_list = "(#{id_list})"
+          where_str = "a0.id IN #{id_list}"
+    @sql_str <<  "WHERE #{where_str}"
   end
 
-  def process_node_old(field_node)
-    if @processed_child_nodes.index(field_node.id) == nil
-      current_node = field_node
-      @processed_child_nodes << current_node.id;
-      parent_node = current_node.parent;
-      while(parent_node!=nil)
-        if(@processed_nodes.index(parent_node.id) == nil)
-          @processed_nodes << parent_node.id
-          parent_node.current_children = []
-        end
-        parent_node.current_children << current_node
-        @processed_child_nodes << current_node.id
-        current_node = parent_node
-        parent_node = parent_node.parent
-        if @processed_child_nodes.index(current_node.id) != nil
-          break;
-        end
-      end
-    end
-
-    #if field_node.parent !=nil
-    #  if(@processed_nodes.index(field_node.parent.id) == nil)
-    #    @processed_nodes << field_node.parent.id
-    #    field_node.parent.current_children = []
-    #  end
-    #  if(@processed_leaves.index(field_node.id) == nil) # so that a field isn't added more than once
-    #    field_node.parent.current_children << field_node
-    #    @processed_leaves << field_node.id
-    #    process_node(field_node.parent)
-    #  end
-
-    #end
-  end
   def get_sql_string()
     construct_current_field_tree()
     @sql_str = "SELECT "
@@ -1248,7 +1284,7 @@ class SearchController
   def get_where_string
     num_filters = @current_filter_indices.length;
     @where_str = "a0.id != #{NOT_SET} "
-    if num_filters >0
+    if num_filters >0 && @search_indices.length == 0
 
       for index in @current_filter_indices
         filter = @extended_filters[index].filter_object;
@@ -1271,7 +1307,9 @@ class SearchController
 
       @where_str << " AND " + external_where_str;
       end
-     
+      
+    elsif @search_indices.length >0
+      @where_str << " AND a0.id IN (#{@search_indices})"     
      
     else
       
@@ -1338,15 +1376,18 @@ class SearchController
     return ret_str;
   end
 
-  def GetUpdateObjects(edit_table_name_, attribute_name_, ids_)
+  def GetUpdateObjects(edit_table_name_, attribute_names_, ids_)
     if !@active
       return [];
     end
+    if ids_.length == 0
+      return [];
+    end    
     construct_current_field_tree()
     @update_nodes = [];
     @sn_level = 0;
     @edit_table = edit_table_name_;
-    @attribute_name =attribute_name_;
+    @attribute_names =attribute_names_;
     scan_nodes(@field_tree);
     if @update_nodes.length == 0
       return [];
@@ -1434,7 +1475,7 @@ class SearchController
       return;
     end
     for child_node in field_node_.current_children
-      if(field_node_.name == @edit_table && child_node.name == @attribute_name)
+      if(field_node_.name == @edit_table  && @attribute_names.index(child_node.name)!=nil)
         if(@update_nodes.index(field_node_.id) == nil )
           @update_nodes << field_node_.id;
         end
@@ -1444,7 +1485,12 @@ class SearchController
     
     @sn_level = @sn_level - 1;    
   end
-
+  
+  def updateCheckBoxes(row_ids, exam_ids, compulsory_ids)
+    @row_ids = row_ids;
+    @exam_ids = exam_ids;
+    @compulsory_ids = compulsory_ids;
+  end
 
   def updateFilters(current_filter_indices_,  update_display_)
      Rails.logger.debug( "updateFilters start" );
@@ -1533,7 +1579,9 @@ class SearchController
     return ret_val;
   end
 
-
+  def UpdateSearchIndices(search_indices)
+    @search_indices = search_indices;
+  end
 
   def UpdateOrder(order_field_name)
     order_index = @hash_to_index[order_field_name]
@@ -1629,41 +1677,7 @@ class SearchController
 
   def save_external_filters_to_db
     
-    sql_str = "ExternalFilterValue.find_by_sql(\"SELECT id, table_name, filter_id, member_id, group_id, in_use FROM external_filter_values WHERE (user_id = " + @user_id.to_s +  " AND table_name = '" + @tables_name + "') ORDER BY id asc\")"
-    Rails.logger.info( "save_external_filters_to_db: before eval(#{sql_str})" );
-    old_external_filter_elts = eval(sql_str);
-    old_external_filter_elt_count  = old_external_filter_elts.length;
-    filter_count = 0;
-    Rails.logger.info( "save_external_filters_to_db:  old_external_filter_elt_count: #{old_external_filter_elt_count}" );
-    
-    
-    for external_filter in @external_filters
-      Rails.logger.info( "save_external_filters_to_db:  current_arguments: #{external_filter.filter_object.current_arguments.length}" );
-      for arg_value in external_filter.filter_object.current_arguments       
-        
-        if filter_count >= old_external_filter_elt_count
-          external_filter_elt  = ExternalFilterValue.new;
-        else
-          external_filter_elt = old_external_filter_elts[filter_count];
-        end
-        external_filter_elt.table_name = @tables_name;
-        external_filter_elt.user_id = @user_id;
-        external_filter_elt.filter_id = external_filter.filter_object.id;
-        external_filter_elt.in_use = true;
-        external_filter_elt.member_id = arg_value.member_id;
-        external_filter_elt.group_id = arg_value.group_id;        
-        external_filter_elt.save;
-        filter_count = filter_count+1;
-        Rails.logger.info("save_exteral_filters_to_db arg_value.member_id:#{arg_value.member_id}, arg_value.group_id:#{arg_value.group_id}");
-      end
-    end
-
-    while filter_count < old_external_filter_elt_count
-      external_filter_elt = old_external_filter_elts[filter_count];
-      external_filter_elt.in_use = false;
-      external_filter_elt.save;
-      filter_count = filter_count+1;
-    end
+ 
 
 
   end

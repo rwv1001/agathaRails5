@@ -7,21 +7,28 @@
 <% member_id = external_filter_element.member_id %>
 <% on_delete_string = "deleteExternalFilterElement('#{class_name}','#{filter_id}','#{element_id }');return false" %>
 
-<div id = <%= raw   "external_filter_argument_span_#{class_name}_#{filter_id}_#{element_id}" %> class = "external_filter_argument_span" style = "float: right; padding: 0px 0px 0px 0px" >
-      <% if external_filter.argument_class == "Group" %>
-        <span class = <%= raw    "argument_selection_group_#{class_name}" %> ></span>
-         <% end %>
-         <% if  argument_selection.length > 0 %>
-      <select id =<%= raw   "argument_selection_#{class_name}_#{filter_id}_#{element_id }"%> class= "external_filter_argument_selection" name=<%= raw   "argument_selection_#{filter_id}_#{element_id }"%> style="width:17em;border:none; background-color: transparent; overflow:hidden; padding: 0px 0px 0px 0px"  >
-    <% for arg in argument_selection  %>
-      <% if arg.id ==  member_id %>
-        <option selected value = <%= arg.id %> > <%= arg.name %></option>
-      <% else %>
-        <option  value = <%= arg.id %> > <%= arg.name %></option>
-      <%end%>
-    <% end %>
-  </select>
- <% end %>
-  <div  class="remove_filter_element_field" style="float: right; padding-top: 0px; height: 100px" ><a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_delete_string}"%> >X</a></div>
- 
-  </div>
+<div id = <%= raw   "external_filter_argument_span_#{class_name}_#{filter_id}_#{element_id}" %> class = "external_filter_argument_span" style = "position:absolute; top:0; right:0; width:100%; height: 100%; background-color: #ffffff;" >
+    <div  class="remove_filter_element_field" style ="float:right;  background: #AAAAAA;    border-left: 1px solid;    border-color: #000000;"  ><a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_delete_string}"%> >X</a></div>
+<% group_class = "" %>
+<% if external_filter.argument_class == "Group" %>
+<span class = <%= raw    "argument_selection_group_#{class_name}" %> ></span>
+<%group_class = "Group_"+class_name+"_select"%>
+<% end %>
+<% if  argument_selection.length > 0 %>
+<div style ="float:right" class= <%=  "\"external_filter_argument_selection_#{class_name}_#{filter_id}\"" %> >
+<select id =<%= raw   "argument_selection_#{class_name}_#{filter_id}_#{element_id }"%> class= "external_filter_argument_selection <%=external_filter.argument_class%>_select  <%=group_class%> " name=<%= raw   "argument_selection_#{filter_id}_#{element_id }"%> style="border:none; background-color: #ffffff; overflow:hidden"  >
+<% for arg in argument_selection  %>
+<% if arg.id ==  member_id %>
+<option selected value = <%= arg.id %> > <%= arg.name %></option>
+<% else %>
+<% if arg.name !=nil %>
+<option  value = <%= arg.id %> > <%= arg.name %></option>
+<% end %>
+<%end%>
+<% end %>
+</select>
+</div> 
+<% end %>
+
+
+</div>

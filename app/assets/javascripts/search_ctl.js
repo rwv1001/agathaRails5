@@ -21,7 +21,7 @@ function deleteColumn(field_name, table_name)
 
     table_text_element_str29 = "#"+table_text_element_str;
     table_text_element  = jQuery(table_text_element_str29 );
-    if(table_text_element != null)
+    if(table_text_element[0] != null)
     {             
         table_text_element.attr("value", table_name);
     }
@@ -65,6 +65,61 @@ function deleteColumn(field_name, table_name)
     elem = document.getElementById(form_id);
     Rails.fire(elem, 'submit');;
 }
+
+function setSearchIndices(table_name)
+{
+    rows_class_str = ".row_" +  table_name;
+    row_count = 0;
+    row_str=""
+    jQuery(rows_class_str).each(function(){
+        id_td = jQuery(this).children().first()
+        if(id_td != null)
+        {
+            id_array = id_td.html().match(/\b\d+\b/)
+            if(id_array !=null)
+            {
+                row_count = row_count+1;
+                if(row_str.length != 0)
+                {
+                    row_str = row_str + ", " + id_array[0];
+
+                }
+                else
+                {
+                    row_str = row_str + id_array[0];
+                }
+            }
+        }
+    });
+    if(row_count>0 && row_count <150)
+    {
+        order_index_element_str = "#order_indices_" + table_name;
+        order_index_element = jQuery(order_index_element_str);
+
+        order_index_element.attr("name", "order_indices");
+        order_index_element.attr("value", row_str);
+    }
+
+}
+
+function setSelectIndices(table_name)
+{
+     search_results_div_str = "#search_results_" + table_name;
+     search_results_div = jQuery(search_results_div_str);
+     specific_div_str = "#order_checks_"+ table_name;
+     specific_div = jQuery(specific_div_str);    
+     specific_div.children().each(function(){jQuery(this).remove()});
+
+     insert_specific_div_checks(specific_div, search_results_div, '.check');
+
+     if(table_name== "Person")
+     {        
+        insert_specific_div_checks(specific_div, search_results_div, '.examcheck');
+        insert_specific_div_checks(specific_div, search_results_div, '.compulsorycheck');
+     }
+
+}
+
 function searchOrder(field_name, table_name) 
 {
     wait();
@@ -75,6 +130,11 @@ function searchOrder(field_name, table_name)
   
     order_element.attr("name", "order_text");
     order_element.attr("value", field_name);
+    
+    
+    setSearchIndices(table_name);
+    setSelectIndices(table_name);
+    
     disableSubmitters();
 
     do_search_str = "do_search_" + table_name;
@@ -105,13 +165,13 @@ function resizeX()
     jQuery('.remove_column').each(function(){
       //  jQuery(this).attr('style',style_str)
          jQuery(this).css('height', new_height);
-          jQuery(this).css('paddingTop', new_padding);
+          jQuery(this).css('padding-top', new_padding);
         });
 
 
     jQuery('.div_column_edit').each(function(){
         jQuery(this).css('height', new_height);
-        jQuery(this).css('paddingTop', new_padding);
+        jQuery(this).css('padding-top', new_padding);
         });
 
 }
@@ -332,18 +392,29 @@ function addExternalFilterElement(class_name, filter_id)
 
     num_elts_str268 = "#"+num_elts_str;
     num_elts_elt  = jQuery(num_elts_str268);
+    max_filter_element_str = "#max_filter_elements_" + class_name + "_" + filter_id;
+    max_filter_element = jQuery(max_filter_element_str);
     current_num_elts = parseInt(num_elts_elt.val());
     new_elt_id = current_num_elts;
     new_current_num = current_num_elts+1;
     num_elts_elt.attr("value", new_current_num);
+    max_filter_element.attr("value", new_elt_id+1);
 
     prev_elt_id = new_elt_id -1;
+    prev_elt = null;
+    max_id = 0;
+    new_elt = null;
+    while(prev_elt_id>=0 && prev_elt == null)
+    {
     prev_elt_str = "external_filter_selection_" + class_name + "_" + filter_id +"_" + prev_elt_id;
 
 
     prev_elt_str277 = "#"+prev_elt_str;
-    prev_elt  = jQuery(prev_elt_str277);
-    new_elt = prev_elt.clone(true);
+    prev_elt  = jQuery(prev_elt_str277)[0];
+    prev_elt_id = prev_elt_id  -1;
+        
+    }
+    new_elt = jQuery(prev_elt).clone(true);
 
     
     new_elt.attr('id',"external_filter_selection_"+ class_name + "_" + filter_id +"_" + new_elt_id);
@@ -370,10 +441,12 @@ function addExternalFilterElement(class_name, filter_id)
     filter_element_field_a.attr('onclick', "deleteExternalFilterElement('"+class_name+"','"+filter_id+"','"+new_elt_id+"');return false");
 
     var new_space = jQuery("<div></div>").attr({ style: 'float: left' });
-        new_space.html("&nbsp")
-    prev_elt.after(new_space);
+     //   new_space.html("&nbsp")
+    new_space.insertAfter(prev_elt)
+    //prev_elt.after(new_space);
     next_space = prev_elt.next('div');
-    next_space.after(new_elt);
+    new_elt.insertAfter(next_space);
+    //next_space.after(new_elt);
 }
 
 function deleteExternalFilterElement(class_name, filter_id,  elt_id)
@@ -384,7 +457,7 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
 
     filter_selection_str316 = "#"+filter_selection_str;
     filter_selection_elt  = jQuery(filter_selection_str316);
-    //div_space = filter_selection_elt.next('div');
+    div_space = filter_selection_elt.next('div');
     filter_selection_elt.remove();
   //  div_space.remove();
 
@@ -437,9 +510,9 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
 
         var new_option = jQuery("<option>", {id: 'possible_external_filters_' + class_name + '_' +  filter_id,  value: filter_id });
         new_option.html(header_str)
-        if(first_option== null)
+        if(first_option[0] == null)
         {
-            not_set_option.after(new_option);
+            new_option.insertAfter(not_set_option);
         }
         else
         {
@@ -447,17 +520,17 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
             current_value = parseInt(current_elt.val());
             if(current_value > filter_id)
             {
-                not_set_option.after(new_option);
+                new_option.insertAfter(not_set_option);
             }
             else
             {
                 next_elt = current_elt.next();
-                while (next_elt != null && parseInt(next_elt.val()) < filter_id)
+                while (next_elt[0] != null && parseInt(next_elt.val()) < filter_id)
                 {
                     current_elt = next_elt;
                     next_elt = current_elt.next();
                 }
-                current_elt.after(new_option);
+                new_option.insertAfter(current_elt);
             }
         }
     }
@@ -488,70 +561,28 @@ function resizeExternalFilters(class_name)
     var client_height = jQuery('#dummy_x').height();
     var height_str = "" +  client_height+"px"
     jQuery('.external_filter_group_selection_'+class_name).each(function(){
-        jQuery(this).attr({ 
-            height: height_str
-        });
+        jQuery(this).css({height: height_str});
     });
     jQuery('.external_filter_argument_selection').each(function(){
-        jQuery(this).attr({ 
-            height: height_str
-        });
+        jQuery(this).css({height: height_str});
     });
     jQuery('.external_filter_element').each(function(){
-        jQuery(this).attr({ 
-            height: height_str
-        });
+        jQuery(this).css({height: height_str});
     });
 
     var a_height = jQuery('#dummy_a').height();
     var new_padding = ((client_height - parseInt(a_height))/2);
-    var new_height_str = "height: "+(client_height - new_padding);
-    var new_padding_str =   "padding-top:" + new_padding
+    var new_height = client_height - new_padding;
+
 
 
     jQuery('.add_external_filter_element').each(function(){
-        old_style = jQuery(this).attr("style");
-        new_style = old_style;
-        if(/height: \d+/.test(new_style))
-        {
-            new_style = new_style.replace(/height: \d+/,new_height_str  );
-        }
-        else
-        {
-            new_style = new_style + new_height_str + "px";
-        }
-        if(/height: \d+/.test(new_style))
-        {
-            new_style = new_style.replace(/padding-top: \d+/, new_padding_str);
-        }
-        else
-        {
-            new_style = new_style + new_padding_str + "px";
-        }
-        
-        jQuery(this).attr("style", new_style);
+        jQuery(this).css("height", new_height);
+        jQuery(this).css("padding-top", new_padding);
     });
     jQuery('.remove_filter_element_field').each(function(){
-        old_style = jQuery(this).attr("style");
-        new_style = old_style;
-        if(/height: \d+/.test(new_style))
-        {
-            new_style = new_style.replace(/height: \d+/,new_height_str  );
-        }
-        else
-        {
-            new_style = new_style + new_height_str + "px";
-        }
-        if(/height: \d+/.test(new_style))
-        {
-            new_style = new_style.replace(/padding-top: \d+/, new_padding_str);
-        }
-        else
-        {
-            new_style = new_style + new_padding_str + "px";
-        }
-
-        jQuery(this).attr("style", new_style);
+        jQuery(this).css("height", new_height);
+        jQuery(this).css("padding-top", new_padding);
     });
 }
 
@@ -600,7 +631,7 @@ function resizeFilters()
 function group_unrestriction()
 {
     external_filter_Group_0 =  jQuery('#external_filter_Group_0');
-    if (external_filter_Group_0  != null)
+    if (external_filter_Group_0[0]  != null)
     {
         external_filter_Group_0.show();
     }
@@ -612,7 +643,7 @@ function group_restriction_timeout(table_name, do_update)
     external_filter_Group_0 = jQuery('#external_filter_Group_0');
     select_obj = jQuery('#argument_selection_Group_0_0');
      
-    if( external_filter_Group_0 == null ||  select_obj == null)
+    if( external_filter_Group_0[0] == null ||  select_obj[0] == null)
     {
         function_str = 'group_restriction_timeout("' + table_name +'",'+  do_update+')';
  //       setTimeout("alert('hi there')", 100);
@@ -633,7 +664,7 @@ function group_restriction_timeout(table_name, do_update)
                 {
 
                     jQuery(this).prop('selected',true);
-                    class_name = jQuery(this).text
+                    class_name = jQuery(this).text()
                     throw $break;
                 }
 
@@ -654,7 +685,7 @@ function group_restriction(table_name)
 { 
     select_obj = jQuery('#argument_selection_Group_0_0');
     do_update = false;
-    if( select_obj == null)
+    if( select_obj[0] == null)
     {
         select_elt_str = "possible_external_filters_Group";
 

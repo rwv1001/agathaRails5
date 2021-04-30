@@ -194,22 +194,13 @@ class WelcomeController < ApplicationController
 
   end
 
-  def update_main_page(page, edited_table_name, attribute_name, id)
-
-  end
-
-  def update_main
+   def update_main(ids, edited_table_name, attribute_names,success_str,fail_str,unwait_flag)
     
-    id = params[:id];
-    ids = [];
-    ids << id;
-   
-    edited_table_name = params[:table_name];
-    attribute_name = params[:attribute_name];
+
     @search_ctls = session[:search_ctls];
     #@search_ctls.each {|key, value| puts "#{key} is #{value}" }
     respond_to do |format|
-      format.js { render "update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_name => attribute_name, :ids => ids, :id => id } }  
+      format.js { render "update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_names => attribute_names, :ids => ids, :success_str => success_str, :fail_str => fail_str , :unwait_flag => unwait_flag } }  
 =begin      
       do
         render :update do |page|
@@ -234,7 +225,24 @@ class WelcomeController < ApplicationController
     end
     Rails.logger.debug("update_main end");
   end
+  
+  def update_main
 
+    id = params[:id].to_i;
+    
+    ids = [];
+    ids << id;
+
+    edited_table_name = params[:table_name];
+    attribute_name = params[:attribute_name];
+    success_str="";
+    fail_str ="";
+    unwait_flag = false;
+    update_main_([id], edited_table_name, [attribute_name], success_str, fail_str, unwait_flag);
+    
+       
+    end
+   
 
   def update_search_controller
 
@@ -280,65 +288,154 @@ class WelcomeController < ApplicationController
       order_field_name = params["order_text"];
       search_ctl.UpdateOrder(order_field_name)      
     end
- #   elapsed = Time.now  - start; Rails.logger.error("update_search_controller_end, time: #{elapsed}");
-
-  end
-  def update_external_filters
-    @search_ctls = session[:search_ctls];
-    @attr_lists = session[:attr_lists];
-    table_name =  params["table_change_text"];
-    search_ctl = @search_ctls[table_name];
-    external_filters = search_ctl.external_filters;
-    # number_of_external_filters = params[:number_of_external_filters];
-    stupid_count = 0;
-
-    for external_filter in external_filters
-      current_arguments = external_filter.filter_object.current_arguments;
-      filter_id = external_filter.filter_object.id;
-      num_elements_str = "number_of_filter_elements_#{filter_id}";
-      
-      if(params.has_key?(num_elements_str))
+    exam_ids = [];
+    row_ids = [];
+    compulsory_ids = [];
+    if(params.has_key?("row_in_list"))
+      row_ids = params[:row_in_list];
+      if(table_name == "Person")
+        if(params.has_key?("exam_in_list"))
+          exam_ids = params[:exam_in_list];
+        end
         
-        num_elts = params[num_elements_str].to_i;
-        Rails.logger.info("update_external_filters  param #{num_elements_str} = #{num_elts} ");
-        if num_elts < current_arguments.length
-          current_arguments = current_arguments[0, num_elts];
-          Rails.logger.info("update_external_filters num_elts:#{num_elts}, current_arguments:#{current_arguments.length}");
-        end
-        for elt_id in (0..(num_elts-1))
-          group_name_str = "group_selection_#{filter_id}_#{elt_id}"
-          if params.has_key?(group_name_str)
-            group_id = params[group_name_str];
-          else
-            group_id = 0;
-          end
-          arg_name_str = "argument_selection_#{filter_id}_#{elt_id}"
-          member_id = params[arg_name_str];
-          if current_arguments.length <= elt_id
-            new_filter_elt = ExternalFilterElement.new(elt_id,external_filter.filter_object);
-            new_filter_elt.member_id = member_id;
-            new_filter_elt.group_id = group_id;
-            current_arguments << new_filter_elt
-          else
-            current_arguments[elt_id].group_id = group_id;
-            current_arguments[elt_id].member_id = member_id;
-          end
-          Rails.logger.info("update_external_filters hum current_arguments:#{current_arguments.length}");
-          Rails.logger.info("update_external_filters, group_id:#{group_id}, member_id:#{member_id}");
-        end
-      else
-        Rails.logger.info("update_external_filters no param #{num_elements_str}");
-        external_filter.filter_object.current_arguments =[];
-        current_arguments = [];
-      end
-      search_ctl.external_filters[stupid_count].filter_object.current_arguments = current_arguments;
-      stupid_count = stupid_count+1;
+        if(params.has_key?("compulsory_in_list"))
+          compulsory_ids = params[:compulsory_in_list];
+        end        
+      end     
     end
-    Rails.logger.info("update_external_filters, search_ctl.external_filters[0].filter_object.current_arguments.length=#{search_ctl.external_filters[0].filter_object.current_arguments.length}");
-    search_ctl.save_external_filters_to_db();    
+
+    #search_ctl.updateCheckBoxes(row_ids, exam_ids, compulsory_ids);
+    
+
+    if(params.has_key?("order_indices"))
+
+      search_indices = params["order_indices"]
+      search_ctl.UpdateSearchIndices(search_indices)
+    else
+      search_ctl.UpdateSearchIndices("")
+    end
+ #   elapsed = Time.now  - start; RAILS_DEFAULT_LOGGER.error("update_search_controller_end, time: #{elapsed}");
+
   end
-
-
+  def QualifiersStr(in_str)
+    ret_str = in_str.strip;
+    ret_str = ret_str.gsub(/[a-z][A-Z]\S{1}/){|s| s.insert(1," ")}
+    ret_str = ret_str.gsub(/[a-z][A-Z]\S{1}/){|s| s.insert(1," ")}
+    ret_str = ret_str.gsub(/\S+$/){|s| s = s.pluralize}
+    ret_str = ret_str.gsub(/\s/){|s| '_'};
+    ret_str = ret_str.gsub(/\//){|s| '__'};
+    ret_str = ret_str.downcase;
+    return ret_str;
+  end  
+  def update_external_filters
+      @search_ctls = session[:search_ctls];
+      @attr_lists = session[:attr_lists];
+      @user_id = session[:user_id];
+      table_name =  params["table_change_text"];
+      @tables_name =  QualifiersStr(table_name);
+      search_ctl = @search_ctls[table_name];
+      external_filters = search_ctl.external_filters;
+      # number_of_external_filters = params[:number_of_external_filters];
+      stupid_count = 0;
+      sql_str = "ExternalFilterValue.find_by_sql(\"SELECT id, table_name, filter_id, member_id, group_id, in_use FROM external_filter_values WHERE (user_id = " + @user_id.to_s +  " AND table_name = '" + @tables_name + "') ORDER BY id asc\")"
+      
+      old_external_filter_elts = eval(sql_str);
+      old_external_filter_elt_count  = old_external_filter_elts.length;
+      filter_count = 0;    
+      
+      for external_filter in external_filters
+          current_arguments = external_filter.filter_object.current_arguments;
+          if current_arguments == nil
+              current_arguments = [];
+          end
+          
+          filter_id = external_filter.filter_object.id;
+          num_elements_str = "number_of_filter_elements_#{filter_id}";
+          
+          if(params.has_key?(num_elements_str))
+              
+              num_elts = params[num_elements_str].to_i;
+              Rails.logger.info("update_external_filters  param #{num_elements_str} = #{num_elts} ");
+              if num_elts < current_arguments.length
+                  current_arguments = current_arguments[0, (num_elts)];
+                  Rails.logger.info("update_external_filters num_elts:#{num_elts}, current_arguments:#{current_arguments.length}");
+              end
+              elt_off_set = 0; 
+              for elt_id in (0..(num_elts-1))
+                  if filter_count >= old_external_filter_elt_count
+                      external_filter_elt  = ExternalFilterValue.new;
+                  else
+                      external_filter_elt = old_external_filter_elts[filter_count];
+                  end
+                  
+                  member_id = -1;
+                  while(member_id == -1 && elt_off_set<1000)
+                      arg_name_str = "argument_selection_#{filter_id}_#{elt_id+elt_off_set}";
+                      if(params.has_key?(arg_name_str))
+                          member_id = params[arg_name_str];
+                      else
+                          elt_off_set=elt_off_set+1;
+                      end
+                  end
+                  if (member_id ==-1)
+                      member_id = 0;
+                  end
+                  
+                  group_name_str = "group_selection_#{filter_id}_#{elt_id+elt_off_set}"         
+                  
+                  if params.has_key?(group_name_str)
+                      group_id = params[group_name_str];
+                  else
+                      group_id = 0;
+                  end
+                  if filter_count >= current_arguments.length                    
+                      
+                      
+                      new_filter_elt = ExternalFilterElement.new(elt_id,external_filter.filter_object);
+                      new_filter_elt.member_id = member_id;
+                      new_filter_elt.group_id = group_id;
+                      current_arguments << new_filter_elt
+                  else
+                      current_arguments[elt_id].group_id = group_id;
+                      current_arguments[elt_id].member_id = member_id;
+                  end
+                  
+                  external_filter_elt.table_name = @tables_name;
+                  external_filter_elt.user_id = @user_id;
+                  external_filter_elt.filter_id = external_filter.filter_object.id;
+                  external_filter_elt.in_use = true;
+                  external_filter_elt.member_id = member_id;
+                  external_filter_elt.group_id = group_id;
+                  external_filter_elt.save;
+                  filter_count =filter_count+1;          
+                  Rails.logger.info("update_external_filters hum current_arguments:#{current_arguments.length}");
+                  Rails.logger.info("update_external_filters, group_id:#{group_id}, member_id:#{member_id}");
+              end
+          else
+              Rails.logger.info("update_external_filters no param #{num_elements_str}");
+              external_filter.filter_object.current_arguments =[];
+              
+          end    
+          
+      end
+      while filter_count < old_external_filter_elt_count
+          external_filter_elt = old_external_filter_elts[filter_count];
+          external_filter_elt.in_use = false;
+          external_filter_elt.save;
+          filter_count = filter_count+1; 
+      end
+  end
+  def id_str_generator(ids)
+    id_str = "";
+      ids.each do |id|
+        if(id_str.length >0 )
+          id_str << ", ";
+        end
+        id_str << id.to_s;
+     end
+     return id_str;
+  end
+  
   def table_search
 #     RubyProf.start
 #start = Time.now; Rails.logger.debug("table_search_start");
@@ -360,10 +457,8 @@ class WelcomeController < ApplicationController
       Rails.logger.debug( "TABLE SEARCH: after eval(eval_str)" );
       search_results = SearchResults.new(@table, :search_results, search_ctl);
       search_results.table_type = :search_results;
-    else
-      search_results = 0;
-      
     end
+    search_ctl.UpdateFiltersFromDB();
     respond_to do |format|
       format.js { render "table_search", :locals => {:search_ctl => search_ctl, :params => params, :table_name => table_name, :search_results=> search_results} } 
 =begin
@@ -458,6 +553,12 @@ class WelcomeController < ApplicationController
 
     new_eval_str = "#{class_name}.new"
     new_obj = eval(new_eval_str);
+    if(class_name == "EmailTemplate")
+      new_obj.from_email = "<%= me.email %>"
+      new_obj.subject = "Put the email subject here."
+      new_obj.body =  %q{Dear <%= person.salutation %>,<br><br>Put your email content here }
+    end    
+    
     new_obj.save;
     id = new_obj.id;
 
@@ -652,7 +753,33 @@ class WelcomeController < ApplicationController
       x = 1;
     end
    end
- 
+
+  def multi_table_create
+    table_name = params[:multi_table_create]
+    @search_ctls = session[:search_ctls];
+    search_ctl = @search_ctls[table_name];
+    respond_to do |format|
+        format.js { render "multi_table_create", :locals =>{:table_name => table_name, :search_ctl => search_ctl  } } 
+=begin 
+          render :update do |page|
+            page << "wait();"
+            if  table_name.length >0
+             @search_ctls = session[:search_ctls];
+             search_ctl = @search_ctls[table_name];
+             new_multi_table = MultiTable.new("\"#{table_name}\"", search_ctl)
+           # <%= render(:partial => "shared/multi_table", :object => new_multi_table ) %>
+             page.replace_html("multi_change_table_div_#{table_name}" , :partial => "shared/multi_table" , :object => new_multi_table);
+            else
+              page << "alert('something went wrong with multi_table_create')";
+
+            end
+            page << "unwait();"
+          end
+        end
+=end         
+    end
+
+  end
 
   def select_action
     action = params[:action_type];
@@ -667,11 +794,18 @@ class WelcomeController < ApplicationController
     when "update_collection_status"
       new_status = params[:collection_status].to_i;
       update_collection_status(ids, new_status);
+    when "multi_update"
+      multi_update(ids, class_name);
+      
     when "group"
       
       group_name = params[:new_group_name];
       group_privacy = params[:group_privacy];
       new_group(ids, class_name, group_name, group_privacy);
+    when "set_tutorial_number"
+
+      tutorial_number = params[:tutorial_number];
+      update_tutorial_number(ids, tutorial_number);      
     when "add_to_group"
       
       class_name2 = params[:class_name2];
@@ -730,6 +864,93 @@ class WelcomeController < ApplicationController
     end
      Rails.logger.flush
   end
+  
+  def multi_update(ids, class_name)
+    error_str = "";
+    success_str = "";
+    attribute_list = [];
+    if(ids == nil || ids.length==0)
+      error_str = "You have not selected any rows to update. "
+    else      
+        
+        Rails.logger.info(" multi_update 1");
+        update_int_fields = Hash.new;
+        update_text_fields = Hash.new;
+        field_str = ""
+        field_count = 0;
+        params.each do |key,value|
+            if(key =~ /^mi_edit_*/)
+
+                i_value = value.to_i
+                Rails.logger.debug("key = #{key}, i_value = #{i_value}, value.length = #{value.length}  ");
+                if (i_value  >= 0 && value.length > 0)
+                  if(field_str.length > 0)
+                    field_str << ", "
+                  end
+                  field_name = key.gsub(/^mi_edit_*/,'');
+                  field_str << field_name;
+                  attribute_list.push(field_name);
+
+                  field_count = field_count + 1;
+                  update_int_fields[field_name] = i_value;
+                end
+
+            elsif(key =~ /^mt_edit_*/)
+                if(value.length > 0)
+                  if(field_str.length > 0)
+                    field_str << ", "
+                  end
+                  field_name = key.gsub(/^mt_edit_*/,'')
+                  field_str << field_name;
+                  attribute_list.push(field_name);
+                  field_count = field_count + 1;
+                  update_text_fields[field_name] = value;
+                end
+            end
+        end
+                Rails.logger.debug(" multi_update 2");
+        ids.each do |id|
+           object_str = "#{class_name}.find(#{id})";
+           current_object  = eval(object_str);
+           update_int_fields.each do |key,value|
+              
+                update_str = "current_object.#{key} = #{value}";
+                eval(update_str);
+              
+
+           end
+                   Rails.logger.debug(" multi_update 3");
+           update_text_fields.each do |key,value|
+
+                update_str = "current_object.#{key} = \"#{value}\"";
+                eval(update_str);
+              
+           end
+           current_object.save;
+                   Rails.logger.debug(" multi_update 4");
+        end
+        
+                Rails.logger.debug(" multi_update 5");
+        if(field_count==0)
+                  Rails.logger.debug(" multi_update 6");
+          success_str = "No updates were made because you didn't set any fields"
+        else
+                  Rails.logger.debug(" multi_update 7");
+          @pluralize_num =  ids.length;
+          success_str = ids.length.to_s + " " +pl("#{class_name}") + " " + pl("was") + " updated with new ";
+          @pluralize_num = field_count;
+          success_str << pl("value") + " for " + pl("field") + " " + field_str;
+        end
+    end
+            Rails.logger.debug(" multi_update 8");
+
+
+
+    unwait_flag = true;
+    update_main_(ids, class_name, attribute_list, success_str, error_str, unwait_flag);
+            
+
+  end  
   def add_tutorial_student(ids)
     error_str = "";
     success_str = "";
@@ -1076,18 +1297,18 @@ class WelcomeController < ApplicationController
 
   end
 
+  def conv(str)
+    str = str.gsub(/(“|”)/,'"').gsub(/(’|‘)/,'\'').gsub(/–/,'-');
 
+  end
 
   def create_email_from_template(ids, send_flag)
     string_update
-    error_str = ""
-    warning_str=""
-    success_str = ""
     if(ids == nil || ids.length==0)
-      error_str = "You have not selected any tutorial schedules"
+      error_str = "You have not selected any students"
     else
       email_ids = []
-      
+      error_str = ""
       email_template_id = params[:email_template_id].to_i;
       term_id = params[:term_id].to_i;
       course_id = params[:course_id].to_i;
@@ -1099,17 +1320,22 @@ class WelcomeController < ApplicationController
       else
         term = Term.find(term_id);
         course = Course.find(course_id);
-        
+        warning_str=""
         if template.global_warnings != nil && template.global_warnings.length>0
         eval(template.global_warnings);
         end
-        
+        id_str = "";
 
-        
+
+
         ids.each do |id|
 
           person = Person.find(id);
-
+          if person.salutation != nil && person.salutation.length >0
+             RAILS_DEFAULT_LOGGER.error("email test #{person.salutation.length }");
+          else
+             RAILS_DEFAULT_LOGGER.error("email test nil or 0"); 
+          end
           if template.personal_warnings != nil && template.personal_warnings.length >0
             eval(template.personal_warnings);
           end
@@ -1119,6 +1345,8 @@ class WelcomeController < ApplicationController
           else
             body_str =  template.body;
           end
+          body_str  = body_str.gsub(/&amp;(?=([^<]*?)%>)/,"&");
+          body_str  = body_str.gsub(/&nbsp;(?=([^<]*?)%>)/," ");
 
 
           agatha_email = AgathaEmail.new
@@ -1126,32 +1354,46 @@ class WelcomeController < ApplicationController
           user = User.find(user_id);
           user_person_id = user.person_id
           user_person = Person.find(user_person_id);
+          RAILS_DEFAULT_LOGGER.debug("test debug");
 
           agatha_email.from_email = render_to_string( :inline => template.from_email , :locals => { :me => user_person})
           agatha_email.to_email = person.email
-          agatha_email.subject = render_to_string( :inline => template.subject , :locals => { :person => person, :term => term, :course => course })
-          agatha_email.body = render_to_string( :inline => body_str , :locals => { :person => person, :term => term, :course => course })
+          subject_str = render_to_string( :inline => template.subject , :locals => { :person => person, :term => term, :course => course })
+          agatha_email.subject = conv(subject_str);
+          RAILS_DEFAULT_LOGGER.debug("pre-rendered body string = #{body_str}");
+          begin
+             body_str = render_to_string( :inline => body_str , :locals => { :person => person, :term => term, :course => course });
+          rescue Exception =>exc
+            body_str = "";
+            error_str = "Agatha Email Error has occurred. There is something wrong with the template" 
+          end
+          RAILS_DEFAULT_LOGGER.debug("body_string_ = #{body_str}");
+          agatha_email.body = conv(body_str);
           agatha_email.sent = false
           agatha_email.email_template_id = email_template_id
           agatha_email.person_id = id;
           agatha_email.term_id = term_id;
           agatha_email.course_id = course_id;
           agatha_email.save;
+          #new_emails << agatha_email;
           email_ids << agatha_email.id
-
-
+          if id_str.length >0
+            id_str << ", "
+          end
+          id_str <<  agatha_email.id.to_s;
         end
         @pluralize_num = ids.length;
-         success_str = pl(@pluralize_num.to_s) + " " +  pl("email") + " " + pl("was") + " created. ";
+        success_str = pl(@pluralize_num.to_s) + " " +  pl("email") + " " + pl("was") + " created. ";
         if send_flag
           status_val = send_emails_routine(email_ids);
           success_str = success_str + status_val["success_str"] + status_val["error_str"];
         end
-      end      
+      end
     end
-    
+    @search_ctls = session[:search_ctls];
+    search_ctl = @search_ctls["AgathaEmail"];
     respond_to do |format|
-      format.js  {render "create_email_from_template", :locals => {:error_str => error_str, :success_str => success_str, :warning_str=> warning_str } }
+      format.js  {render "create_email_from_template", :locals => {:error_str => error_str, :success_str => success_str, :warning_str=> warning_str, :search_ctl => search_ctl } }
 =begin      
       do
         render :update do |page|
@@ -1311,7 +1553,7 @@ class WelcomeController < ApplicationController
       alert_str = "You did not select any courses. "
     end
     respond_to do |format|
-      format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+      format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
 =begin      
       do
         render :update do |page|
@@ -1358,7 +1600,7 @@ class WelcomeController < ApplicationController
       alert_str = "You did not select any courses. "
     end
     respond_to do |format|
-      format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+      format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
 =begin      
 do
         render :update do |page|
@@ -1373,8 +1615,35 @@ do
   def create_tutorial_schedules(ids)
     tutor_id = params[:tutor_id];
     course_id =  params[:course_id];
+    class_size = params[:tutorial_class_size].to_i;
     if ids != nil && ids.length > 0
+      if class_size < 1
+        class_size =1;
+      end
+
+      number_of_students = ids.length+0.000001;
+      number_of_classes = (number_of_students/class_size).round;
+
+      class_count = 1;
+      a_class = [];
+      tutorial_classes = [];
+      student_count = 1;
+      upper_bound = (number_of_students * class_count/number_of_classes);
       ids.each do |student_id|
+        a_class << student_id;
+        student_count= student_count +1;
+        if student_count > upper_bound
+          tutorial_classes << a_class;
+          a_class = [];
+          class_count = class_count +1;
+          upper_bound = (number_of_students * class_count/number_of_classes);
+        end
+      end
+      if a_class.length>0
+        tutorial_classes << a_class;
+      end
+
+      tutorial_classes.each do |tutorial_class|
         tutorial_schedule = TutorialSchedule.new;
         tutorial_schedule.course_id = course_id
         tutorial_schedule.person_id = tutor_id
@@ -1382,12 +1651,13 @@ do
         tutorial_schedule.number_of_tutorials = params[:number_of_tutorials];        
         tutorial_schedule.number_of_tutorial_hours = params[:number_of_tutorials];
         tutorial_schedule.save;
+        tutorial_class.each do |student_id|
         tutorial = Tutorial.new;
         tutorial.person_id = student_id;
         tutorial.tutorial_schedule_id = tutorial_schedule.id;
         tutorial.collection_status = params[:collection_required];
         tutorial.save;
-
+        end
         present = WillingTutor.find_by_sql("SELECT * FROM willing_tutors WHERE person_id = #{tutor_id} AND course_id = #{course_id}");
         if present ==nil || present.length == 0
 
@@ -1398,7 +1668,8 @@ do
           willing_tutor.save;
         end
       end
-      alert_str = "Tutorial/Tutorial Schedules created";
+      @pluralize_num = tutorial_classes.length;
+      alert_str = "#{@pluralize_num} Tutorial/Tutorial " + pl("Schedule") +" created";
     else
       ids = [];
       alert_str = "You did not select any students. "
@@ -1460,19 +1731,16 @@ do
           willing_lecturer.order_of_preference = 1;
           willing_lecturer.save;
         end
-    alert_str = "Lecture schedule created";
 
-    respond_to do |format|
-      format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
-=begin      
-do
-        render :update do |page|
-          page << "alert('Lecture schedule created')"
-          page << "unwait();"
-        end
-      end
-=end
-    end
+    success_str = 'Lecture schedule created';
+    error_str = '';
+    unwait_flag = true;
+    attribute_list = ['id'];
+    class_name = 'Lecture'
+    id = lecture.id;
+    ids = [];
+    update_main_([id], class_name, attribute_list, success_str, error_str, unwait_flag);
+  
   end
   def make_attendee(lecture_ids)
     error_str = "";
@@ -1797,9 +2065,17 @@ do
       end
     end
     end
-
+   @search_ctls = session[:search_ctls];
+   if class_ok
+      table_name = class_name2;
+      search_ctl = @search_ctls[table_name]; 
+      search_ctl_group =  @search_ctls["Group"];
+   else
+       search_ctl = nil;
+   end
+       
    respond_to do |format|
-      format.js  { render "remove_from_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :not_present_members => not_present_members, :num_existing => num_existing } }
+      format.js  { render "remove_from_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :not_present_members => not_present_members, :num_existing => num_existing, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group, :ids => ids, :table_name => table_name } }
 =begin      
       do
         render :update do |page|
@@ -1870,9 +2146,12 @@ Rails.logger.flush
          end
       end
     end
-
+    @search_ctls = session[:search_ctls];
+    table_name = class_name
+    search_ctl = @search_ctls[table_name];
+    search_ctl_group = @search_ctls["Group"];
     respond_to do |format|
-      format.js { render "add_to_groups", :locals => { :group_ids => group_ids, :permissioned => permissioned, :unpresent => unpresent, :class_name => class_name, :present => present, :wrong_types => wrong_types, :unpermissioned => unpermissioned } }
+      format.js { render "add_to_groups", :locals => { :group_ids => group_ids, :permissioned => permissioned, :unpresent => unpresent, :class_name => class_name, :present => present, :wrong_types => wrong_types, :class_id => class_id, :unpermissioned => unpermissioned, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group } }
 =begin      
       do
         render :update do |page|
@@ -1944,9 +2223,12 @@ Rails.logger.flush
          end
       end
     end
-
+    @search_ctls = session[:search_ctls];
+    table_name = class_name;
+    search_ctl = @search_ctls[table_name];
+    search_ctl_group = @search_ctls["Group"];
     respond_to do |format|
-      format.js  { render "remove_from_groups", :locals => {:group_ids => group_ids, :permissioned => permissioned, :present => present, :unpresent => unpresent, :wrong_types => wrong_types, :unpermissioned => unpermissioned  } }
+      format.js  { render "remove_from_groups", :locals => {:group_ids => group_ids, :permissioned => permissioned, :present => present, :unpresent => unpresent, :wrong_types => wrong_types, :unpermissioned => unpermissioned, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group  } }
 =begin      
       do
         render :update do |page|
@@ -2027,9 +2309,16 @@ Rails.logger.flush
       end
     end
     end
-  
+   @search_ctls = session[:search_ctls];
+   if class_ok
+      table_name = class_name2;
+      search_ctl = @search_ctls[table_name]; 
+      search_ctl_group =  @search_ctls["Group"];
+   else
+       search_ctl = nil;
+   end  
    respond_to do |format|
-      format.js { render "add_to_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :ids => ids, :already_existing => already_existing, :new_members => new_members  } }
+      format.js { render "add_to_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :ids => ids, :already_existing => already_existing, :new_members => new_members, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group  } }
 =begin      
        do
         render :update do |page|
@@ -2068,7 +2357,7 @@ Rails.logger.flush
     if(group_name.length ==0)
       alert_str = "Group creation failed: the chosen group name #{group_name} can't be an empty string.";
       respond_to do |format|
-        format.js  {render "make_willing_lecturer", :local => {:alert_str => alert_str} }
+        format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
 =begin      
 do
           render :update do |page|
@@ -2082,8 +2371,10 @@ do
     end
 
     table_name = class_name.tableize;
+    Rails.logger.info("RWV Created new group I am here");
     existing_group = Group.where(:group_name => group_name, :table_name => table_name).first;
     if(existing_group == nil)
+        Rails.logger.info("RWV Created new group");
 
       new_group = Group.new;
       new_group.group_name = group_name;
@@ -2093,7 +2384,7 @@ do
       new_group.writers_id = 1;
       new_group.private = group_privacy;
       new_group.save;
-
+      new_group_id = new_group.id;
       if ids != nil
         for id in ids
           new_group_member_str = "Group#{class_name}.new"
@@ -2106,8 +2397,13 @@ do
       end
 
     end
+    @search_ctls = session[:search_ctls];
+    table_name = class_name;
+    search_ctl = @search_ctls[table_name];
+    search_ctl_group = @search_ctls["Group"];
+
     respond_to do |format|
-        format.js  { render "new_group", :locals => { :existing_group => existing_group, :class_name => class_name, :group_name => group_name } }
+        format.js  { render "new_group", :locals => { :existing_group => existing_group, :class_name => class_name, :table_name => table_name, :group_name => group_name, :new_group_id => new_group_id, :ids => ids, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group } }
 =begin        
         do
           render :update do |page|
@@ -2124,7 +2420,87 @@ do
       end
 
   end
+  def update_tutorial_number(ids, tutorial_number)
+    tutorial_number = tutorial_number.to_i
+    if(tutorial_number <0)
+        alert_str = "Set Tutorial Number failed: the number of tutorial can't be negative."
+        respond_to do |format|
+            format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
+        end    
+=begin
+    do
+    render :update do |page|
+    page << "alert(\"Set Tutorial Number failed: the number of tutorial can't be negative.\")"
+    page << "unwait();"
+    end
+    end
+=end    
+        return;
+    end
+    if ids.length == 0
+        alert_str = "Set Tutorial Number failed: you didn't select any tutorial scedules to be updated."
+        respond_to do |format|
+            format.js {render :partial => "shared/alert", :local => {:alert_str => alert_str} }  
+        end 
+=begin        
+            do
+          render :update do |page|
+       page << "alert(\"Set Tutorial Number failed: you didn't select any tutorial scedules to be updated.\")"
+       page << "unwait();"
+          end
+        end
+      end
+=end      
+      return;
+    end
+    id_str = ""
+    ids.each do |id|
+        if id_str.length >0
+            id_str << ", "
+        end
+        id_str << id.to_s;
+    end
+    tutorial_schedules = TutorialSchedule.find_by_sql("SELECT * FROM tutorial_schedules WHERE id IN (#{id_str})");
 
+      tutorial_schedules.each do |tutorial_schedule|
+        tutorial_schedule.number_of_tutorials = tutorial_number;
+        tutorial_schedule.save;
+      end
+
+
+      @pluralize_num = ids.length;
+      success_str = "#{@pluralize_num} "+ pl("tutorial schedule") +" updated to have "
+      @pluralize_num = tutorial_number;
+      success_str = success_str + "#{@pluralize_num} " + pl("tutorial");
+      table_name = "TutorialSchedule"
+      @search_ctls = session[:search_ctls];
+      search_ctl = @search_ctls[table_name];
+      respond_to do |format|
+        format.js {render :partial => "shared/alert", :local => {:table_name => table_name, :search_ctl => search_ctl, :ids => ids, :success_str => success_str } }  
+=begin        
+        do
+          render :update do |page|
+
+            eval("#{table_name}.set_controller(search_ctl)");
+            updated_objects = search_ctl.GetUpdateObjects(table_name, ["id"], ids);
+            updated_objects.each do |row|
+               page << "if ($('#{row.id}_#{ table_name}')) {"
+              page["#{row.id}_#{table_name}"].replace( :partial => "shared/search_results_row_button", :object =>row );
+              page << "setcheck('#{table_name}_check_#{row.id.to_s}',true)"
+              page << "}"
+            end
+
+            page << "recolour('TutorialSchedule');"
+            page << "action_select_no_js();";
+            page << "alert(\"#{success_str}\")"
+            page << "unwait();"
+          end
+        end
+=end
+      end
+
+  end
+  
   def update_collection_status(ids, new_status)
     if (ids.length > 0)
       id_str = ""
@@ -2398,7 +2774,7 @@ do
 
 
     end
-
+   Rails.logger.info("RWV deleted_ids = #{deleted_ids.inspect}");
 
 
     respond_to do |format|

@@ -8,8 +8,9 @@ class SubQuery
   attr_accessor :current_argument_value;
   attr_accessor :selection_controller;
 
-  def initialize(header_, variable_name_, select_string_, argument_class_)
+  def initialize(dependences_, header_, variable_name_, select_string_, argument_class_)
 #    Rails.logger.error( "new SubQuery" );
+    @dependences_ = dependences_;
     @header = header_;
     @variable_name = variable_name_;
     @select_string = select_string_;

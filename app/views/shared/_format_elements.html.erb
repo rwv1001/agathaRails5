@@ -49,12 +49,12 @@
          </div>
       <% if  format_elements.format_elements_array.length >1 %>
           <% on_delete_string = "deleteElement('#{format_elements.table}','#{elt_count}');return false" %>
-          <div class="remove_format_field" id =<%= raw "remove_format_#{format_elements.table}_#{elt_count}" %> ><a href ="#" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_delete_string}"%> >X</a> </div>
+          <div class="remove_format_field" id =<%= raw "remove_format_#{format_elements.table}_#{elt_count}" %> ><a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_delete_string}"%> >X</a> </div>
       <% end %>
     </div>
     <div style ="float:left;"> &nbsp; </div>
   <% on_add_string = "addElement('#{format_elements.table}','#{elt_count+1}');return false" %>
-          <div  class="add_format_field" id =<%= raw "add_format_#{format_elements.table}_#{elt_count}" %> ><a href ="#" onclick= <%= raw "#{on_add_string }"%> >+</a> </div>
+          <div  class="add_format_field" id =<%= raw "add_format_#{format_elements.table}_#{elt_count}" %> ><a href ="/" data-remote="true" rel="nofollow" onclick= <%= raw "#{on_add_string }"%> >+</a> </div>
   
    
   

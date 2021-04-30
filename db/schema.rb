@@ -57,8 +57,8 @@ ActiveRecord::Schema.define(:version => 20100930162148) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "compulsory"
-    t.integer  "mark"
-    t.integer  "mark_type"
+    t.string  "mark"
+    t.string  "mark_type"
     t.text     "comment"
   end
 
