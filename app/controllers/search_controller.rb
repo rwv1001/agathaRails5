@@ -1377,6 +1377,7 @@ class SearchController
   end
 
   def GetUpdateObjects(edit_table_name_, attribute_names_, ids_)
+      Rails.logger.info("GetUpdateObjects 01")
     if !@active
       return [];
     end

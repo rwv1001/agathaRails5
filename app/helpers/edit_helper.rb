@@ -117,7 +117,7 @@ def win_unload_helper
     Rails.logger.info("win_unload_helper rwv begin");
     @id = params[:id];
     @table_name = params[:table_name];
-    attribute = params[:attribute];
+    attribute_name = params[:field_name];
     @user_id = session[:user_id];
 
 
@@ -126,10 +126,10 @@ def win_unload_helper
     if(open_records.length >0)
     open_records[0].in_use = false;
     open_records[0].save;
-    Rails.logger.info("win_unload_helper rwv updated record, attribute length = #{attribute.length} ");
+ 
     session_div = 1;
     respond_to do |format|
-        format.js { render  :partial => "shared/win_unload_helper", :locals => {:session_div => session_div, :table_name => @table_name, :id => @id, :attribute => attribute }  }
+        format.js { render  :partial => "shared/win_unload_helper", :locals => {:session_div => session_div, :table_name => @table_name, :id => @id, :attribute => attribute_name }  }
 =begin        
         do
         render :update do |page|
@@ -229,7 +229,7 @@ def update_helper()
         update_parent = false;
         edit_cell2 = EditCell.new(attribute, object, @table_name, @filter_controller, update_parent,readonly_flag);
         respond_to do |format| #5
-            format.js { render :partial => "shared/update_helper", :locals => {:table_name => @table_name, :field_name => field_name, :edit_cell1 => edit_cell1, :edit_cell2 => edit_cell2} }
+            format.js { render :partial => "shared/update_helper", :locals => {:table_name => @table_name, :field_name => field_name, :edit_cell1 => edit_cell1, :edit_cell2 => edit_cell2, :attribute => attribute, :id => id } }
             end #5
         else #4
         respond_to do |format|

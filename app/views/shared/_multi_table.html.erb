@@ -1,6 +1,6 @@
 <%  table_name = multi_table.table_name; %>
 <% search_controller = multi_table.search_controller %>
-
+<p> <%= "#{table_name}" %> </p>
 <table>
             <%  attribute_eval_str = "AttributeList.new(#{table_name})" %>
             <%  attribute_list = eval(attribute_eval_str) %>

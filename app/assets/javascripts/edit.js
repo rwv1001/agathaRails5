@@ -287,7 +287,7 @@ function on_assign(id)
      search_results_div  = jQuery(search_results_div_str239)
      search_results_div.find('.check').each(function()
      {
-            new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+            new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
             specific_div.append(new_elt  )
       });
 
@@ -314,7 +314,7 @@ function on_willing(id)
      search_results_div  = jQuery(search_results_div_str261)
      search_results_div.find('.check').each(function()
      {
-            new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+            new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
             specific_div.append(new_elt  )
       });
 
@@ -359,7 +359,7 @@ function on_sends(test_flag)
      search_results_div  = jQuery(search_results_div_str299)
      search_results_div.find('.check').each(function()
      {
-            new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+            new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
             specific_div.append(new_elt  )
       });
      sent_test_flag = jQuery("<input></input>").attr({ type: 'text', name: 'test_flag',  value: test_flag  })
@@ -402,7 +402,7 @@ function on_create_send(id)
             search_results_div  = jQuery(search_results_div_str335)
             search_results_div.find('.check').each(function()
             {
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+                new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
                 specific_div.append(new_elt  )
             });
 
@@ -514,7 +514,7 @@ function on_create(id)
             search_results_div  = jQuery(search_results_div_str435)
             search_results_div.find('.check').each(function()
             {
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+                new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
                 specific_div.append(new_elt  )
             });
             break;
@@ -542,7 +542,7 @@ function on_create(id)
             search_results_div  = jQuery(search_results_div_str459)
             search_results_div.find('.check').each(function()
             {
-                new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+                new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
                 specific_div.append(new_elt  )
             });
             break;
@@ -564,7 +564,7 @@ function insert_specific_div_checks(specific_div, search_results_div, check_clas
     
 
     search_results_div.find(check_class).each(function(){
-    new_elt = jQuery(this).clone(true); new_elt.removeAttribute('id');
+    new_elt = jQuery(this).clone(true); new_elt.removeAttr('id');
                 specific_div.append(new_elt)
             });
 }
@@ -636,7 +636,7 @@ function create_multi_change_table(table_name)
     {
         multi_change_present_obj.prop('checked', true);
         multi_table_create_table_name_obj = jQuery("#multi_table_create_table_name");
-        multi_table_create_table_name.val( table_name);
+        multi_table_create_table_name_obj.val( table_name);
         multi_table_create_obj = jQuery("#multi_table_create");
         //multi_table_create.onsubmit();
         elem = document.getElementById('multi_table_create');
@@ -790,7 +790,7 @@ function MultiUpdate(class_name)
     action_table = jQuery("#action_class");
     action_table.val( class_name);
     
-    search_results_div_str = "search_results_" + class_name;
+    search_results_div_str = "#search_results_" + class_name;
     search_results_div = jQuery(search_results_div_str);
 
     insert_specific_div_checks(specific_div, search_results_div, '.check');
@@ -798,7 +798,7 @@ function MultiUpdate(class_name)
     multi_change_table_div = jQuery("#multi_change_table_div_"+class_name);
     multi_change_table_div.find('.radio').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
     multi_change_table_div.find('.edit_text').each(function(){new_elt = jQuery(this).clone(true); specific_div.append( new_elt)});
-    multi_change_table_div.find('.select').each(function(){new_elt =  jQuery("<input></input>").attr({ type: 'text',   name: elt.name,  value: jQuery(this).val()   }); specific_div.append( new_elt)});
+    multi_change_table_div.find('.select').each(function(){new_elt =  jQuery("<input></input>").attr({ type: 'text',   name: jQuery(this).name,  value: jQuery(this).val()   }); specific_div.append( new_elt)});
 
     //form_obj = $("action_form");
     //form_obj.onsubmit();

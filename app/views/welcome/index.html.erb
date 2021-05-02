@@ -220,8 +220,8 @@ td img {display: block;}
     </form>
     </div>
     <div>
-          <form action=<%=  "\"/welcome/multi_table_create\"" %> id=<%="\"multi_table_create\""%> method="post" onsubmit="new Ajax.Request('<%="/welcome/multi_table_create"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
-            <div  style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= "\"#{form_authenticity_token}\"" %> /></div>
+          <form action=<%=  "/welcome/multi_table_create" %> id=<%="multi_table_create"%> data-remote="true" method="post" onsubmit="new Ajax.Request('<%="/welcome/multi_table_create"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
+            <div  style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= "#{form_authenticity_token}" %> /></div>
              <div style= "display: none" >
             <input type="text"  name ="multi_table_create" id="multi_table_create_table_name"   />
              </div>

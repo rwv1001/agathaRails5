@@ -36,14 +36,14 @@
 
 
      <% if table_name == "Person" || table_name == "Lecture" %>
-    <%  raw click_str = "onclick=on_select_check_click('#{row.id.to_s}', '#{table_name}')"  %>
+    <%  click_str = "onclick=on_select_check_click(#{row.id},'#{table_name}')"  %>
     <%  raw id_str=  "id = #{table_name}_check_#{row.id.to_s}" %>
     <% else %>
       <% click_str = ""  %>
        <%  raw id_str = "id = #{table_name}_check_#{row.id.to_s}" %>
     <% end %>
 
-      <td class ="select-cell"> <input type="checkbox" name ="row_in_list[]" class="check"  <%=id_str%> <%= click_str %> value= <%=row.id.to_s %>  ></td>
+      <td class ="select-cell"> <input type="checkbox" name ="row_in_list[]" class="check"  <%=id_str%> <%= click_str.html_safe  %> value= <%=row.id.to_s %>  ></td>
       <td class="update-cell">      <% onclick_str = "on_edit('#{table_name.tableize}','#{table_name}','#{row.id.to_s}');return false" %>
       <span id=<%= raw "a_edit_#{table_name.tableize}_#{row.id.to_s}" %> >
       <a href="/" data-remote="true" rel="nofollow"   onclick= <%= raw "#{onclick_str}"%>   >Edit </a> </span>

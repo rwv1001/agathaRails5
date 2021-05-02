@@ -194,9 +194,9 @@ class WelcomeController < ApplicationController
 
   end
 
-   def update_main(ids, edited_table_name, attribute_names,success_str,fail_str,unwait_flag)
+   def update_main_(ids, edited_table_name, attribute_names,success_str,fail_str,unwait_flag)
     
-
+    Rails.logger.info("update_main rwv args");
     @search_ctls = session[:search_ctls];
     #@search_ctls.each {|key, value| puts "#{key} is #{value}" }
     respond_to do |format|
@@ -227,19 +227,22 @@ class WelcomeController < ApplicationController
   end
   
   def update_main
-
+    Rails.logger.info("update_main 01" );
     id = params[:id].to_i;
     
     ids = [];
     ids << id;
 
     edited_table_name = params[:table_name];
+    Rails.logger.info("update_main 02" );
     attribute_name = params[:attribute_name];
+    Rails.logger.info("update_main 03" );
     success_str="";
     fail_str ="";
     unwait_flag = false;
+    Rails.logger.info("update_main 04" );
     update_main_([id], edited_table_name, [attribute_name], success_str, fail_str, unwait_flag);
-    
+    Rails.logger.info("update_main 05" );
        
     end
    

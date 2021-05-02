@@ -8,10 +8,7 @@
     <% readonly_str = "" %>
 <% end %>
 <% if edit_cell.update_parent %>
-  <script type="text/javascript">
-    update_parent('<%= table_name %>', '<%= attribute.name  %>' ,'<%= current_object.id %>')
 
-  </script>
 <% end %>
 <div id =<%= raw "#{table_name}_#{attribute.name}"%> >
 

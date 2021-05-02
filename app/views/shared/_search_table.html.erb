@@ -217,8 +217,8 @@
           </div>
 
 
-          <% onclick_str = "MultiUpdate('#{table_name}');return false" %>
-        <input type="button" id=<%="multi_update_button_#{table_name}"%> value=<%="\"Update Selected\"" %> class="list_button"  onclick= <%="\"#{onclick_str }\""%>  >
+          <% onclick_str = "MultiUpdate('#{table_name}');return false;" %>
+        <input type="button" id=<%="multi_update_button_#{table_name}"%> value='<%="Update Selected" %>' class="list_button"  onclick= '<%="#{onclick_str }"%>'  >
          
         </div>
        <% if table_name == "Tutorial" %>
