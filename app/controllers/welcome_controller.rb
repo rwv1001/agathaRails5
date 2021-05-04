@@ -2373,7 +2373,7 @@ Rails.logger.flush
     if(group_name.length ==0)
       alert_str = "Group creation failed: the chosen group name #{group_name} can't be an empty string.";
       respond_to do |format|
-        format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
+        format.js  {render :partial => "shared/alert", :locals => {:alert_str => alert_str} }
 =begin      
 do
           render :update do |page|
@@ -2419,8 +2419,10 @@ do
     search_ctl_group = @search_ctls["Group"];
 
     respond_to do |format|
+          
+       
         format.js  { render "new_group", :locals => { :existing_group => existing_group, :class_name => class_name, :table_name => table_name, :group_name => group_name, :new_group_id => new_group_id, :ids => ids, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group } }
-=begin        
+=begin         
         do
           render :update do |page|
             if(existing_group ==nil)

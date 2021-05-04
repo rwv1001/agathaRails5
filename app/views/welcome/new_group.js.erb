@@ -22,10 +22,6 @@
         if (jQuery('#<%="#{row.id}_#{table_name}"%>') ){
             jQuery('#<%="#{row.id}_#{table_name}"%>').replaceWith("<%= j render(:partial => 'shared/search_results_row_button', :object => row) %>");  
 
-               updated_objects.each do |row|
-
-                  page << "if ($('#{row.id}_#{ table_name}')) {"
-                  page["#{row.id}_#{table_name}"].replace( :partial => "shared/search_results_row_button", :object =>row );
         }
     <% end %>
     <% results_table_name = "search_results_table_Group" %>
