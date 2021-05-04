@@ -168,8 +168,9 @@
         <div style="height: 6px">&nbsp</div>
         
         <div class="delete_div" >
-        <% onclick_str2 = "DeleteMembers('#{table_name}');return false" %>
-        <input type="button" value=<%= raw "Delete selected" %> class="list_button"  onClick= <%= raw "#{onclick_str2}"  %> />
+        
+        <% onclick_str2 = "onclick=DeleteMembers('#{table_name}'); return false; " %>
+        <input type="button" value=<%= raw "Delete selected" %> class="list_button"  <%= onclick_str2.html_safe  %>  />
        </div>
 
       <% if table_name == "TutorialSchedule" %>

@@ -75,7 +75,7 @@ function on_unload()
     unload_data_type_obj = jQuery("#unload_data_type");
     attribute_name = unload_attribute_obj.val();
     data_type = unload_data_type_obj.val(); 
-    editBlur(attribute_name, data_type); 
+     
     parent_win=window.opener;
     if(parent_win!=null)
         {
@@ -90,15 +90,8 @@ function on_unload()
 
             submit_obj = parent_win.document.getElementById('child_unload_main');
             Rails.fire(submit_obj, 'submit');
-           // submit_obj.submit();
+           
         }
-
-    win_unload_obj = jQuery('#win_unload')
-    if(win_unload_obj.get(0)){
-    	//win_unload_obj.submit();
-    	elem = document.getElementById('win_unload');
-        Rails.fire(elem, 'submit');;
-    }
 }
 
 function open_win()
@@ -145,10 +138,10 @@ function on_edit( table_name,class_name,id)
     span_aref_obj_str120 = "#"+span_aref_obj_str;
     span_aref_obj  = jQuery(span_aref_obj_str120 );
     aref_obj = span_aref_obj.find('a').first();
-    var  disabled_a = jQuery("<label></label>").attr({'class': 'alabel'});
-    disabled_a.html('Edit ')
-    aref_obj.remove();
-    span_aref_obj.replaceWith(disabled_a);
+    //var  disabled_a = jQuery("<label></label>").attr({'class': 'alabel'});
+    //disabled_a.html('Edit ')
+    //aref_obj.remove();
+    //span_aref_obj.replaceWith(disabled_a);
 
     attribute_opener =''
     opener_id = 1;
@@ -1112,7 +1105,7 @@ function any_selected(class_name)
         if(jQuery(this).is(':checked'))
         {
             ret_val = true;
-            throw $break;
+            return ret_val;
         }
         else
             {
@@ -1141,14 +1134,14 @@ if (!answer)
  return;
     }
 
-    specific_action_variables825 = "#"+specific_action_variables;
+    specific_action_variables825 = "#"+"specific_action_variables";
     specific_div  = jQuery(specific_action_variables825);
     specific_div.children().each(function(){jQuery(this).remove()});
     search_results_div_str = "search_results_" + class_name;
 
     search_results_div_str828 = "#"+search_results_div_str;
     search_results_div  = jQuery(search_results_div_str828)
-    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); jQuery(this).removeAttribute('id'); specific_div.append(new_elt)});
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); jQuery(this).removeAttr('id'); specific_div.append(new_elt)});
 
     action_obj = jQuery('#action_type')
     action_obj.val( "delete")
@@ -1228,27 +1221,33 @@ function on_del(table_name, ids)
 //    alert_str = "table = " + table_name + ", ids = ";
 //   ids.each(function(){alert_str = alert_str + id + ", "});
 //    alert(alert_str);
-    ids.forEach(function(id){        
+    ids.forEach(function(id){ 
+        
         name = table_name + '_' + id;
         win_ref = open_windows.get(name);
+        
         if(win_ref!=null && !win_ref.closed)
         {
             win_ref.close();
         }
+        
         open_windows.unset(name);
         row_obj_str = ""+ id +"_"+ table_name;
 
         row_obj_str907 = "#"+row_obj_str;
         row_obj  = jQuery(row_obj_str907);
+        
         if(row_obj[0] != null)
         {
             row_obj.remove();
         }
+        
     });
     row_objs_str = ".row_" + table_name
     row_count = 0;
     jQuery(row_objs_str).each(function(){
         row = jQuery(this);
+        
         if( row_count  % 2 == 0)
         {
             row.css({background:'#CCCCCC'});
@@ -1269,7 +1268,7 @@ function on_del(table_name, ids)
   //  action_obj.val( "delete")
 
 
-  form_obj_str937 = "#"+form_obj_str;
+ // form_obj_str937 = "#"+form_obj_str;
   //  form_obj  = jQuery(form_obj_str937);
   //  form_obj.submit();
 }

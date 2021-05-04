@@ -162,86 +162,88 @@ def update_helper()
     @table_name = params[:table_name];
     field_value = params[:field_value];
     field_name = params[:field_name];
-#  readonly_fields = session["#{@table_name}_readonly_fields"]
+    #  readonly_fields = session["#{@table_name}_readonly_fields"]
 
 
     sql_str = "OpenRecord.find_by_sql(\"SELECT * FROM  open_records WHERE (user_id = " + @user_id.to_s + " AND table_name = '" + @table_name + "' AND  record_id = " +id.to_s + "  AND in_use = true)\")"
     open_records = eval(sql_str)
 
     if(open_records.length == 0 ) #1
-    blank_div = "This page has expired";
-    respond_to do |format| 
-        format.js { render :partial => "shared/blank", :locals => {:blank_div => blank_div} }
+        blank_div = "This page has expired";
+        respond_to do |format| 
+            format.js { render :partial => "shared/blank", :locals => {:blank_div => blank_div} }
 =begin        
-        do
-        render :update do |page|
-            
-            page.replace_html("main_div", :partial => "shared/blank_div", :object => blank_div);
-        end
-        end
+do
+render :update do |page|
+
+page.replace_html("main_div", :partial => "shared/blank_div", :object => blank_div);
+end
+end
 =end        
-    end
+        end
     else #1
-    object_str = "#{@table_name}.find(id)"
-    object = eval(object_str)
-    if object == nil #2
-        blank_div = "#{@table_name} record with id = #{id} could not be found. I guess this means another user has just deleted this record. They shouldn't have been able to do this because you should have been the current owner of the file.  So if your reading this, it means there is a bug in Agatha";
-        respond_to do |format| #3
-        
-        format.js  { render :partial => "shared/blank", :locals => {:blank_div => blank_div} }
+        object_str = "#{@table_name}.find(id)"
+        object = eval(object_str)
+        if object == nil #2
+            blank_div = "#{@table_name} record with id = #{id} could not be found. I guess this means another user has just deleted this record. They shouldn't have been able to do this because you should have been the current owner of the file.  So if your reading this, it means there is a bug in Agatha";
+            respond_to do |format| #3
+                format.js  { render :partial => "shared/blank", :locals => {:blank_div => blank_div} }
 =begin           
-        do
+            do
             render :update do |page|
-            
+
             page.replace_html("main_div", :partial => "shared/blank_div", :object => blank_div);
             end
-        end
+            end
 =end           
-        end #3
-    else #2
-        open_record = open_records[0];
-        open_record.save;
-        update_str = "object.update(#{field_name}: '#{field_value}')";
-        Rails.logger.info("RWV update_str = #{update_str}")
-        if field_name.length != 0
-           eval(update_str);
-        
-        save_ok = false;
-        exception_str = ""
-        begin
-        object.save;
-        save_ok = true;
-        rescue Exception => exc
-        exception_str = "An update error has occurred. Perhaps you already have #{@table_name} with these details.";
-        end
-        if save_ok  #4
-        attribute_eval_str = "AttributeList.new(#{@table_name.classify})"
-        @attribute_list = AttributeList.new(@table_name.classify);
-        @search_ctls = session[:search_ctls]
-        attribute = @attribute_list.attribute_hash[field_name]
-        if attribute.foreign_key.length >0
-            @filter_controller = FilterController.new(@search_ctls, @table_name, @user_id)
-        end
-        update_parent = true;
-        readonly_flag = false;  
-        edit_cell1 = EditCell.new(attribute, object, @table_name, @filter_controller, update_parent,readonly_flag );       
-        attribute = @attribute_list.attribute_hash["updated_at"];  
-        update_parent = false;
-        edit_cell2 = EditCell.new(attribute, object, @table_name, @filter_controller, update_parent,readonly_flag);
-        respond_to do |format| #5
-            format.js { render :partial => "shared/update_helper", :locals => {:table_name => @table_name, :field_name => field_name, :edit_cell1 => edit_cell1, :edit_cell2 => edit_cell2, :attribute => attribute, :id => id } }
-            end #5
-        else #4
-        respond_to do |format|
-            format.js { render :partial => "shared/alert", :locals => {:alert_str => exception_str } }
-        end 
-        end
-        end #4
-        
-        end #2
+            end #3
+        else #2
+            open_record = open_records[0];
+            open_record.save;
+            update_str = "object.update(#{field_name}: '#{field_value}')";
+            Rails.logger.info("RWV update_str = #{update_str}")
+            if field_name.strip().length != 0
+                Rails.logger.info("update_helper updating *#{field_name}*")
+                eval(update_str);
 
+                save_ok = false;
+                exception_str = ""
+                begin
+                    object.save;
+                    save_ok = true;
+                    rescue Exception => exc
+                    exception_str = "An update error has occurred. Perhaps you already have #{@table_name} with these details.";
+                end
+                if save_ok  #4
+                    attribute_eval_str = "AttributeList.new(#{@table_name.classify})"
+                    @attribute_list = AttributeList.new(@table_name.classify);
+                    @search_ctls = session[:search_ctls]
+                    attribute1 = @attribute_list.attribute_hash[field_name]
+                    if attribute1.foreign_key.length >0
+                    @filter_controller = FilterController.new(@search_ctls, @table_name, @user_id)
+                    end
+                    update_parent = true;
+                    readonly_flag = false;  
+                    edit_cell1 = EditCell.new(attribute1, object, @table_name, @filter_controller, update_parent,readonly_flag );       
+                    attribute2 = @attribute_list.attribute_hash["updated_at"];  
+                    update_parent = false;
+                    edit_cell2 = EditCell.new(attribute2, object, @table_name, @filter_controller, update_parent,readonly_flag);
+                    respond_to do |format| #5
+                        format.js { render :partial => "shared/update_helper", :locals => {:table_name => @table_name, :field_name => field_name, :edit_cell1 => edit_cell1, :edit_cell2 => edit_cell2, :attribute => attribute1, :id => id } }
+                    end #5
+                else #4
+                    respond_to do |format|
+                        format.js { render :partial => "shared/alert", :locals => {:alert_str => exception_str } }
+                    end 
+                end #4
+            else 
+                Rails.logger.info("update_helper do nothing");
+                respond_to do |format|
+                    format.js { render :partial => "shared/do_nothing" }
+                end   
+            end 
+        end #2
     end #1
-    
 end        
 =begin          
         do

@@ -1,34 +1,38 @@
-    
-    <%  current_object = edit_object.current_object %>
-    <%  attribute_list = edit_object.attribute_list %>
-    <%  filter_controller =  edit_object.filter_controller %>
-    <%  table_name =  edit_object.table_name %>
-    <%  readonly_fields =  edit_object.readonly_fields %>
+
+<%  current_object = edit_object.current_object %>
+<%  attribute_list = edit_object.attribute_list %>
+<%  filter_controller =  edit_object.filter_controller %>
+<%  table_name =  edit_object.table_name %>
+<%  readonly_fields =  edit_object.readonly_fields %>
 
 <div style="display:none" >
-       <input name="opener_attribute_name" id ="stupid_update_opener_attribute_name" type="text" value="not_set" />
-       <input name="opener_id" id ="stupid_update_opener_id" type="text" value ="1" />
+    <input name="opener_attribute_name" id ="stupid_update_opener_attribute_name" type="text" value="not_set" />
+    <input name="opener_id" id ="stupid_update_opener_id" type="text" value ="1" />
 </div>
 
 <div style="display:none" >
-       <input name="opener_attribute_name" id ="sensible_update_opener_attribute_name" type="text"  />
-       <input name="opener_id" id ="sensible_update_opener_id" type="text" />
+    <input name="opener_attribute_name" id ="sensible_update_opener_attribute_name" type="text"  />
+    <input name="opener_id" id ="sensible_update_opener_id" type="text" />
 </div>
 
-    <form action=<%= raw   "/#{table_name.tableize}/update_main" %> id="update_main" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/update_main"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
-      <div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> /></div>
-       <div style="display:none" >
-       <input name="id" id="update_main_id" type="text" />
-       <input name="class_name" id ="update_main_class_name" type="text"  />
-       <input name="attribute_name" id="update_main_attribute_name" type="text" />
-       
-       <input name="opener_attribute_name" id ="update_opener_attribute_name" type="text" value="not_set" />
-       <input name="opener_id" id ="update_opener_id" type="text" value ="1" />
-       </div>
-    </form>
-    
-    <form action=<%= raw "/#{table_name.tableize}/updater"%> id="update_form" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/updater"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;">
-    <div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> /></div>
+<form action=<%= raw   "/#{table_name.tableize}/update_main" %> id="update_main" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/update_main"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
+    <div style="margin:0;padding:0">
+        <input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> />
+    </div>
+    <div style="display:none" >
+        <input name="id" id="update_main_id" type="text" />
+        <input name="class_name" id ="update_main_class_name" type="text"  />
+        <input name="attribute_name" id="update_main_attribute_name" type="text" />
+
+        <input name="opener_attribute_name" id ="update_opener_attribute_name" type="text" value="not_set" />
+        <input name="opener_id" id ="update_opener_id" type="text" value ="1" />
+    </div>
+</form>
+
+<form action=<%= raw "/#{table_name.tableize}/updater"%> id="update_form" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/updater"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;">
+    <div style="margin:0;padding:0">
+        <input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> />
+    </div>
     <div  style="display:none">
         <input name="table_name"  type="text" value=<%= raw "#{table_name}" %> />
         <input name="field_name" id ="field_name" type="text" />
@@ -38,63 +42,63 @@
         <input name="id" id="id_value" type="text" value=<%= raw "#{current_object.id}" %>  />
         <input name="closing_flag" id="closing_flag" type="text" value= "0"  />
     </div>
-  <div>
-    <input name="commit" type="submit" value="Update button" style="display:none" />
-  </div>
+    <div>
+        <input name="commit" type="submit" value="Update button" style="display:none" />
+    </div>
+</form>
 
-    </form>
-    <form action=<%= raw   "/#{table_name.tableize}/win_load" %> id="win_load" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/win_load"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
-      <div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> /></div>
-       <div  style="display:none">
-       <input name="id" id="id_value" type="text" value=<%= raw "#{current_object.id}" %>  />
-       <input name="table_name"  type="text" value=<%= raw "#{table_name}" %> />
-       </div>
-    </form>
+<form action=<%= raw   "/#{table_name.tableize}/win_load" %> id="win_load" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/win_load"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
+    <div style="margin:0;padding:0">
+        <input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> />
+    </div>
+    <div  style="display:none">
+        <input name="id" id="id_value" type="text" value=<%= raw "#{current_object.id}" %>  />
+        <input name="table_name"  type="text" value=<%= raw "#{table_name}" %> />
+    </div>
+</form>
 
-      <div  style="display:none">
-           <input name="attribute" id="unload_attribute" type="text"   />
-     <input name="data_type" id="unload_data_type" type="text"   />
-     </div>
+<div  style="display:none">
+    <input name="attribute" id="unload_attribute" type="text"   />
+    <input name="data_type" id="unload_data_type" type="text"   />
+</div>
 
-      <form action=<%= raw   "/#{table_name.tableize}/win_unload" %> id="win_unload" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/win_unload"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
-      <div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> /></div>
-        <div  style="display:none">
-   <input name="table_name" id="unload_table_name" type="text" value=<%= raw "#{table_name}" %> />
-    <input name="id" id="unload_id_value" type="text" value=<%= raw "#{current_object.id}" %>  />
-    <input name="attribute" id="unload_attribute_name" type="text" value="" />
-    <input name="data_type" id="unload_data_type" type="text" value="" />
-    
-        </div>
+<form action=<%= raw   "/#{table_name.tableize}/win_unload" %> id="win_unload" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/win_unload"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
+    <div style="margin:0;padding:0">
+        <input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> />
+    </div>
+    <div  style="display:none">
+        <input name="table_name" id="unload_table_name" type="text" value=<%= raw "#{table_name}" %> />
+        <input name="id" id="unload_id_value" type="text" value=<%= raw "#{current_object.id}" %>  />
+        <input name="attribute" id="unload_attribute_name" type="text" value="" />
+        <input name="data_type" id="unload_data_type" type="text" value="" />
+    </div>
+</form>
 
-      
-      <table>
-        <tr class="column-header">
-          <th>Field</th>
-          <th>Value</th>
-        </tr>
-        <%  for attribute in attribute_list.attribute_elements  %>
 
-          <% if readonly_fields.index(attribute.name) == nil %>
+<table>
+    <tr class="column-header">
+        <th>Field</th>
+        <th>Value</th>
+    </tr>
+    <%  for attribute in attribute_list.attribute_elements  %>
+        <% if readonly_fields.index(attribute.name) == nil %>
             <% readonly_flag = false %>
-            <%  else %>
+        <%  else %>
             <% readonly_flag = true %>
-            <% end %>
-
-          <tr class="<%= cycle('row-even', 'row-odd') %>">
-
+        <% end %>
+        <tr class="<%= cycle('row-even', 'row-odd') %>">
             <td><%= attribute.name %> </td>
             <% update_parent = false %>
             <%  edit_cell = EditCell.new(attribute, current_object, table_name, filter_controller,  update_parent, readonly_flag ); %>
             <td class ="edit_column" >
-            <%= raw  render(:partial => "shared/edit_cell", :object => edit_cell) %>
+                <%= raw  render(:partial => "shared/edit_cell", :object => edit_cell) %>
             </td>
+        </tr>
+    <% end %>
+</table>
 
-          </tr>
-        <% end %>
-      </table>
-</form>
 
 <script type ="text/javascript">
-silly_update();
+    silly_update();
 </script>
 

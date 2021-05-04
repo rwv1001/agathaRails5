@@ -4,17 +4,18 @@
       
       <%= javascript_include_tag "application" %>     
       <%= javascript_include_tag "prototype" %>
+      
       <%= javascript_include_tag "prepend_template" %>
       <%= javascript_include_tag "template" %>
       <%= javascript_include_tag "search_ctl" %>
       <%= javascript_include_tag "display_format" %>
-      <%= javascript_include_tag "prepend_template" %>
       <%= javascript_include_tag "edit" %>
       <%= javascript_include_tag "group_filters" %>
-     
+      
+      <%= javascript_include_tag "jquery-ui.min" %>
 
      <%= stylesheet_link_tag  'agatha' %>
-
+     <%= stylesheet_link_tag  'jquery-ui' %>
 
 
 
@@ -31,6 +32,7 @@ td img {display: block;}
       
 
 </style>
+
 
 </head>
   <body  bgcolor="#ffffff"  onUnload ="on_unload()" >
@@ -607,28 +609,25 @@ td img {display: block;}
   <script language="javascript">
   content_end() 
   </script>
-  <div id="two_column_div">
- <div id="content_div_1" class="content_div" style="position: fixed;  top: 187px; left: 166px; right:0px; bottom:7px; overflow: auto;">
-<div id="first_div_1"> </div>
+<div id="two_column_div" style="position: fixed;  top: 187px; left: 166px; right:0px; bottom:7px; overflow: hidden;" >
+    <div id="content_div_1" class="content_div" style="position: fixed;  top: 187px; left: 166px; right:0px; bottom:7px; overflow: auto;">
+        <div id="first_div_1"> </div>
+    </div>
+    <div id="content_div_2" class="content_div" style="position: fixed;  top: 187px; left: 166px; right:0px; bottom:7px; overflow: auto;">
+        <div id="first_div_2"> </div>
+    </div>
+    <div id="black_bar_separator_div" style ="position: fixed;top:187px; left: 166px;  bottom:7px; width: 7px; background-color: #000000;">
+        &nbsp;
+    </div>
+</div>
 
-  
-<div id="content_div_2" class="content_div" style="position: fixed;  top: 187px; left: 166px; right:0px; bottom:7px; overflow: auto;">
-<div id="first_div_2"> </div>
-
-  </div>
-  <div id="black_bar_separator_div" style ="position: fixed;top:187px; left: 166px;  bottom:7px; width: 7px; background-color: #000000;">&nbsp;</div>
-  </div>
-
-
-  </div>
-
-  <div id="disable_id" style ="position:absolute; top:0; right:0; width:100%; height: 100%; background-color: #ffffff;  opacity:0.5">
+<div id="disable_id" style ="position:absolute; top:0; right:0; width:100%; height: 100%; background-color: #ffffff;  opacity:0.5">
 </div>
 
 <%  if session[:administrator] %>
-  <div id="administrator_div"></div>
+    <div id="administrator_div"></div>
 
-  <%  end %>
+<%  end %>
 </div>
 
   <script type="text/JavaScript">
@@ -642,7 +641,7 @@ td img {display: block;}
         jQuery('#fx_height').val( jQuery('#dummy_fx').height());
         content_end();
         jQuery('#content_div').hide();
-        jQuery('#two_column_div').hide();
+        //jQuery('#two_column_div').hide();
         load_pages();
         jQuery('#disable_id').hide();
         jQuery(window).name = "main_window";
@@ -651,7 +650,13 @@ td img {display: block;}
              while (el && el.nodeType != 1)
              el = el.nextSibling;
          return jQuery(el);
-        };
+    };
+      jQuery( function() {
+      jQuery("#black_bar_separator_div").draggable({containment: two_column_div});
+     } );
+      jQuery("#black_bar_separator_div").on( "dragstop", function( event, ui ) { end_drag() } );
+        
+ 
     
 </script>
 </html>

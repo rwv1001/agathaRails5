@@ -155,14 +155,27 @@ class WelcomeController < ApplicationController
 
   end
   def child_unload
-    
+    Rails.logger.info("Begin child_unload");
+       
+       
     edited_table_name = params[:table_name];
     id = params[:id];
+    attribute_name = params[:attribute_name];
     ids = [];
     ids << id.to_i;
+    @user_id = session[:user_id];
+
+
+    sql_str = "OpenRecord.find_by_sql(\"SELECT * FROM  open_records WHERE (user_id = " + @user_id.to_s + " AND table_name = '" + @table_name + "' AND  record_id = " +@id.to_s + "  AND in_use = true)\")"
+    open_records = eval(sql_str)
+    if(open_records.length >0)
+        open_records[0].in_use = false;
+        open_records[0].save;
+        Rails.logger.info("child_unload open records updated")
+    end 
     @search_ctls = session[:search_ctls][edited_table_name]
     respond_to do |format|
-      format.js  { render "child_unload", :locals => {:search_ctl => session[:search_ctls][edited_table_name], :edited_table_name => edited_table_name, :ids => ids, :id => id  } }
+      format.js  { render "child_unload", :locals => {:search_ctl => session[:search_ctls][edited_table_name], :edited_table_name => edited_table_name, :ids => ids, :id => id, :attribute_name => attribute_name  } }
 =begin      
       do
         render :update do |page|

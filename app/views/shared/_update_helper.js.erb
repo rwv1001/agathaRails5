@@ -1,3 +1,6 @@
+<% Rails.logger.info("update_parent .js.erb #{@table_name}, #{attribute.name}, #{id}"); %>
+
+
 update_parent('<%= "#{@table_name}" %>', '<%= "#{attribute.name}"  %>' ,'<%= "#{id}" %>')
 jQuery('#<%="#{@table_name}_#{field_name}"%>').replaceWith("<%= j render(:partial => 'shared/edit_cell', :object => edit_cell1) %>");
 jQuery('#<%="#{@table_name}_updated_at"%>').replaceWith("<%= j render(:partial => 'shared/edit_cell', :object => edit_cell2) %>");

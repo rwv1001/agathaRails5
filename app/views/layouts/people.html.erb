@@ -48,6 +48,8 @@ td img {display: block;}
 
  <script language="javascript">
  menu_begin();
+ 
+
    </script>
 
 
@@ -74,13 +76,19 @@ td img {display: block;}
 
   <script language="javascript">
   content_begin()
+  function l(){
+    alert("load Windowe");
+    }
+
   </script>
    <div id ="session_div">
   </div>
 
 <%=  yield %>
    <script language="javascript">
-  content_end()
+  content_end();
+  
+
   </script>
   </div>
 </body>

@@ -14,7 +14,7 @@ function hideHeader()
     jQuery('#content_div').css('top', '17px');
     jQuery('#content_div_1').css('top', '17px');
     jQuery('#content_div_2').css('top', '17px');
-
+    jQuery('#two_column_div').css('top', '17px');
     jQuery('#black_bar_separator_div').css('top', '17px');
     jQuery('#expand_button_div').show();
 }
@@ -25,6 +25,7 @@ function showHeader()
     jQuery('#black_bar_div').show();
     jQuery('#shrink_button_div').show();
     jQuery('#menu_div').css('top', '187px');
+    jQuery('#two_column_div').css('top', '187px');
     jQuery('#content_div').css('top', '187px');
     jQuery('#content_div_1').css('top', '187px');
     jQuery('#content_div_2').css('top', '187px');
@@ -1540,22 +1541,22 @@ function set_double_scroll()
     left_black_bar = Math.floor(frac_left_black_bar+0.5);
 
     right_1_pos = left_black_bar -1;
-    from_right_1_pos_str = "right: " + (jQuery(window).innerWidth() - right_1_pos -1);    
-    left_black_bar_str = "left: " + left_black_bar;
+    from_right_1_pos_str = "" + (jQuery(window).innerWidth() - right_1_pos -1);    
+    left_black_bar_str = "" + left_black_bar;
 
     left_2_pos = right_1_pos + black_bar_width;
     right_2_pos = 0;
-    left_2_pos_str = "left: " + left_2_pos;
+    left_2_pos_str = "" + left_2_pos;
 
     
 
-    div_1_new_style =  div_1_style.replace(/right: \d+/, from_right_1_pos_str);
-    div_2_new_style =  div_2_style.replace(/left: \d+/, left_2_pos_str);
-    black_bar_new_style = black_bar_style.replace(/left: \d+/, left_black_bar_str);
+    //div_1_new_style =  div_1_style.replace(/right:\s*\d+/, from_right_1_pos_str);
+    //div_2_new_style =  div_2_style.replace(/left:\s*\d+/, left_2_pos_str);
+    black_bar_new_style = black_bar_style.replace(/left:\s*\d+/, left_black_bar_str);
 
-    content_div_1.attr("style",div_1_new_style);
-    content_div_2.attr("style",div_2_new_style);
-    black_bar_separator_div.attr("style",black_bar_new_style);
+    content_div_1.css("right",from_right_1_pos_str+"px");
+    content_div_2.css("left",left_black_bar_str+"px");
+    black_bar_separator_div.css("left",left_black_bar_str+"px");
 
 }
 

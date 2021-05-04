@@ -24,11 +24,15 @@ class UsersController < ApplicationController
   # GET /users/new
   # GET /users/new.xml
   def new_user
+    Rails.logger.info("new_user params: #{params[:user]}");
+    params[:user].permit!
     new_user = User.new(params[:user])   #
     save_status = new_user.save;
 
     respond_to do |format|
-      format.js  do
+      format.js  { render "new_user", :locals => {:save_status => save_status, :new_user => new_user, :session => session } }
+=begin      
+      do
         if(save_status)
           render :update do |page|
 
@@ -49,63 +53,76 @@ class UsersController < ApplicationController
         end
 
       end
+=end      
     end
   end
 
   def admin_update_user
-
+    update_status = false;
+    current_user = nil;
     if session[:administrator]
-      current_user  = User.find(params[:user_id])
-      update_status = false;
-      if( current_user)
-        current_user.update_attributes(params[:user])
-        update_status = current_user.save;
-      end
-      respond_to do |format|
-        format.js  do
-          if(update_status)
-            render :update do |page|
-              page.replace_html("user", :partial => "shared/create_user", :object => current_user );
-              page << "alert(\"Username #{current_user.name} has been successfully updated\")";
-            #  page.replace_html("flash", :partial => "shared/flash", :object => "Username #{current_user.name} has been successfully updated");
-
-            end
-          else
-            render :update do |page|
-              page << "alert(\"Unable to update user. Make sure new password and confirm password are identical\")";
-             # page.replace_html("flash", :partial => "shared/flash", :object => "Unable to update user");
-            end
-          end
+        current_user  = User.find(params[:user_id])
+        update_status = false;
+        if( current_user )
+            params[:user].permit!
+            current_user.update_attributes(params[:user])
+            update_status = current_user.save;
+        end
+        respond_to do |format|
+            format.js  { render "admin_update_user", :locals => {:update_status => update_status, :current_user => current_user } }
+        end    
+=begin        
+        do
+        if(update_status)
+        render :update do |page|
+        page.replace_html("user", :partial => "shared/create_user", :object => current_user );
+        page << "alert(\"Username #{current_user.name} has been successfully updated\")";
+        #  page.replace_html("flash", :partial => "shared/flash", :object => "Username #{current_user.name} has been successfully updated");
 
         end
-      end
+        else
+        render :update do |page|
+        page << "alert(\"Unable to update user. Make sure new password and confirm password are identical\")";
+        # page.replace_html("flash", :partial => "shared/flash", :object => "Unable to update user");
+        end
+        end
 
+        end
+=end  
     else
-      respond_to do |format|
-        format.js  do
-
-          render :update do |page|
-            page << "alert(\"You do not have admin rights\")";
-        #    page.replace_html("flash", :partial => "shared/flash", :object => "You do not have admin rights");
-          end
+        alert_str = "You do not have admin rights";
+        respond_to do |format|
+            format.js { render "shared/alert", :locals => {:alert_str => alert_str} }
         end
-      end
     end
-    
-  end
+  end            
+            
+=begin            
+    do
+        render :update do |page|
+        page << "alert(\"You do not have admin rights\")";
+        #    page.replace_html("flash", :partial => "shared/flash", :object => "You do not have admin rights");
+        end
+    end
+=end     
+
 
 
   def update_user
     @user = User.find(params[:user_id])
     current_user = User.authenticate(@user.name, params[:old_password])
     update_status = false;
-    if( current_user)
+    if( current_user )
       current_user.update_attributes(params[:user])
       update_status = current_user.save;
     end
      
     respond_to do |format|
-      format.js  do
+      format.js  { render "update_user.js.erb", :locals => { :update_status => update_status , :current_user => current_user } }
+    end
+  end
+=begin      
+      do
         if(update_status)
           render :update do |page|
             page.replace_html("user", :partial => "shared/user", :object => current_user );
@@ -122,6 +139,7 @@ class UsersController < ApplicationController
     end
 
   end
+=end  
   def new
     @user = User.new
 
