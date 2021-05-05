@@ -91,6 +91,7 @@ function scrollHandler()
         })
     });
 // set_double_scroll();
+    separate_resizing();
   
 }
 function scrollHandler3()
@@ -407,7 +408,7 @@ function load_pages()
     person_page_views.push(new PageView("people", "Person", "Make attendee", true,
       [new DisplayDiv("welcome_Person", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], ""),
        new DisplayDiv("Person_action_div", "first_menu_div", [], [], [], ""),
-       new DisplayDiv("welcome_Lecture", "first_div_2", [], ["Lecture_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], " set_action_class('Person','Lecture','add_to_lectures')")]));
+       new DisplayDiv("welcome_Lecture", "first_div_2", [], ["Lecture_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], " set_action_class('Person','Lecture','.children')")]));
     person_page_views.push(new PageView("people", "Person", "Add to groups", true,
       [new DisplayDiv("welcome_Person", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], "group_unrestriction()"),
        new DisplayDiv("Person_action_div", "first_menu_div", [], [], [], ""),
@@ -521,7 +522,7 @@ function load_pages()
     lecture_page_views.push(new PageView("lectures", "Lecture", "Add attendees",true,
       [new DisplayDiv("welcome_Lecture", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], [".remove-cell",".update-cell",".select_options", ".select-cell", ".delete-cell"],"group_unrestriction()"),
        new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [], [".delete_div",".group_div"],""),
-       new DisplayDiv("welcome_Person", "first_div_2", [], ["Person_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], "group_restriction('lectures'); set_action_class('Lecture','Person','add_to_lectures')")]));
+       new DisplayDiv("welcome_Person", "first_div_2", [], ["Person_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], "group_restriction('lectures'); set_action_class('Lecture','Person','.children')")]));
     lecture_page_views.push(new PageView("lectures", "Lecture",  "Create group",true,
       [new DisplayDiv("welcome_Lecture", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"],""),
        new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [".group_div"], "")]));
@@ -1490,14 +1491,20 @@ function display_select_action(table_name, option_id, do_js)
     
     old_page_name = table_name;
     old_option_id = option_id;
-    
+    separate_resizing();
+
+}
+function separate_resizing(){
     jQuery(".separator_class").each(function(){
-   var separate_div = jQuery(this);
+        var separate_div = jQuery(this);
+   separate_div.css({'width': 1});
+    });
+   jQuery(".separator_class").each(function(){
+   var separate_div = jQuery(this);   
    var content_div = separate_div.closest('.content_div')
-   var leftOffset = parseInt(separate_div.css('left')); //Grab the left position left first
-   content_div.scroll(function(){    
-    separate_div.css({'left': jQuery(this).scrollLeft() + leftOffset  });
-   });});
+   var scroll_width =  content_div[0].scrollWidth;  
+    separate_div.css({'width': scroll_width});
+   });   
 }
 
 function action_select(table_name)
@@ -1570,7 +1577,7 @@ function set_double_scroll()
     content_div_1.css("right",from_right_1_pos_str+"px");
     content_div_2.css("left",left_black_bar_str+"px");
     black_bar_separator_div.css("left",left_black_bar_str+"px");
-
+    
 }
 
 

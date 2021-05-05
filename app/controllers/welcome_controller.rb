@@ -1426,6 +1426,8 @@ class WelcomeController < ApplicationController
     end
   end
   def max_tutorials(ids)
+      people_ids = ids[0 .. -1]
+      Rails.logger.info("b max_tutorials ids = #{ids.length}")
     success_str = "";
     if(ids == nil || ids.length==0)
       error_str = "You have not selected any people"
@@ -1470,8 +1472,15 @@ class WelcomeController < ApplicationController
       end
 
     end
+    
+    table_name = "Person"
+    @search_ctls=session[:search_ctls]
+    search_ctl = @search_ctls[table_name]
+
+    
+    
     respond_to do |format|
-      format.js  {render "max_tutorials", :local => {:success_str => success_str, :error_str => error_str} } 
+      format.js  {render "max_tutorials", :locals => {:search_ctl => search_ctl, :ids => people_ids, :success_str => success_str, :error_str => error_str} } 
 =begin      
       do
         render :update do |page|
@@ -1517,7 +1526,7 @@ class WelcomeController < ApplicationController
       end
     end
     respond_to do |format|
-      format.js  {render "max_tutorials", :local => {:success_str => success_str, :error_str => error_str} }
+      format.js  {render "max_tutorials", :locals => {:success_str => success_str, :error_str => error_str} }
 =begin      
       do
         render :update do |page|
@@ -1569,7 +1578,7 @@ class WelcomeController < ApplicationController
       alert_str = "You did not select any courses. "
     end
     respond_to do |format|
-      format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
+      format.js  {render :partial => "shared/alert", :locals => {:alert_str => alert_str} }
 =begin      
       do
         render :update do |page|
@@ -1616,7 +1625,7 @@ class WelcomeController < ApplicationController
       alert_str = "You did not select any courses. "
     end
     respond_to do |format|
-      format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
+      format.js  {render :partial => "shared/alert", :locals => {:alert_str => alert_str} }
 =begin      
 do
         render :update do |page|
@@ -2445,7 +2454,7 @@ do
     if(tutorial_number <0)
         alert_str = "Set Tutorial Number failed: the number of tutorial can't be negative."
         respond_to do |format|
-            format.js  {render :partial => "shared/alert", :local => {:alert_str => alert_str} }
+            format.js  {render :partial => "shared/alert", :locals => {:alert_str => alert_str} }
         end    
 =begin
     do
@@ -2460,7 +2469,7 @@ do
     if ids.length == 0
         alert_str = "Set Tutorial Number failed: you didn't select any tutorial scedules to be updated."
         respond_to do |format|
-            format.js {render :partial => "shared/alert", :local => {:alert_str => alert_str} }  
+            format.js {render :partial => "shared/alert", :locals => {:alert_str => alert_str} }  
         end 
 =begin        
             do
@@ -2496,7 +2505,7 @@ do
       @search_ctls = session[:search_ctls];
       search_ctl = @search_ctls[table_name];
       respond_to do |format|
-        format.js {render :partial => "shared/alert", :local => {:table_name => table_name, :search_ctl => search_ctl, :ids => ids, :success_str => success_str } }  
+        format.js {render :partial => "shared/alert", :locals => {:table_name => table_name, :search_ctl => search_ctl, :ids => ids, :success_str => success_str } }  
 =begin        
         do
           render :update do |page|
