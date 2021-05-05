@@ -223,9 +223,10 @@ function OnChangeNewGroup(class_name)
 
 function setcheck(check_id, value)
 {
+    
 
     check_id199 = "#"+check_id;
-    check_obj  = jQuery(check_id199);
+    check_obj  = jQuery(check_id);
     check_obj.prop( 'checked', value);
 }
 
@@ -568,12 +569,15 @@ function insert_specific_div_multi_values(specific_div, class_name2)
 }
 function on_action( id)
 {
-    wait();
+    //wait();
     action_type = jQuery('#action_type').val();
     specific_div = jQuery('#specific_action_variables');
     specific_div.children().each(function(){
         jQuery(this).remove()
     });
+    class_name2 = jQuery("#action_class2").val();
+    search_results_div_str = "#search_results_" + class_name2;
+    search_results_div = jQuery(search_results_div_str)
 
     id_elt = new Element('input',{
         type: 'text',

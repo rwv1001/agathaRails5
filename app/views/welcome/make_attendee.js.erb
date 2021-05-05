@@ -26,8 +26,9 @@ alert('<%="#{error_str}"%>');
 <%       if exam_ids.index(row.id.to_s)%>            
               setcheck('#<%="#{table_name}_examcheck_#{row.id.to_s}"%>',true); 
 <%       end %> 
+         
          setcheck('#<%="#{table_name}_check_#{row.id.to_s}"%>',true); 
-
+         
      }
 <%   end %> 
 

@@ -2206,6 +2206,7 @@ Rails.logger.flush
     end    
   end
   def remove_from_groups(group_ids, class_id, class_name)
+      Rails.logger.info("remove_from_groups begin ");
     @user_id = session[:user_id];
     if group_ids.length >0
       group_ids_str = "";
@@ -2243,8 +2244,9 @@ Rails.logger.flush
     table_name = class_name;
     search_ctl = @search_ctls[table_name];
     search_ctl_group = @search_ctls["Group"];
+    Rails.logger.info("remove_from_groups 01 ");
     respond_to do |format|
-      format.js  { render "remove_from_groups", :locals => {:group_ids => group_ids, :permissioned => permissioned, :present => present, :unpresent => unpresent, :wrong_types => wrong_types, :unpermissioned => unpermissioned, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group  } }
+      format.js  { render "remove_from_groups", :locals => {:group_ids => group_ids, :permissioned => permissioned, :present => present, :unpresent => unpresent, :wrong_types => wrong_types, :unpermissioned => unpermissioned, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group, :class_name => class_name , :class_id => class_id } }
 =begin      
       do
         render :update do |page|
