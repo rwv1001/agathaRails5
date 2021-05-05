@@ -282,7 +282,7 @@ class WelcomeController < ApplicationController
           if(select_value == 0 )
             argument_class = extended_filter.filter_object.argument_class;
             if argument_class.length >0
-              last_str = "#{argument_class}.find(:last).id"
+              last_str = "#{argument_class}.last.id"
               select_value = eval(last_str);
             end
           end
@@ -646,7 +646,7 @@ class WelcomeController < ApplicationController
       if suggested_term !=nil ||   suggested_term == SearchController::NOT_SET
         tutorial_schedule.term_id = suggested_term.id
       else
-        tutorial_schedule.term_id = Term.find(:last).id;
+        tutorial_schedule.term_id = Term.last.id;
       end
     else
       tutorial_schedule.term_id = old_term_id;
@@ -720,7 +720,7 @@ class WelcomeController < ApplicationController
       if suggested_term !=nil ||   suggested_term == SearchController::NOT_SET
         lecture.term_id = suggested_term.id
       else
-        lecture.term_id = Term.find(:last).id;
+        lecture.term_id = Term.last.id;
       end
     else
       lecture.term_id = old_term_id;

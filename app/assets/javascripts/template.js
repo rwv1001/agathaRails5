@@ -1484,8 +1484,20 @@ function display_select_action(table_name, option_id, do_js)
         }
         scrollHandler();
     });
+    
+    
+    
+    
     old_page_name = table_name;
     old_option_id = option_id;
+    
+    jQuery(".separator_class").each(function(){
+   var separate_div = jQuery(this);
+   var content_div = separate_div.closest('.content_div')
+   var leftOffset = parseInt(separate_div.css('left')); //Grab the left position left first
+   content_div.scroll(function(){    
+    separate_div.css({'left': jQuery(this).scrollLeft() + leftOffset  });
+   });});
 }
 
 function action_select(table_name)
@@ -1520,6 +1532,7 @@ function action_select(table_name)
      unwait();
             }
 }
+
 
 function set_double_scroll()
 {
