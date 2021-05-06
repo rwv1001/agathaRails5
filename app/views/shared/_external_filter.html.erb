@@ -29,7 +29,7 @@
   </div>
 </th>
 <th>
-  <% on_add_string = "addExternalFilterElement('#{class_name}','#{filter_id}');return false" %>
+  <% on_add_string = "\"addExternalFilterElement('#{class_name}','#{filter_id}');return false\"" %>
   <% Rails.logger.info("external_filter.html.erb 06") %>
   <% if external_filter.allow_multiple_arguments %>
   <% Rails.logger.info("external_filter.html.erb 07") %>

@@ -546,9 +546,18 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
              filter_selection_elt  = jQuery(filter_selection_str316);
              filter_selection_elt.prop('id', new_id);
              
+             external_filter_argument_span_str = "external_filter_argument_span_" + class_name + "_" + filter_id + "_" + reorder_index;
+             new_external_filter_argument_span_str = "external_filter_argument_span_" + class_name + "_" + filter_id + "_" + (reorder_index-1);
+             external_filter_argument_span_elt = jQuery("#"+external_filter_argument_span_str);
+             external_filter_argument_span_elt.prop('id', new_external_filter_argument_span_str);
+             
+             onclick_str = "deleteExternalFilterElement('"+class_name+"','"+filter_id+"','"+(reorder_index-1)+"');return false;"
+             jQuery("#external_filter_argument_span_Person_0_0").find('a').attr('onclick', onclick_str);
+             
+             
              argument_selection_str = '#argument_selection_'+ class_name +'_'+ filter_id + '_' + reorder_index; 
              new_namer = 'argument_selection_' + filter_id + '_' + (reorder_index-1);
-             new_idr = 'argument_selection_' + class_name +'_'+ filter_id + (reorder_index-1);
+             new_idr = 'argument_selection_' + class_name +'_'+ filter_id + '_' + (reorder_index-1);
              argument_selection_elt = jQuery(argument_selection_str);
              argument_selection_elt.prop('id', new_idr);
              argument_selection_elt.prop('name',new_namer);
