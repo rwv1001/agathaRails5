@@ -10,6 +10,9 @@
 <% if edit_cell.update_parent %>
 
 <% end %>
+<% Rails.logger.info("edit_cell.js.rb table_name = #{table_name}") %>  
+<% Rails.logger.info("edit_cell.js.rb attribute = #{attribute.inspect}") %>  
+<% Rails.logger.info("edit_cell.js.rb attribute name = #{attribute.name}") %>  
 <div id =<%= raw "#{table_name}_#{attribute.name}"%> >
 
 

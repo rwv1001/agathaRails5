@@ -75,23 +75,36 @@ function on_unload()
     unload_data_type_obj = jQuery("#unload_data_type");
     attribute_name = unload_attribute_obj.val();
     data_type = unload_data_type_obj.val(); 
-     
+    editBlur(attribute_name, data_type);
     parent_win=window.opener;
-    if(parent_win!=null)
+    unload_table_obj = jQuery('#unload_table_name');
+    table = unload_table_obj.val(); 
+    parent_win.alert("" +table +" edit window has been closed and the database has been updated");
+  /*  if(parent_win!=null)
         {
+            
             id_obj = jQuery(parent_win.document.getElementById('child_unload_main_id'));
+            parent_win.alert("unload a");
             table_obj = jQuery(parent_win.document.getElementById('child_unloade_main_table_name'));
+            parent_win.alert("unload b");
             attribute_obj = jQuery(parent_win.document.getElementById('child_unload_main_attribute_name'));
-
+parent_win.alert("unload c");
             unload_id_obj = jQuery('#unload_id_value');
+            parent_win.alert("unload d");
             unload_table_obj = jQuery('#unload_table_name');
+            parent_win.alert("unload e");
             id_obj.val(  unload_id_obj.val());
+            parent_win.alert("unload f id="+unload_id_obj.val());
             table_obj.val(  unload_table_obj.val());
+            parent_win.alert("unload g table = "+ unload_table_obj.val());
 
-            submit_obj = parent_win.document.getElementById('child_unload_main');
-            Rails.fire(submit_obj, 'submit');
+            //update_parent(unload_table_obj.val(), attribute_name, unload_id_obj.val() );
+          //  submit_obj = parent_win.document.getElementById('child_unload_main');
+           // parent_win.alert("unload h");
+           // Rails.fire(submit_obj, 'submit');
+            parent_win.alert("unload i");
            
-        }
+        }*/
 }
 
 function open_win()
@@ -795,7 +808,7 @@ function MultiUpdate(class_name)
     multi_change_table_div = jQuery("#multi_change_table_div_"+class_name);
     multi_change_table_div.find('.radio').each(function(){new_elt = jQuery(this).clone(true); specific_div.append(new_elt)});
     multi_change_table_div.find('.edit_text').each(function(){new_elt = jQuery(this).clone(true); specific_div.append( new_elt)});
-    multi_change_table_div.find('.select').each(function(){new_elt =  jQuery("<input></input>").attr({ type: 'text',   name: jQuery(this).name,  value: jQuery(this).val()   }); specific_div.append( new_elt)});
+    multi_change_table_div.find('.select').each(function(){new_elt =  jQuery("<input></input>").attr({ type: 'text',   name: jQuery(this).prop("name"),  value: jQuery(this).val()   }); specific_div.append( new_elt)});
 
     //form_obj = $("action_form");
     //form_obj.onsubmit();
@@ -960,7 +973,7 @@ function select_remove(table_name,id)
 
 function select_update(table_name,id,new_option_str)
 {
- 
+   
    count = 0;
  
    select_class = "."+ table_name + "_select > option[value="+id+"]";
@@ -1027,6 +1040,7 @@ function insert_option(select_elt, group_name, new_group_id)
 function insert_new_obj(class_name, new_obj_name, new_obj_id)
 {
     
+    
     select_class = "."+ class_name + "_select:first";
     done = false;
 
@@ -1035,7 +1049,7 @@ function insert_new_obj(class_name, new_obj_name, new_obj_id)
         select_elt = jQuery(this);
        if(done)
        {
-               return;
+               return false;
        }
 
        select_length = Math.round(select_elt.children().length);
@@ -1081,10 +1095,12 @@ function insert_new_obj(class_name, new_obj_name, new_obj_id)
             if(option_elt.text().trim().toLowerCase()<new_obj_name.trim().toLowerCase())
             {
                 new_option.insertAfter(option_elt );
+                return false;
             }
             else
             {
                 new_option.insertBefore(option_elt );
+                return false;
             }
         });
 

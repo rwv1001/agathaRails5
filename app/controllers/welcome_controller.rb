@@ -2145,9 +2145,15 @@ Rails.logger.flush
         group_ids_str << group_id.to_s;
       end
       group_ids_str = "(#{group_ids_str})";
-      unpermissioned = Group.find_by_sql("SELECT * FROM groups WHERE id IN #{group_ids_str} AND table_name = '#{class_name.tableize}' AND (owner_id != #{@user_id} AND private = true)")
-      wrong_types = Group.find_by_sql("SELECT * FROM groups WHERE id IN #{group_ids_str} AND table_name != '#{class_name.tableize}' AND (owner_id = #{@user_id} OR private = false)")
-      permissioned = Group.find_by_sql("SELECT * FROM groups WHERE id IN #{group_ids_str} AND table_name = '#{class_name.tableize}' AND (owner_id = #{@user_id} OR private = false)")
+      unpermissioned_str = "SELECT * FROM groups WHERE id IN #{group_ids_str} AND table_name = '#{class_name.tableize}' AND (owner_id != #{@user_id} AND private = true)"
+      Rails.logger.info("unpermissioned_str: #{unpermissioned_str}");
+      unpermissioned = Group.find_by_sql(unpermissioned_str)
+      wrong_types_str = "SELECT * FROM groups WHERE id IN #{group_ids_str} AND table_name != '#{class_name.tableize}' AND (owner_id = #{@user_id} OR private = false)";
+      Rails.logger.info("wrong_types_str: #{wrong_types_str}");
+      wrong_types = Group.find_by_sql(wrong_types_str)
+      permissioned_str = "SELECT * FROM groups WHERE id IN #{group_ids_str} AND table_name = '#{class_name.tableize}' AND (owner_id = #{@user_id} OR private = false)"
+      Rails.logger.info("permissioned_str: #{permissioned_str}");
+      permissioned = Group.find_by_sql(permissioned_str)
       if permissioned.length >0
         permission_id_str = "";
         permissioned.each do |permission_group|

@@ -163,9 +163,10 @@ def update_helper()
     field_value = params[:field_value];
     field_name = params[:field_name];
     #  readonly_fields = session["#{@table_name}_readonly_fields"]
-
+    Rails.logger.info("update_helper(), table_name = #{@table_name}, field_value = #{field_value}, field_name = #{field_name}");
 
     sql_str = "OpenRecord.find_by_sql(\"SELECT * FROM  open_records WHERE (user_id = " + @user_id.to_s + " AND table_name = '" + @table_name + "' AND  record_id = " +id.to_s + "  AND in_use = true)\")"
+    Rails.logger.info("update_helper sql_str = #{sql_str}");
     open_records = eval(sql_str)
 
     if(open_records.length == 0 ) #1
@@ -215,10 +216,12 @@ end
                     exception_str = "An update error has occurred. Perhaps you already have #{@table_name} with these details.";
                 end
                 if save_ok  #4
+                    Rails.logger.info("update_helper save_ok")
                     attribute_eval_str = "AttributeList.new(#{@table_name.classify})"
                     @attribute_list = AttributeList.new(@table_name.classify);
                     @search_ctls = session[:search_ctls]
                     attribute1 = @attribute_list.attribute_hash[field_name]
+                    Rails.logger.info("update_helper attribute1.name = #{attribute1.name}");
                     if attribute1.foreign_key.length >0
                     @filter_controller = FilterController.new(@search_ctls, @table_name, @user_id)
                     end
@@ -278,57 +281,7 @@ end
 =end           
 
 
-def update_main_helper(class_name)
-    Rails.logger.debug("update_main start #{class_name}");
-    id = params[:id];
-    edited_class_name = params[:class_name];
 
-    attribute_name = params[:attribute_name];
-    opener_attribute_name = params[:opener_attribute_name];
-    opener_id = params[:opener_id];
-
-    @user_id = session[:user_id];
-
-    object_str = "#{class_name}.find(opener_id)"
-    object = eval(object_str)
-    edit_cell = nil
-    if(object != nil)
-        
-        @attribute_list = AttributeList.new(class_name);
-        @search_ctls = session[:search_ctls];
-        attribute = @attribute_list.attribute_hash[opener_attribute_name];
-        @filter_controller = FilterController.new(@search_ctls, class_name, @user_id)
-        update_parent = false;
-        readonly_flag = false;
-        edit_cell = EditCell.new(attribute, object, class_name.tableize, @filter_controller, update_parent,readonly_flag );
-        html_element_name =   "#{class_name}_#{opener_attribute_name}";
-    end
-
-    #            
-#             @attribute_list = AttributeList.new(table_name.classify);
-    #            @search_ctls = session[:search_ctls]
-#             attribute = @attribute_list.attribute_hash[field_name]
-#              @filter_controller = FilterController.new(@search_ctls, @table_name, @user_id)
-#             update_parent = true;
-#                readonly_flag = false;
-
-# edit_cell = EditCell.new(attribute, object, table_name, @filter_controller, update_parent,readonly_flag );
-    x = 1;
-    respond_to do |format|
-    format.js { render :partial => "shared/update_main_helper", :locals => {:html_element_name => html_element_name, :edit_cell => edit_cell, :edited_class_name => edited_class_name, :attribute_name => attribute_name, :id => id } }
-=begin           
-    do
-        render :update do |page|
-        if edit_cell != nil
-            page.replace_html(html_element_name, :partial => "shared/edit_cell", :object => edit_cell);
-        end
-        page << "update_parent('#{edited_class_name}', '#{attribute_name}', #{id})"
-        end
-    end
-=end      
-    end
-    Rails.logger.debug("update_main end");
-end
 
 def email_update()
     @user_id = session[:user_id];

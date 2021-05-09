@@ -32,7 +32,5 @@ class CoursesController < ApplicationController
     update_helper();
 
   end
-  def update_main
-    update_main_helper("Course");
-  end
+
 end

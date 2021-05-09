@@ -29,7 +29,5 @@ class EmailAttachmentsController < ApplicationController
     update_helper();
 
   end
-  def update_main
-    update_main_helper("EmailAttachment");
-  end
+
 end

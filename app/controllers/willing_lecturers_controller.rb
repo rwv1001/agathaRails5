@@ -33,7 +33,5 @@ class WillingLecturersController < ApplicationController
     update_helper();
 
   end
-  def update_main
-    update_main_helper("WillingLecturer");
-  end
+
 end

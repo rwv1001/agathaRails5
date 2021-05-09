@@ -408,7 +408,7 @@ function load_pages()
     person_page_views.push(new PageView("people", "Person", "Make attendee", true,
       [new DisplayDiv("welcome_Person", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], ""),
        new DisplayDiv("Person_action_div", "first_menu_div", [], [], [], ""),
-       new DisplayDiv("welcome_Lecture", "first_div_2", [], ["Lecture_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], " set_action_class('Person','Lecture','.children')")]));
+       new DisplayDiv("welcome_Lecture", "first_div_2", [], ["Lecture_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], " set_action_class('Person','Lecture','add_to_lectures')")]));
     person_page_views.push(new PageView("people", "Person", "Add to groups", true,
       [new DisplayDiv("welcome_Person", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], "group_unrestriction()"),
        new DisplayDiv("Person_action_div", "first_menu_div", [], [], [], ""),
@@ -522,7 +522,7 @@ function load_pages()
     lecture_page_views.push(new PageView("lectures", "Lecture", "Add attendees",true,
       [new DisplayDiv("welcome_Lecture", "first_div_1", ["two_column_div"],["content_div"], [".add-cell",".dummy-cell"], [".remove-cell",".update-cell",".select_options", ".select-cell", ".delete-cell"],"group_unrestriction()"),
        new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [], [".delete_div",".group_div"],""),
-       new DisplayDiv("welcome_Person", "first_div_2", [], ["Person_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], "group_restriction('lectures'); set_action_class('Lecture','Person','.children')")]));
+       new DisplayDiv("welcome_Person", "first_div_2", [], ["Person_action_div"], [".add_attendee_options",".add_to_lecture_title",".toadd-cell",".select-cell",".exam-cell",".compulsory-cell"], "group_restriction('lectures'); set_action_class('Lecture','Person','add_to_lectures')")]));
     lecture_page_views.push(new PageView("lectures", "Lecture",  "Create group",true,
       [new DisplayDiv("welcome_Lecture", "first_div", ["content_div"],["two_column_div"], [".select_options", ".select-cell"],""),
        new DisplayDiv("Lecture_action_div", "first_menu_div", [], [], [".group_div"], "")]));

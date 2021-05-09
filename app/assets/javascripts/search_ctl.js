@@ -674,7 +674,7 @@ function group_restriction_timeout(table_name, do_update)
 
                     jQuery(this).prop('selected',true);
                     class_name = jQuery(this).text()
-                    throw $break;
+                    return false;
                 }
 
             });
@@ -707,7 +707,7 @@ function group_restriction(table_name)
             if(jQuery(this).val() == 0)
             {
                 jQuery(this).prop('selected',true);
-                throw $break;
+                return false;
             }
 
         });

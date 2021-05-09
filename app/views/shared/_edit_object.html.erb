@@ -15,19 +15,7 @@
     <input name="opener_id" id ="sensible_update_opener_id" type="text" />
 </div>
 
-<form action=<%= raw   "/#{table_name.tableize}/update_main" %> id="update_main" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/update_main"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
-    <div style="margin:0;padding:0">
-        <input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> />
-    </div>
-    <div style="display:none" >
-        <input name="id" id="update_main_id" type="text" />
-        <input name="class_name" id ="update_main_class_name" type="text"  />
-        <input name="attribute_name" id="update_main_attribute_name" type="text" />
 
-        <input name="opener_attribute_name" id ="update_opener_attribute_name" type="text" value="not_set" />
-        <input name="opener_id" id ="update_opener_id" type="text" value ="1" />
-    </div>
-</form>
 
 <form action=<%= raw "/#{table_name.tableize}/updater"%> id="update_form" method="post" onsubmit="new Ajax.Request('<%="/#{table_name.tableize}/updater"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;">
     <div style="margin:0;padding:0">
