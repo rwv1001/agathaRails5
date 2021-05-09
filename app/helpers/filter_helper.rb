@@ -547,6 +547,7 @@ module FilterHelper
        GroupMember.new(\"Tutorials\",\"tutorials\"),
        GroupMember.new(\"Tutorial Schedules\",\"tutorial_schedules\"),
        GroupMember.new(\"Willing Lecturers\",\"willing_lecturers\"),
+       GroupMember.new(\"Locations\",\"locations\"),                                                       
        GroupMember.new(\"Willing Tutors\",\"willing_tutors\"),
        GroupMember.new(\"Users\",\"users\"),
        GroupMember.new(\"AgathaEmails\",\"agatha_emails\"),
@@ -784,7 +785,45 @@ module FilterHelper
       false#group_selector_
       ))
 ];
-    extended_filters["Location"]=[];
+    extended_filters["Location"]=[        
+     ExtendedFilter.new(:external_filter, ExternalFilter.new("Location", #class_name
+      "Locations in group", #header
+      "(SELECT COUNT(*) FROM group_locations b1 WHERE b1.location_id = a0.id AND b1.group_id = arg_value)>0", #where_str_
+      "Group",#argument_class_
+      "",#group_class_
+      "@class_search_controller.GetAllShortFieldsWhere(false,\"asc\", false, \"\", \"a0.table_name ='locations' AND (a0.owner_id = user_id_ OR administrator_ OR ((SELECT COUNT(*) FROM group_users a2 WHERE a2.user_id = user_id_ AND a2.group_id = a0.readers_id) > 0 AND a0.private = FALSE) )\")", #argument_selector_str_
+      true,#allow_multiple_arguments
+      false#group_selector_
+      )),
+  ExtendedFilter.new(:external_filter, ExternalFilter.new("Location", #class_name
+      "Locations not in group", #header
+      "(SELECT COUNT(*) FROM group_locations b1 WHERE b1.location_id = a0.id AND b1.group_id = arg_value)=0", #where_str_
+      "Group",#argument_class_
+      "",#group_class_
+      "@class_search_controller.GetAllShortFieldsWhere(false,\"asc\", false, \"\", \"a0.table_name ='locations' AND (a0.owner_id = user_id_ OR administrator_ OR ((SELECT COUNT(*) FROM group_users a2 WHERE a2.user_id = user_id_ AND a2.group_id = a0.readers_id) > 0 AND a0.private = FALSE) )\")", #argument_selector_str_
+      true,#allow_multiple_arguments
+      false#group_selector_
+
+    )),
+       ExtendedFilter.new(:external_filter, ExternalFilter.new("Location", #class_name
+      "Locations in some group", #header
+      "(SELECT COUNT(*) FROM group_locations b1 WHERE b1.location_id = a0.id)>0", #where_str_
+      "Group",#argument_class_
+      "",#group_class_
+      "[]", #argument_selector_str_
+      false,#allow_multiple_arguments
+      false#group_selector_
+      )),
+           ExtendedFilter.new(:external_filter, ExternalFilter.new("Location", #class_name
+      "Locations not in any group", #header
+      "(SELECT COUNT(*) FROM group_locations b1 WHERE b1.location_id = a0.id)=0", #where_str_
+      "Group",#argument_class_
+      "",#group_class_
+      "[]", #argument_selector_str_
+      false,#allow_multiple_arguments
+      false#group_selector_
+      ))
+];
     extended_filters["MaximumTutorial"]=[];
     extended_filters["Term"]=[];
     extended_filters["TermName"]=[];

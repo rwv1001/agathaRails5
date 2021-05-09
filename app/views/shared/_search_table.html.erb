@@ -156,11 +156,11 @@
 
       <%  if session[:administrator] %>
       
-        <select id= <%= raw   "action_select_#{table_name}" %> onchange= <%= raw "action_select2('#{table_name}');return false;"%> >
+        <select id= <%= raw   "action_select_#{table_name}" %> onchange= <%= raw "\"action_select2('#{table_name}');return false;\""%> >
   
         </select>
         <% else %>
-                <select style="display:none" id= <%= raw   "action_select_#{table_name}" %> onchange= <%= raw "action_select2('#{table_name}');return false;"%> >
+                <select style="display:none" id= <%= raw   "action_select_#{table_name}" %> onchange= <%= raw "\"action_select2('#{table_name}');return false;\""%> >
 
         </select>
 <% end %>
@@ -169,7 +169,7 @@
         
         <div class="delete_div" >
         
-        <% onclick_str2 = "onclick=DeleteMembers('#{table_name}'); return false; " %>
+        <% onclick_str2 = "onclick=\"DeleteMembers('#{table_name}'); return false; \"" %>
         <input type="button" value=<%= raw "Delete selected" %> class="list_button"  <%= onclick_str2.html_safe  %>  />
        </div>
 
@@ -190,7 +190,7 @@
 
          <div class= "group_div" >
 
-        <% onclick_str = "CreateGroup('#{table_name}');return false" %>
+        <% onclick_str = "\"CreateGroup('#{table_name}');return false;\"" %>
         <div>
         <input type="button" id=<%= raw "create_group_button_#{table_name}"%> value=<%= raw "Create from selected" %> class="list_button"  onclick= <%= raw "#{onclick_str }"%>  >
         </div>
@@ -223,7 +223,7 @@
          
         </div>
        <% if table_name == "Tutorial" %>
-          <% onclick_str = "UpdateCollectionStatus();return false" %>
+          <% onclick_str = "\"UpdateCollectionStatus();return false\"" %>
           <div class="collection_div">
             <div>
                 <input type="button" id=<%= raw "update_collection_status"%> value=<%= raw "Update" %> class="list_button"  onclick= <%= raw "#{onclick_str }"%>  >
@@ -282,9 +282,9 @@
         <% end %>
         <% if table_name == "AgathaEmail" %>
          <div class="send_div">
-            <% onclick_str2 = "on_sends('0');return false" %>
+            <% onclick_str2 = "\"on_sends('0');return false\"" %>
         <input type="button" value=<%= raw "Send Emails" %> class="list_button"  onClick= <%= raw "#{onclick_str2}"  %> />
-            <% onclick_str2 = "on_sends('1');return false" %>
+            <% onclick_str2 = "\"on_sends('1');return false\"" %>
         <input type="button" value=<%= raw "Test Emails" %> class="list_button"  onClick= <%= raw "#{onclick_str2}"  %> />
          </div>
          <% end %>
@@ -292,7 +292,7 @@
 
       <% if table_name == "Person" %>
         <div class= "max_tutorials_div" >
-        <% onclick_str = "SetMaxTutorials();return false" %>
+        <% onclick_str = "\"SetMaxTutorials();return false\"" %>
         <div>
         <input type="button"  style="width: 115px" value=<%= raw "Set Max Tutorials" %>  onclick= <%= raw "#{onclick_str }"%>  >
         </div>

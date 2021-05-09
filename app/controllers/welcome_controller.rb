@@ -213,7 +213,7 @@ class WelcomeController < ApplicationController
     @search_ctls = session[:search_ctls];
     #@search_ctls.each {|key, value| puts "#{key} is #{value}" }
     respond_to do |format|
-      format.js { render "update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_names => attribute_names, :ids => ids, :success_str => success_str, :fail_str => fail_str , :unwait_flag => unwait_flag } }  
+      format.js { render "shared/update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_names => attribute_names, :ids => ids, :success_str => success_str, :fail_str => fail_str , :unwait_flag => unwait_flag } }  
 =begin      
       do
         render :update do |page|

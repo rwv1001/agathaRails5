@@ -232,7 +232,7 @@ end
                     update_parent = false;
                     edit_cell2 = EditCell.new(attribute2, object, @table_name, @filter_controller, update_parent,readonly_flag);
                     respond_to do |format| #5
-                        format.js { render :partial => "shared/update_helper", :locals => {:table_name => @table_name, :field_name => field_name, :edit_cell1 => edit_cell1, :edit_cell2 => edit_cell2, :attribute => attribute1, :id => id } }
+                        format.js { render :partial => "shared/update_helper", :locals => {:table_name => @table_name, :field_name => field_name, :edit_cell1 => edit_cell1, :edit_cell2 => edit_cell2, :attribute => attribute1, :id => id , :search_ctls => @search_ctls} }
                     end #5
                 else #4
                     respond_to do |format|

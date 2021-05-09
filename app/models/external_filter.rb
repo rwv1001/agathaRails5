@@ -98,6 +98,7 @@ class ExternalFilter
   def MemberSelection(group_id, member_id)
     ret_val = [];    
     member_attribute_name = argument_class.underscore + "_id"
+    Rails.logger.info("MemberSelection @argument_selector_str = #{@argument_selector_str}");
     return eval(@argument_selector_str);
   end
 end

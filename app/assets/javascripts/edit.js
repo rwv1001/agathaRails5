@@ -79,7 +79,7 @@ function on_unload()
     parent_win=window.opener;
     unload_table_obj = jQuery('#unload_table_name');
     table = unload_table_obj.val(); 
-    parent_win.alert("" +table +" edit window has been closed and the database has been updated");
+   parent_win.alert("" +table +" edit window has been closed and the database has been updated");
   /*  if(parent_win!=null)
         {
             
@@ -242,7 +242,12 @@ function setcheck(check_id, value)
     check_obj  = jQuery(check_id);
     check_obj.prop( 'checked', value);
 }
-
+function setcheckremote(check_id, value,doc)
+{
+     check_id199 = "#"+check_id;
+    check_obj  = jQuery(check_id,doc);
+    check_obj.prop( 'checked', value);  
+}
 function on_checkbox_click(row_id, type_name, class_name)
 {
     check_str = class_name +'_'+ type_name +'_'+  row_id

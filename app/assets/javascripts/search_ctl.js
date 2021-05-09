@@ -692,7 +692,9 @@ function group_restriction_timeout(table_name, do_update)
 
 function group_restriction(table_name)
 { 
+    
     select_obj = jQuery('#argument_selection_Group_0_0');
+    
     do_update = false;
     if( select_obj[0] == null)
     {
