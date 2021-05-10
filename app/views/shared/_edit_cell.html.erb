@@ -17,8 +17,8 @@
 
 
    <% data_type = attribute.data_type %>
-   <% onfocus_str = "\"editFocus('#{attribute.name}','#{data_type}');return false\"" %>
-  <% onblur_str = "editBlur('#{attribute.name}','#{data_type}');return false" %>
+   <% onfocus_str = "\"editFocus('#{attribute.name}','#{data_type}');return false;\"" %>
+  <% onblur_str = "\"editBlur('#{attribute.name}','#{data_type}',false);return false;\"" %>
     
  
   <% eval_str = "current_object.#{attribute.name}" %>
@@ -27,7 +27,7 @@
   <% case data_type
   when :text %>
 
-    <textarea onblur= <%= raw  raw "#{onblur_str}"%>   onfocus= <%= raw "#{onfocus_str}"%>  cols=<%= raw "#{column_width}"%> rows="5"name =<%= raw "edit_#{attribute.name}"%> id=<%= raw "edit_#{attribute.name}"%> class="edit_text"   ><%=eval( eval_str) %></textarea>
+    <textarea onblur= <%= raw "#{onblur_str}"%>   onfocus= <%= raw "#{onfocus_str}"%>  cols=<%= raw "#{column_width}"%> rows="5"name =<%= raw "edit_#{attribute.name}"%> id=<%= raw "edit_#{attribute.name}"%> class="edit_text"   ><%=eval( eval_str) %></textarea>
 
   <% when :boolean %>
     <% if eval(eval_str) %>
@@ -72,10 +72,10 @@
         <% if foreign_class == "Term" || foreign_class == "Day" || foreign_class == "User" || foreign_class == "GroupUser"%>
           <% onclick_str = "" %>
         <%  else %>
-        <%  raw onclick_str = "onclick =  editClick('#{attribute.name}', #{current_object.id}, '#{foreign_class.tableize}','#{foreign_class}', #{current_id}, event);return false" %>
+        <%  onclick_str = "onclick = \"editClicki('#{attribute.name}', #{current_object.id}, '#{foreign_class.tableize}','#{foreign_class}', #{current_id}, event);return false;\"" %>
        <% end %>
         <%  possible_options = filter_controller.GetOptions(foreign_key,foreign_class, current_id, false, false) %>
-        <select  <%= raw "#{onclick_str}"%> onchange = <%="#{onblur_str}"%> onfocus= <%= raw "#{onfocus_str}"%> name =<%= raw "edit_#{attribute.name}"%>  id=<%= raw "edit_#{attribute.name}"%> class="edit_text"  <%= readonly_str %> >
+        <select  onclick = "editClick('<%="#{attribute.name}"%>','<%="#{current_object.id}"%>','<%="#{foreign_class.tableize}"%>','<%="#{foreign_class}"%>','<%="#{current_id}"%>',event); return false;" onchange = <%= raw "#{onblur_str}"%> onfocus= <%= raw "#{onfocus_str}"%> name =<%= raw "edit_#{attribute.name}"%>  id=<%= raw "edit_#{attribute.name}"%> class="edit_text"  <%= readonly_str %> >
           <% for p in  possible_options -%>
             <% if p.id == current_id %>
               <option selected value = "<%=p.id %>"><%= p.name %></option>

@@ -175,9 +175,9 @@
 
       <% if table_name == "TutorialSchedule" %>
         <div class= "tutorial_no_div" >
-    <% onclick_str = "SetTutorialNumber();return false" %>
+    <% onclick_str = "onclick=\"SetTutorialNumber();return false\"" %>
         <div>
-        <input type="button" id=<%="set_tutorial_number_button"%> value=<%="\"Set number\"" %> class="list_button"  onclick= <%="\"#{onclick_str }\""%>  >
+        <input type="button" id=<%="set_tutorial_number_button"%> value= "Set number" class="list_button"   <%=onclick_str.html_safe%>  >
         </div>
         <label>Tutorial Number</label>
         <div>        

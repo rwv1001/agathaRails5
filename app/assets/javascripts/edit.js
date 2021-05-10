@@ -75,11 +75,12 @@ function on_unload()
     unload_data_type_obj = jQuery("#unload_data_type");
     attribute_name = unload_attribute_obj.val();
     data_type = unload_data_type_obj.val(); 
-    editBlur(attribute_name, data_type);
+    unloading = true;
+    editBlur(attribute_name, data_type, unloading);
     parent_win=window.opener;
     unload_table_obj = jQuery('#unload_table_name');
     table = unload_table_obj.val(); 
-   parent_win.alert("" +table +" edit window has been closed and the database has been updated");
+   parent_win.alert("" +table +" edit window has been closed and the database has been updated. Click search to see changes.");
   /*  if(parent_win!=null)
         {
             
@@ -587,7 +588,7 @@ function insert_specific_div_multi_values(specific_div, class_name2)
 }
 function on_action( id)
 {
-    //wait();
+    wait();
     action_type = jQuery('#action_type').val();
     specific_div = jQuery('#specific_action_variables');
     specific_div.children().each(function(){
@@ -881,7 +882,7 @@ function SetTutorialNumber()
     specific_div.append( cloned_tutorial_number_elt);
     search_results_div_str = "#search_results_TutorialSchedule";
     search_results_div = jQuery(search_results_div_str);
-    search_results_div.find('.check').each(function(){new_elt = jQuery(this).cloneNode(true); specific_div.append( new_elt)});
+    search_results_div.find('.check').each(function(){new_elt = jQuery(this).clone(true); specific_div.append( new_elt)});
 
     action_div = jQuery('#TutorialSchedule_action_div');
   
@@ -899,13 +900,13 @@ function SetTutorialNumber()
 
 function GetRadioValue(radio_list)
 {
-    default_ret_val = radio_list[0].val();
+    default_ret_val = jQuery(radio_list[0]).val();
     length = radio_list.length;
     for(i=0;i<length; i++)
     {
-        if(radio_list[i].is(':checked') == true)
+        if(jQuery(radio_list[i]).is(':checked') == true)
         {
-            return radio_list[i].val();
+            return jQuery(radio_list[i]).val();
         }
     }
     return default_ret_val;
@@ -1324,14 +1325,20 @@ function editClick(attribute_opener,  opener_id, table_name, class_name, current
     }
 }
 
-function editBlur(attribute_name, data_type)
+function editBlur(attribute_name, data_type, unloading)
 {
     emailBlur();
     field_name_obj = jQuery('#field_name');
     field_value_obj = jQuery('#field_value');
     field_data_type_obj = jQuery('#field_data_type');
+    closing_flag_obj = jQuery('#closing_flag');
     field_name_obj.val( attribute_name);
     field_data_type_obj.val( data_type);
+    if (unloading){
+        closing_flag_obj.val('1');
+    } else {
+        closing_flag_obj.val('0');
+    }
     current_attribute_obj_str ="edit_"+ attribute_name;
     if(attribute_name=="collection_status")
     {
@@ -1439,7 +1446,7 @@ function add_blur_listener()
 {
    myEditor.saveHTML();
 
-   editBlur("","")
+   editBlur("","", false)
 
 
 

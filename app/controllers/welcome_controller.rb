@@ -1007,8 +1007,12 @@ class WelcomeController < ApplicationController
       success_str << "You have added person with id #{person_id} to #{@pluralize_num} " + pl("tutorial schedules");
 
     end
+      @search_ctls = session[:search_ctls];
+      edited_table_name = "Tutorial";
+      Rails.logger.info("add_tutorial_student success_str = #{success_str}");
       respond_to do |format|
-        format.js { render "add_tutorial_student", :locals => {:error_str => error_str, :success_str => success_str } }  
+        format.js { render "shared/update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_names => ["id"], :ids => ids, :success_str => success_str, :fail_str => error_str , :unwait_flag => true } }
+ 
 =begin        
         do
           render :update do |page|
@@ -1525,8 +1529,11 @@ class WelcomeController < ApplicationController
         success_str = "#{num_updates} tutor updates were made. "
       end
     end
-    respond_to do |format|
-      format.js  {render "max_tutorials", :locals => {:success_str => success_str, :error_str => error_str} }
+    @search_ctls = session[:search_ctls];
+    edited_table_name = "TutorialSchedule";
+    respond_to do |format|           
+      format.js { render "shared/update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => edited_table_name, :attribute_names => ["person_id"], :ids => ids, :success_str => success_str, :fail_str => error_str , :unwait_flag => true } }
+
 =begin      
       do
         render :update do |page|
@@ -2052,55 +2059,78 @@ do
   end
 
   def remove_from_group(group_id, ids, class_name2)
-
-  @user_id = session[:user_id];
-  db_group = Group.find(group_id);
-  permission = false
-  class_ok= false
+    Rails.logger.info("RWV remove_from_group BEGIN")
+    @user_id = session[:user_id];
+    db_group = Group.find(group_id);
+    permission = false
+    class_ok= false
+    num_existing = 0;
+    Rails.logger.info("RWV remove_from_group A")
     if(db_group != nil)
-      if db_group.private == false || db_group.owner_id = @user_id
-        permission = true;
-      end
+        if db_group.private == false || db_group.owner_id = @user_id
+            permission = true;
+        end
     end
-
+Rails.logger.info("RWV remove_from_group B")
     if(permission)
-      if(class_name2.tableize == db_group.table_name)
-        class_ok= true;
-        if (ids.length > 0)
-        id_str = ""
-        ids.each do |id|
-          if id_str.length >0
-            id_str << ", "
-          end
-          id_str << id.to_s;
+        Rails.logger.info("RWV remove_from_group C")
+        if(class_name2.tableize == db_group.table_name)
+            class_ok= true;
+            Rails.logger.info("RWV remove_from_group D")
+            if (ids.length > 0)
+                Rails.logger.info("RWV remove_from_group E")
+                id_str = ""
+                ids.each do |id|
+                    if id_str.length >0
+                        id_str << ", "
+                    end
+                    id_str << id.to_s;
+                end
+                Rails.logger.info("RWV remove_from_group F")
+                already_existing = Group.find_by_sql("SELECT * FROM group_#{class_name2.tableize} WHERE #{class_name2.underscore}_id IN (#{id_str}) AND group_id = #{group_id}");
+                num_existing = already_existing.length;
+                not_present_members = Array.new(ids);
+                Rails.logger.info("RWV remove_from_group G")
+                
+                already_existing.each do |existing|
+                    existing_id_str = "existing.#{class_name2.underscore}_id";
+                    existing_id = eval(existing_id_str)
+                    Rails.logger.info("RWV remove_from_group existing_id_str = #{existing_id_str}, existing_id = #{existing_id}")
+                    not_present_members.delete(existing_id.to_s);
+                end
+                Rails.logger.info("RWV remove_from_group H")
+                Rails.logger.info("RWV remove_from_group not_present_members = #{not_present_members.inspect}");
+                already_existing.each do |delete_obj|
+                    destroy_str = "Group#{class_name2}.destroy(#{delete_obj.id})";
+                    Rails.logger.info("RWV remove_from_group #{destroy_str}");
+                    eval(destroy_str);
+                    # delete_obj.destroy;
+                end
+                Rails.logger.info("RWV remove_from_group I")
+            end
+            Rails.logger.info("RWV remove_from_group J")
         end
-        already_existing = Group.find_by_sql("SELECT * FROM group_#{class_name2.tableize} WHERE #{class_name2.underscore}_id IN (#{id_str}) AND group_id = #{group_id}");
-        num_existing = already_existing.length;
-        not_present_members = Array.new(ids);
-        already_existing.each do |existing|
-          existing_id_str = "existing.#{class_name2.underscore}_id";
-          existing_id = eval(existing_id_str)
-          not_present_members.delete(existing_id);
-        end
-        already_existing.each do |delete_obj|
-          destroy_str = "Group#{class_name2}.destroy(#{delete_obj.id})";
-          eval(destroy_str);
-         # delete_obj.destroy;
-        end
-      end
+        Rails.logger.info("RWV remove_from_group K")
     end
+    Rails.logger.info("RWV remove_from_group L")
+    @search_ctls = session[:search_ctls];
+    if class_ok
+        Rails.logger.info("RWV remove_from_group M")
+        table_name = class_name2;
+        search_ctl = @search_ctls[table_name]; 
+        search_ctl_group =  @search_ctls["Group"];
+    else
+        Rails.logger.info("RWV remove_from_group O")
+        search_ctl = nil;
     end
-   @search_ctls = session[:search_ctls];
-   if class_ok
-      table_name = class_name2;
-      search_ctl = @search_ctls[table_name]; 
-      search_ctl_group =  @search_ctls["Group"];
-   else
-       search_ctl = nil;
-   end
-       
-   respond_to do |format|
-      format.js  { render "remove_from_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :not_present_members => not_present_members, :num_existing => num_existing, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group, :ids => ids, :table_name => table_name } }
+    Rails.logger.info("RWV remove_from_group P")
+
+    respond_to do |format|
+        format.js  { render "remove_from_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :not_present_members => not_present_members, :num_existing => num_existing, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group, :ids => ids, :table_name => table_name } }
+    end
+    Rails.logger.info("RWV remove_from_group END")
+    Rails.logger.flush
+  end      
 =begin      
       do
         render :update do |page|
@@ -2125,14 +2155,12 @@ do
               success_str << "#{not_present_members.length} #{class_name2.tableize} were not in the group #{db_group.group_name} to begin with."
             end
             page << "alert('#{success_str}')"
-          end
+           end
           page << "unwait();"
         end
       end
 =end      
-    end
-Rails.logger.flush
-  end
+
 
   def add_to_groups(group_ids, class_id, class_name)
     @user_id = session[:user_id];
@@ -2324,18 +2352,25 @@ Rails.logger.flush
           end
           id_str << id.to_s;
         end
-        already_existing = Group.find_by_sql("SELECT * FROM group_#{class_name2.tableize} WHERE #{class_name2.underscore}_id IN (#{id_str}) AND group_id = #{group_id}");
+        already_existing_str = "SELECT * FROM group_#{class_name2.tableize} WHERE #{class_name2.underscore}_id IN (#{id_str}) AND group_id = #{group_id}";
+        Rails.logger.info("RWV add_to_group, already_existing_str = #{already_existing_str}")
+        already_existing = Group.find_by_sql(already_existing_str);
         new_members = Array.new(ids);
+        Rails.logger.info("RWV ids = #{ids.inspect}");
         already_existing.each do |existing|
           existing_id_str = "existing.#{class_name2.underscore}_id";
           existing_id = eval(existing_id_str)
-          new_members.delete(existing_id);
+          Rails.logger.info("RWV existing_id_str = #{existing_id_str}, existing_id = #{existing_id}")
+          new_members.delete(existing_id.to_s);
         end
+        Rails.logger.info("RWV new_members = #{new_members.inspect}");
         new_members.each do |new_id|
           new_group_member_str = "Group#{class_name2}.new"
           new_group_member = eval(new_group_member_str);
           new_group_member.group_id = db_group.id;
           new_group_member_id_str = "new_group_member.#{class_name2.underscore}_id = #{new_id}"
+          Rails.logger.info("RWV new_group_member_id_str = #{new_group_member_id_str}");
+          
           eval(new_group_member_id_str);
           new_group_member.save;
         end
@@ -2351,7 +2386,7 @@ Rails.logger.flush
        search_ctl = nil;
    end  
    respond_to do |format|
-      format.js { render "add_to_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :ids => ids, :already_existing => already_existing, :new_members => new_members, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group  } }
+      format.js { render "add_to_group", :locals => { :db_group => db_group, :group_id => group_id, :permission => permission, :class_ok => class_ok, :class_name2 => class_name2, :table_name => table_name, :ids => ids, :already_existing => already_existing, :new_members => new_members, :search_ctl => search_ctl, :search_ctl_group => search_ctl_group  } }
 =begin      
        do
         render :update do |page|
@@ -2511,7 +2546,9 @@ do
       @search_ctls = session[:search_ctls];
       search_ctl = @search_ctls[table_name];
       respond_to do |format|
-        format.js {render :partial => "shared/alert", :locals => {:table_name => table_name, :search_ctl => search_ctl, :ids => ids, :success_str => success_str } }  
+        format.js { render "shared/update_main", :locals => {:search_ctls => @search_ctls, :edited_table_name => table_name, :attribute_names => ["number_of_tutorials"], :ids => ids, :success_str => success_str, :fail_str => "" , :unwait_flag => true } }  
+          
+ 
 =begin        
         do
           render :update do |page|
