@@ -1216,7 +1216,11 @@ class WelcomeController < ApplicationController
       ids.each do |id|
         agatha_email = AgathaEmail.find(id);
         agatha_email.sent = false;
-        email_addresses = agatha_email.to_email.split(';');
+        to_email = agatha_email.to_email
+        if to_email == nil
+            to_email = []
+        end
+        email_addresses = to_email.split(';');
         email_addresses.each do |email_address|
         if email_address =~ /@/
           email_address = email_address.gsub(/\s+/,'');
@@ -1229,7 +1233,7 @@ class WelcomeController < ApplicationController
           Rails.logger.debug("email to address is #{to_email}");
           Rails.logger.debug("email from address is #{agatha_email.from_email}");
           Rails.logger.debug("email subject is #{agatha_email.subject}");
-          AgathaMailer.deliver_email(agatha_email, to_email)
+          AgathaMailer.with(agatha_email: agatha_email, to_email: to_email).email.deliver_now
           agatha_email.sent = true;
         else
           non_emails = non_emails + 1;
