@@ -74,16 +74,20 @@
         <%  else %>
             <% readonly_flag = true %>
         <% end %>
-        <tr class="<%= cycle('row-even', 'row-odd') %>">
-            <td><%= attribute.name %> </td>
-            <% update_parent = false %>
-            <%  edit_cell = EditCell.new(attribute, current_object, table_name, filter_controller,  update_parent, readonly_flag ); %>
-            <td class ="edit_column" >
-                <%= raw  render(:partial => "shared/edit_cell", :object => edit_cell) %>
-            </td>
-        </tr>
+        <% if attribute.name != "ruby_header" %>
+            <tr class="<%= cycle('row-even', 'row-odd') %>">
+                <td><%= attribute.name %> </td>
+                <% update_parent = false %>
+                <%  edit_cell = EditCell.new(attribute, current_object, table_name, filter_controller,  update_parent, readonly_flag ); %>
+                <td class ="edit_column" >
+                    <%= raw  render(:partial => "shared/edit_cell", :object => edit_cell) %>
+                </td>
+            </tr>
+        <% end %>    
     <% end %>
 </table>
+
+
 
 
 <script type ="text/javascript">

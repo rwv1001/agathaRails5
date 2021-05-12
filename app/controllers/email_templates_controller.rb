@@ -30,7 +30,7 @@ class EmailTemplatesController < ApplicationController
   end
 
   def updater
-    email_update();
+    update_helper();
   end
 
 

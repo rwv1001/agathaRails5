@@ -41,7 +41,7 @@ doc = opener_window.document;
                 if (jQuery('#<%="#{new_row.id}_#{table_name}"%>',doc)[0]!=null){               
                     jQuery('#<%="#{new_row.id}_#{table_name}"%>',doc).replaceWith('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>');
                 }else if (jQuery('#<%="#{results_table_name}"%>',doc)[0]!=null){ 
-                    jQuery('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>').insertAfter('#<%="#{results_table_name}"%> tr:last',doc);
+                    jQuery('#<%="#{results_table_name}"%> tr:last',doc).after('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>');
                 }else{
                     jQuery('#<%="search_results_#{table_name}"%>',doc).html('<%= j render(:partial => "shared/search_results" , :object => search_results)%>',doc);            
                     opener_window.resizeX();              

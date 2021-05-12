@@ -22,12 +22,12 @@ class AgathaMailer < ActionMailer::Base
         plain_text   =  plain_text.gsub(/<div\b[^>]*>/i,"")
         plain_text   =  plain_text.gsub(/<\/div>/i,"")
         p.body = plain_text
-        RAILS_DEFAULT_LOGGER.debug("plain email is #{p.body}")
+        Rails.logger.debug("plain email is #{p.body}")
       end
 
       a.part "text/html" do |p|
         p.body = render_message("email.text.html",:body_text => agatha_email.body)
-        RAILS_DEFAULT_LOGGER.debug("html email is #{p.body}")
+        Rails.logger.debug("html email is #{p.body}")
       end
     end
     

@@ -14,9 +14,8 @@ unwait();
     <%  search_results.table_type = :search_results; %>
     jQuery('#<%="#{current_filter_name}"%>').hide()
     if  (jQuery('#<%="#{results_table_name}"%>')[0]!=null){  
-    #  page << "alert('one')"
         <%  new_emails.each do |new_row| %>
-            jQuery('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>').insertAfter('#<%="#{results_table_name}"%>tr:last');
+            jQuery('#<%="#{results_table_name}"%> tr:last').after('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>');
         <% end %>
     }else{              
         jQuery("#search_results_AgathaEmail").replaceWith('<%= j render(:partial => "shared/search_results" , :object => search_results)%>');

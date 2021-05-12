@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  match '' => 'welcome#default', via: [:get, :post]
+  root "welcome#default"
+  match "/admin/login" => "admin#login", via: [:get, :post]
+  match "/admin/logout" => "admin#logout", via: [:get, :post]
+  match "welcome/table_search" => "welcome#table_search", via: [:get, :post]
+   
+    
+  #match '' => 'welcome#default', via: [:get, :post]
   match 'admin' => 'welcome#index', via: [:get, :post]
   match 'accessdenied' => 'welcome#accessdenied', via: [:get, :post]
   match 'index' => 'welcome#index', via: [:get, :post]
@@ -26,8 +32,11 @@ Rails.application.routes.draw do
   resources :agatha_emails
   resources :agatha_files
   resources :maximum_tutorials
+  
+  get ":controller(/:action(/:id))"
+  post ":controller(/:action(/:id))"
  # get '/:controller(/:action(/:id))'
-  match '/:controller(/:action(/:id))', via: [:get, :post]
+  #match '/:controller(/:action(/:id))', via: [:get, :post]
   
   
   

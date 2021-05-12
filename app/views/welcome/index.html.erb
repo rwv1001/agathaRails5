@@ -203,11 +203,6 @@ td img {display: block;}
        <input name="id" id="delete_id" type="text" style="display:none" />
        <input name="table_name" id ="delete_table_name" type="text" style="display:none"  />
     </form>
-    <form action=<%= raw   "/welcome/delete" %> id=<%= raw "form_delete"%> method="post" onsubmit="new Ajax.Request('<%="/welcome/delete"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
-      <div  style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> /></div>
-       <input name="id" id="delete_id" type="text" style="display:none" />
-       <input name="table_name" id ="delete_table_name" type="text" style="display:none"  />
-    </form>
     <div>
     <form action=<%= raw   "/welcome/select_action" %> id=<%= raw "action_form"%> method="post" onsubmit="new Ajax.Request('<%="/welcome/select_action"%>', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" >
       <div  style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value= <%= raw  "#{form_authenticity_token}" %> /></div>

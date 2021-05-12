@@ -1327,7 +1327,7 @@ function editClick(attribute_opener,  opener_id, table_name, class_name, current
 
 function editBlur(attribute_name, data_type, unloading)
 {
-    emailBlur();
+    
     field_name_obj = jQuery('#field_name');
     field_value_obj = jQuery('#field_value');
     field_data_type_obj = jQuery('#field_data_type');

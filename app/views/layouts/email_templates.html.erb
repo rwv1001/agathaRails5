@@ -1,28 +1,18 @@
 <html>
   <head>
     <title tal:content="template/title">Agatha People Page</title>
-      <%= javascript_include_tag "prepend_template" %>
       <%= javascript_include_tag "application" %>     
-      <%= javascript_include_tag "iframeprototype" %>
+       <%= javascript_include_tag "prototype" %>
+       <%= javascript_include_tag "prepend_template" %>
       <%= javascript_include_tag "template" %>
       <%= javascript_include_tag "search_ctl" %>
       <%= javascript_include_tag "display_format" %>
       <%= javascript_include_tag "edit" %>
+    
      <%= stylesheet_link_tag  'agatha' %>
 
 
-<!-- Skin CSS file -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/assets/skins/sam/skin.css">
-<!-- Utility Dependencies -->
-<script src="http://yui.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>
-<!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
-<script src="http://yui.yahooapis.com/2.8.0r4/build/container/container_core-min.js"></script>
-<!-- Source file for Rich Text Editor-->
-<script src="http://yui.yahooapis.com/2.8.0r4/build/editor/editor-min.js"></script>
-<script src="http://yui.yahooapis.com/2.8.0r4/build/menu/menu-min.js"></script>
-<script src="http://yui.yahooapis.com/2.8.0r4/build/buttons/button-min.js"></script>
+
     <script type="text/JavaScript">
 
 <!--
@@ -111,7 +101,7 @@ td img {display: block;}
   </div>
 
    <script language="javascript">
-     yahoo_widget()
+  
 
 
 

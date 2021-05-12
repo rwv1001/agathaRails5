@@ -41,7 +41,7 @@
                 if (jQuery('#<%="#{new_row.id}_#{table_name}"%>')[0]!=null){               
                     jQuery('#<%="#{new_row.id}_#{table_name}"%>').replaceWith('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>');
                }else if (jQuery('#<%="#{results_table_name}"%>')[0]!=null){ 
-                    jQuery('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>').insertAfter('#<%="#{results_table_name}"%> tr:last');
+                    jQuery('#<%="#{results_table_name}"%> tr:last').after('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>');
                 }else{
                     jQuery('#<%="search_results_#{table_name}"%>').html('<%= j render(:partial => "shared/search_results" , :object => search_results)%>');            
                     resizeX();              

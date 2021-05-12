@@ -330,7 +330,7 @@ class WelcomeController < ApplicationController
     else
       search_ctl.UpdateSearchIndices("")
     end
- #   elapsed = Time.now  - start; RAILS_DEFAULT_LOGGER.error("update_search_controller_end, time: #{elapsed}");
+ #   elapsed = Time.now  - start; Rails.logger.error("update_search_controller_end, time: #{elapsed}");
 
   end
   def QualifiersStr(in_str)
@@ -1324,6 +1324,8 @@ class WelcomeController < ApplicationController
 
   def create_email_from_template(ids, send_flag)
     string_update
+    success_str = "";
+    warning_str="";
     if(ids == nil || ids.length==0)
       error_str = "You have not selected any students"
     else
@@ -1340,7 +1342,7 @@ class WelcomeController < ApplicationController
       else
         term = Term.find(term_id);
         course = Course.find(course_id);
-        warning_str=""
+        
         if template.global_warnings != nil && template.global_warnings.length>0
         eval(template.global_warnings);
         end
@@ -1352,9 +1354,9 @@ class WelcomeController < ApplicationController
 
           person = Person.find(id);
           if person.salutation != nil && person.salutation.length >0
-             RAILS_DEFAULT_LOGGER.error("email test #{person.salutation.length }");
+             Rails.logger.error("email test #{person.salutation.length }");
           else
-             RAILS_DEFAULT_LOGGER.error("email test nil or 0"); 
+             Rails.logger.error("email test nil or 0"); 
           end
           if template.personal_warnings != nil && template.personal_warnings.length >0
             eval(template.personal_warnings);
@@ -1374,20 +1376,20 @@ class WelcomeController < ApplicationController
           user = User.find(user_id);
           user_person_id = user.person_id
           user_person = Person.find(user_person_id);
-          RAILS_DEFAULT_LOGGER.debug("test debug");
+          Rails.logger.debug("test debug");
 
           agatha_email.from_email = render_to_string( :inline => template.from_email , :locals => { :me => user_person})
           agatha_email.to_email = person.email
           subject_str = render_to_string( :inline => template.subject , :locals => { :person => person, :term => term, :course => course })
           agatha_email.subject = conv(subject_str);
-          RAILS_DEFAULT_LOGGER.debug("pre-rendered body string = #{body_str}");
+          Rails.logger.debug("pre-rendered body string = #{body_str}");
           begin
              body_str = render_to_string( :inline => body_str , :locals => { :person => person, :term => term, :course => course });
           rescue Exception =>exc
             body_str = "";
             error_str = "Agatha Email Error has occurred. There is something wrong with the template" 
           end
-          RAILS_DEFAULT_LOGGER.debug("body_string_ = #{body_str}");
+          Rails.logger.debug("body_string_ = #{body_str}");
           agatha_email.body = conv(body_str);
           agatha_email.sent = false
           agatha_email.email_template_id = email_template_id
@@ -1395,6 +1397,7 @@ class WelcomeController < ApplicationController
           agatha_email.term_id = term_id;
           agatha_email.course_id = course_id;
           agatha_email.save;
+          Rails.logger.info("Created email with id = #{agatha_email.id}");
           #new_emails << agatha_email;
           email_ids << agatha_email.id
           if id_str.length >0
@@ -1413,7 +1416,7 @@ class WelcomeController < ApplicationController
     @search_ctls = session[:search_ctls];
     search_ctl = @search_ctls["AgathaEmail"];
     respond_to do |format|
-      format.js  {render "create_email_from_template", :locals => {:error_str => error_str, :success_str => success_str, :warning_str=> warning_str, :search_ctl => search_ctl } }
+      format.js  {render "create_email_from_template", :locals => {:error_str => error_str, :success_str => success_str, :warning_str=> warning_str, :id_str=> id_str, :search_ctl => search_ctl } }
 =begin      
       do
         render :update do |page|

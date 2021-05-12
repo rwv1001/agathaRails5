@@ -9,7 +9,7 @@
       <%= javascript_include_tag "display_format" %>
       <%= javascript_include_tag "edit" %>
       <%= javascript_include_tag "group_filters" %>
-    
+ 
 
      <%= stylesheet_link_tag  'agatha' %>
 
@@ -89,9 +89,6 @@ djd
   
 
 
-
-
-
 <div id="first_div" >
         <td><p>&nbsp;</p>
 	  <%= form_tag do %>
@@ -108,11 +105,13 @@ djd
         <%= password_field_tag :password, params[:password] %>
       </div>
 
+
       <div>
         <%= submit_tag "Login" %>
       </div>
     </fieldset>
   <% end %>
+  
 <% s = Person.new %>
 <% s.first_name = "r" %>
 <% s.save %>
