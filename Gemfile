@@ -34,15 +34,16 @@ gem 'trix-rails', require: 'trix'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 #
-group :development do
-   gem "capistrano"
-   gem 'net-ssh'
-   gem 'capistrano-bundler'
-   gem 'capistrano-rails'
-   gem 'capistrano-rvm'
-   gem 'capistrano-sidekiq'
-end
-
+#
+gem 'capistrano'
+gem 'capistrano-bundler'
+gem 'capistrano-rails'
+gem 'capistrano-rbenv'
+gem 'capistrano-passenger'
+gem 'net-ssh'
+gem 'ed25519'
+gem 'bcrypt_pbkdf'
+gem 'therubyracer'
 # Reduces boot times through caching; required in config/boot.rb
 #gem 'bootsnap', '>= 1.1.0', require: false
 gem 'activerecord-session_store'

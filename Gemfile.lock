@@ -55,6 +55,7 @@ GEM
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
+    bcrypt_pbkdf (1.1.0)
     bindex (0.8.1)
     builder (3.2.4)
     byebug (11.1.3)
@@ -65,15 +66,14 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (2.0.1)
       capistrano (~> 3.1)
+    capistrano-passenger (0.2.1)
+      capistrano (~> 3.0)
     capistrano-rails (1.6.1)
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
-    capistrano-rvm (0.1.2)
-      capistrano (~> 3.0)
-      sshkit (~> 1.2)
-    capistrano-sidekiq (1.0.3)
-      capistrano (>= 3.9.0)
-      sidekiq (>= 3.4, < 6.0)
+    capistrano-rbenv (2.2.0)
+      capistrano (~> 3.1)
+      sshkit (~> 1.3)
     capybara (3.32.2)
       addressable
       mini_mime (>= 0.1.3)
@@ -94,8 +94,8 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.8)
-    connection_pool (2.2.5)
     crass (1.0.6)
+    ed25519 (1.2.4)
     erubi (1.10.0)
     execjs (2.7.0)
     ffi (1.15.0)
@@ -135,8 +135,6 @@ GEM
     public_suffix (4.0.6)
     puma (3.12.6)
     rack (2.2.3)
-    rack-protection (2.1.0)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.5)
@@ -167,7 +165,6 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.1.4)
     regexp_parser (1.8.2)
     ruby_dep (1.5.0)
     rubyzip (2.3.0)
@@ -185,11 +182,6 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
-    sidekiq (5.2.9)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (~> 2.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 4.2)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -234,15 +226,17 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
+  bcrypt_pbkdf
   byebug
   capistrano
   capistrano-bundler
+  capistrano-passenger
   capistrano-rails
-  capistrano-rvm
-  capistrano-sidekiq
+  capistrano-rbenv
   capybara (>= 2.15)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  ed25519
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
