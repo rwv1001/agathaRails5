@@ -1,9 +1,12 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.16.0"
 
-set :application, "my_app_name"
-set :repo_url, "git@example.com:me/my_repo.git"
-
+set :application, "agatha"
+set :repo_url, "https://github.com/rwv1001/agathaRails5"
+set :branch, "master"
+set :deploy_to, "/home/rverrill/#{fetch :application}"
+append :linked_files, "config/master.key"
+set :linked_files, %w{config/database.yml}
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
