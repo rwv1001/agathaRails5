@@ -35,6 +35,7 @@ gem 'trix-rails', require: 'trix'
 # gem 'capistrano-rails', group: :development
 #
 #
+group :development do
 gem 'capistrano'
 gem 'capistrano-bundler'
 gem 'capistrano-rails'
@@ -43,6 +44,7 @@ gem 'capistrano-passenger'
 gem 'net-ssh'
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
+end
 gem 'therubyracer'
 # Reduces boot times through caching; required in config/boot.rb
 #gem 'bootsnap', '>= 1.1.0', require: false
