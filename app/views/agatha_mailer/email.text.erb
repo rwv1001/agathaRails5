@@ -2,8 +2,8 @@
 <%  plain_text   =  plain_text.gsub(/<br>/i,"\n") %>
 <%  plain_text   =  plain_text.gsub(/<p\b[^>]*>(.*?)<\/p>/i,"\n" + '\1'+"\n") %>
 <%  plain_text   =  plain_text.gsub(/<div\b[^>]*>(.*?)<\/div>/i,"\n" + '\1'+"\n") %>
-<%  plain_text   =  plain_text.gsub(/<([A-z][A-z0-9]*)\b[^>]*>(.*?)<\/\1>/,'\2') %>
-<%  plain_text   =  plain_text.gsub(/<([A-z][A-z0-9]*)\b[^>]*>(.*?)<\/\1>/,'\2') %>
+<%  plain_text   =  plain_text.gsub(/<([A-z][A-z0-9]*)\b[^>]*>(.*?)<\/\1>/m,'\2') %>
+<%  plain_text   =  plain_text.gsub(/<([A-z][A-z0-9]*)\b[^>]*>(.*?)<\/\1>/m,'\2') %>
 <%  plain_text   =  plain_text.gsub(/<div\b[^>]*>/i,"") %>
 <%  plain_text   =  plain_text.gsub(/<\/div>/i,"") %>
 <%= plain_text %>
