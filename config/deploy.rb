@@ -6,7 +6,7 @@ set :repo_url, "https://github.com/rwv1001/agathaRails5"
 set :branch, "master"
 set :deploy_to, "/home/rverrill/#{fetch :application}"
 append :linked_files, "config/master.key"
-set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/database.yml config/master.key}
 set :passenger_restart_with_touch, true
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
