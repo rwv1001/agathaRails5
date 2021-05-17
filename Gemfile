@@ -45,7 +45,7 @@ gem 'net-ssh'
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
 end
-gem 'therubyracer'
+#gem 'therubyracer'
 # Reduces boot times through caching; required in config/boot.rb
 #gem 'bootsnap', '>= 1.1.0', require: false
 gem 'activerecord-session_store'
