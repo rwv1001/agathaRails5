@@ -66,12 +66,13 @@
 
       <% if table_name == "Person" || table_name == "Lecture" %>
       <td class="exam-cell">
-      <%  raw onclick_str = "onclick= on_checkbox_click('#{row.id.to_s}','examcheck', '#{table_name}')" %>
-      <input type="checkbox" name ="exam_in_list[]"  <%= "#{onclick_str}" %> id= <%="#{table_name}_examcheck_#{row.id.to_s}"%> class="examcheck" value= <%=row.id.to_s %>  >
+      <% exam_check_str = "\"on_checkbox_click('#{row.id.to_s}','examcheck', '#{table_name}')\"" %>         
+      <input type="checkbox" name ="exam_in_list[]"  onclick= <%= raw "#{exam_check_str}"%> id= <%="#{table_name}_examcheck_#{row.id.to_s}"%> class="examcheck" value= <%=row.id.to_s %>  >
       </td>
       <td class="compulsory-cell">
-      <%  raw onclick_str = "onclick= on_checkbox_click('#{row.id.to_s}','compulsorycheck', '#{table_name}')" %>
-      <input  type="checkbox"  name= "compulsory_in_list[]"  <%= "#{onclick_str}" %> id= <%="#{table_name}_compulsorycheck_#{row.id.to_s}"%>  class= "compulsorycheck"  value= <%=row.id.to_s %>    >
+      <% comp_check_str = "\"on_checkbox_click('#{row.id.to_s}','compulsorycheck', '#{table_name}')\"" %>   
+      
+      <input  type="checkbox"  name= "compulsory_in_list[]"  onclick= <%= raw "#{comp_check_str}"%>  id= <%="#{table_name}_compulsorycheck_#{row.id.to_s}"%>  class= "compulsorycheck"  value= <%=row.id.to_s %>    >
       </td>
        <%  end %>
 

@@ -1358,9 +1358,9 @@ class WelcomeController < ApplicationController
 
           person = Person.find(id);
           if person.salutation != nil && person.salutation.length >0
-             Rails.logger.error("email test #{person.salutation.length }");
+             #Rails.logger.error("email test #{person.salutation.length }");
           else
-             Rails.logger.error("email test nil or 0"); 
+             #Rails.logger.error("email test nil or 0"); 
           end
           if template.personal_warnings != nil && template.personal_warnings.length >0
             eval(template.personal_warnings);

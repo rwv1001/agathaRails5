@@ -424,10 +424,10 @@ function addExternalFilterElement(class_name, filter_id)
             jQuery(external_filter_group_selection).attr('id',"group_selection_"+ class_name + "_" + filter_id +"_" + new_elt_id);
 
             jQuery(external_filter_group_selection).attr("onchange","onUpdateExternalFilterGroup('"+class_name+"','"+filter_id+"','"+new_elt_id+"');return false");
-            old_filter_group_selection = prev_elt.find('.external_filter_group_selection_'+class_name)[0];
+            old_filter_group_selection = jQuery(prev_elt).find('.external_filter_group_selection_'+class_name)[0];
             old_group_selection_value = jQuery(old_filter_group_selection).val();
             group_class_str = ".group_class_"+old_group_selection_value
-            external_filter_group_selected =  external_filter_group_selection.find(group_class_str)[0];
+            external_filter_group_selected =  jQuery(external_filter_group_selection).find(group_class_str)[0];
             jQuery(external_filter_group_selected).prop('selected',true);
 
     }
@@ -552,7 +552,7 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
              external_filter_argument_span_elt.prop('id', new_external_filter_argument_span_str);
              
              onclick_str = "deleteExternalFilterElement('"+class_name+"','"+filter_id+"','"+(reorder_index-1)+"');return false;"
-             jQuery("#external_filter_argument_span_Person_0_0").find('a').attr('onclick', onclick_str);
+             external_filter_argument_span_elt.find('a').attr('onclick', onclick_str);
              
              
              argument_selection_str = '#argument_selection_'+ class_name +'_'+ filter_id + '_' + reorder_index; 
@@ -567,6 +567,7 @@ function deleteExternalFilterElement(class_name, filter_id,  elt_id)
 }
 function resizeExternalFilters(class_name)
 {
+    
     var client_height = jQuery('#dummy_x').height();
     var height_str = "" +  client_height+"px"
     jQuery('.external_filter_group_selection_'+class_name).each(function(){

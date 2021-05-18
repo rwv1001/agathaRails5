@@ -88,6 +88,7 @@ class ExternalFilter
     ret_val = []
     if group_selector_str.length >0
       group_values = eval(@group_selector_str)
+      Rails.logger.info("GroupSelection, @group_selector_str = #{@group_selector_str}");
       for group_value in group_values
         ret_val << GroupMember.new(group_value.group_name, group_value.id);
       end
