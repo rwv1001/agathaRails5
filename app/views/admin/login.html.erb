@@ -56,32 +56,25 @@ td img {display: block;}
 
 
     
-   <script language="javascript">
- template_header();
- </script>
+<%=  render(:partial => "shared/template_header") %>
  
  <div id ="main_div">
-   <script language="javascript">
- menu_begin();
-   </script>
- <div >
-djd
- </div>
+   <div id="menu_div" style="position: fixed; top: 187px; left:0px; bottom: 7px; width:150px; ">
+
  <div style="clear:both; height: 20px"> &nbsp</div>
 
 
   <div id="first_menu_div"> </div>
 
 
-   <script language="javascript">
-   menu_end();
+ <div style ="width: 150px; position:  absolute;bottom:0;"><p style="text-align: center; font-size: 25%;"> </p>
 
-  </script>
+   <%=  render(:partial => "shared/copyright") %>
+
+  </div></div>
     
 
-  <script language="javascript">
-  content_begin()
-  </script>
+  <div id="content_div" class="content_div" style="position: fixed;  top: 187px; left: 166px; right:0px; bottom:7px; overflow: auto;">
 
   <script language="javascript">
     on_load();
@@ -112,19 +105,7 @@ djd
     </fieldset>
   <% end %>
   
-<% s = Person.new %>
-<% s.first_name = "r" %>
-<% s.save %>
-<%= link_to 'Destroy', s, method: :delete, data: { confirm: 'Are you sure?', remote: true }, class: "deleteiati", id: "destroy_id" %>
 
-<%= form_with url: "/people/test", id: "test_form", method: :post, remote: true do |form| %>
-
-  <%= form.label :query, "Search for:" %>
-  <%= form.text_field :query %>
-  <%= form.submit "Search" %>
-<% end %>
-
-<a href="#" onclick="testAjax();return" false>X</a>
 
 
 
