@@ -102,6 +102,28 @@ function setSearchIndices(table_name)
 
 }
 
+function invert_selection(table_name, check_str) 
+{
+    check_box_strs = '#search_results_'+ table_name + ' input.'+check_str;
+    check_boxes = jQuery(check_box_strs);
+    check_boxes.each(function(){
+        box = jQuery(this);
+        box.prop( 'checked', !box.is(':checked') );
+        if(check_str=='check'){
+            if(!box.is(':checked') ){
+                box.closest('tr').find('.compulsorycheck:first').prop( 'checked',false);
+                box.closest('tr').find('.examcheck:first').prop( 'checked',false);
+            }
+            
+        } else {
+            if(box.is(':checked') ){
+                box.closest('tr').find('.check:first').prop( 'checked',true);
+            }
+        }
+    }); 
+
+}
+
 function setSelectIndices(table_name)
 {
      search_results_div_str = "#search_results_" + table_name;

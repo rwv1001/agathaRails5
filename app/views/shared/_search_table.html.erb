@@ -123,38 +123,33 @@
           <% check_box_str = "'\#search_results_#{table_name} input.check'"   %>
           <% exam_box_str = "'\#search_results_#{table_name} input.examcheck'"   %>
           <% compulsory_box_str = "'\#search_results_#{table_name} input.compulsorycheck'"   %>
+          <% invert_select_str = "\"invert_selection('#{table_name}','check')\"" %>
+          <% invert_comp_select_str = "\"invert_selection('#{table_name}','compulsorycheck')\"" %>
+          <% invert_exam_select_str = "\"invert_selection('#{table_name}','examcheck')\"" %>
           <table>
             <tr>
            <th align ="left" >Add Update Column</th><td><input type="button" class ="check" value="Select All"
-              onClick="jQuery(<%= check_box_str %>).each(function(){jQuery(this).prop( 'checked', true )})">
+              onClick="jQuery(<%= raw "#{check_box_str}" %>).each(function(){jQuery(this).prop( 'checked', true )})">
            <input type="button" class ="check"  value="Deselect All"
-              onClick="jQuery(<%=check_box_str%>).each(function(){jQuery(this).prop( 'checked', false )});jQuery(<%= exam_box_str%>).each(function(){jQuery(this).prop( 'checked', false )});jQuery(<%=  compulsory_box_str %>).each(function(){jQuery(this).prop( 'checked', false )})">
+              onClick="jQuery(<%=raw "#{check_box_str}" %>).each(function(){jQuery(this).prop( 'checked', false )});jQuery(<%= exam_box_str%>).each(function(){jQuery(this).prop( 'checked', false )});jQuery(<%= raw "#{compulsory_box_str}" %>).each(function(){jQuery(this).prop( 'checked', false )})">
            <input type="button" class ="check" value="Invert Selection"
-           onClick="jQuery(<%=check_box_str%>).each(function(){jQuery(this).prop( 'checked', !jQuery(this).is(':checked') ); if(!jQuery(this).is(':checked') ){jQuery(this).getOffsetParent().next('.compulsory-cell').find('compulsorycheck:first').prop( 'checked',false);jQuery(this).getOffsetParent().next('.exam-cell').find('examcheck:first').prop( 'checked',false)}})"></td>
+           onClick=<%= raw "#{invert_select_str}" %> ></td>
             </tr>
             <tr>
            <th align ="left">Examine Column</th><td><input type="button" class ="check" value="Select All"
-              onClick="jQuery(<%= exam_box_str %>).each(function(){jQuery(this).prop( 'checked', true )});jQuery(<%= check_box_str %>).each(function(){jQuery(this).prop( 'checked', true )})">
+              onClick="jQuery(<%= raw "#{exam_box_str}" %>).each(function(){jQuery(this).prop( 'checked', true )});jQuery(<%= raw "#{check_box_str}" %>).each(function(){jQuery(this).prop( 'checked', true )})">
            <input type="button" class ="check"  value="Deselect All"
-              onClick="jQuery(<%=exam_box_str%>).each(function(){jQuery(this).prop( 'checked', false )})">
+              onClick="jQuery(<%=raw "#{exam_box_str}"%>).each(function(){jQuery(this).prop( 'checked', false )})">
            <input type="button" class ="check" value="Invert Selection"
-           onClick="jQuery(<%=exam_box_str%>).each(function(){jQuery(this).prop( 'checked', !jQuery(this).is(':checked') ); if(jQuery(this).is(':checked') ){jQuery(this).getOffsetParent().previous('.select-cell').find('check:first').prop( 'checked',true)}})"></td>
+           onClick=<%= raw "#{invert_exam_select_str}" %> ></td>
             </tr>
             <tr>
            <th align ="left">Compulsory Column</th><td><input type="button" class ="check" value="Select All"
-              onClick="jQuery(<%= compulsory_box_str %>).each(function(){jQuery(this).prop( 'checked', true )});jQuery(<%= check_box_str %>).each(function(){jQuery(this).prop( 'checked', true )})">
+              onClick="jQuery(<%= raw "#{compulsory_box_str}" %>).each(function(){jQuery(this).prop( 'checked', true )});jQuery(<%= raw "#{check_box_str}" %>).each(function(){jQuery(this).prop( 'checked', true )})">
            <input type="button" class ="check"  value="Deselect All"
-              onClick="jQuery(<%=  compulsory_box_str %>).each(function(){jQuery(this).prop( 'checked', false )})">
+              onClick="jQuery(<%=  raw "#{compulsory_box_str}" %>).each(function(){jQuery(this).prop( 'checked', false )})">
            <input type="button" class ="check" value="Invert Selection"
-           onClick="jQuery(<%=compulsory_box_str%>).each(function(){
-                if(jQuery(this).is(':checked')){
-                    jQuery(this).prop( 'checked', false ); 
-                } else {
-                    jQuery(this).prop( 'checked', true ); 
-                }
-                if(jQuery(this).is(':checked')){
-                    jQuery(this).getOffsetParent().previous('.select-cell').find('check:first').prop( 'checked',true)}
-                })"></td>
+           onClick=<%= raw "#{invert_comp_select_str}" %> ></td>
             </tr>
           </table>
         </div>
