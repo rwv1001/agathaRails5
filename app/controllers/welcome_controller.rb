@@ -1380,7 +1380,8 @@ class WelcomeController < ApplicationController
           user = User.find(user_id);
           user_person_id = user.person_id
           user_person = Person.find(user_person_id);
-          Rails.logger.debug("test debug");
+          Rails.logger.info("Create email, term_year=#{term.year}");
+          Rails.logger.info("Create email, body_str=#{body_str}");
 
           agatha_email.from_email = render_to_string( :inline => template.from_email , :locals => { :me => user_person})
           agatha_email.to_email = person.email
@@ -1393,7 +1394,7 @@ class WelcomeController < ApplicationController
             body_str = "";
             error_str = "Agatha Email Error has occurred. There is something wrong with the template" 
           end
-          Rails.logger.debug("body_string_ = #{body_str}");
+          Rails.logger.info("body_string_ = #{body_str}");
           agatha_email.body = conv(body_str);
           agatha_email.sent = false
           agatha_email.email_template_id = email_template_id

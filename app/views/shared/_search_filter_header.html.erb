@@ -41,9 +41,9 @@
       <div   style ="position:relative; min-width: <%= min_width_str%>;  overflow: hidden; background: #fff; border: 1px solid #000;" align ="left" class="div_column_edit">
         
           <%  raw filter_string = filter.current_filter_string.gsub(/\"/){|s| '&quot'}; %>
-          <%  raw value_str =  "value= #{filter_string}"  %>
+          <%  value_str =  "\"#{filter_string}\""  %>
           
-                     <input type=text style="border:none" <%= id_str %> name="<%=filter.tag %>" <%= value_str %> <%= on_blur_string %> size= <%= col_width %> >
+                     <input type=text style="border:none" <%= id_str %> name="<%=filter.tag %>" value=<%= raw "#{value_str}" %> <%= on_blur_string %> size= <%= col_width %> >
           
           <%  raw id_str_x = "id = #{class_id_name}_x" %>
           <% if row_type == :filter_string && !filter.primary && num_filters > 1 %>

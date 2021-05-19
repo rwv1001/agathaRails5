@@ -8,6 +8,7 @@ class AgathaMailer < ApplicationMailer
     email_date = Time.now
     email_content_type = "multipart/mixed"
     @body_text = agatha_email.body
+    Rails.logger.info("email body text = #{@body_text}");
     if agatha_email.person.html_email
         mail(to: to_email, from: from_email, subject: email_subject, date: email_date, content_type: "text/html") do |format|          
         format.html

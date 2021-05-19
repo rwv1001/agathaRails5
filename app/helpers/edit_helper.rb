@@ -201,7 +201,7 @@ end
         else #2
             open_record = open_records[0];
             open_record.save;
-            update_str = "object.update(#{field_name}: '#{field_value}')";
+            update_str = "object.update(#{field_name}: %q(#{field_value}))";
             Rails.logger.info("RWV update_str = #{update_str}")
             if field_name.strip().length != 0
                 Rails.logger.info("update_helper updating *#{field_name}*")
@@ -332,7 +332,7 @@ def email_update()
         object.body = body_value;
         end
         if field_name.length != 0
-        update_str ="object.update(#{field_name}: '#{field_value}')";
+        update_str ="object.update(#{field_name}: %q({field_value}))";
         eval(update_str);
         end
 
