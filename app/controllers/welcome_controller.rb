@@ -1472,14 +1472,14 @@ class WelcomeController < ApplicationController
       new_num = ids.length;
       success_str  ="";
       if present_num ==1
-        success_str = "1 maximum maximum tutorial entry was updated in the database. "
+        success_str = "1 maximum tutorial entry was updated in the database. "
       elsif present_num >1
        success_str = "#{present_num} maximum tutorial entries were updated in the database. "
       end
       if new_num == 1
         success_str << "1 new maximum maximum tutorial entry was added to the database. "
       elsif new_num >1
-        success_str << "#{present_num} new maximum tutorial entries were added to the database. "
+        success_str << "#{new_num} new maximum tutorial entries were added to the database. "
       end
 
     end
