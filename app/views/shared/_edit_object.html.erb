@@ -74,7 +74,7 @@
         <%  else %>
             <% readonly_flag = true %>
         <% end %>
-        <% if attribute.name != "ruby_header" %>
+        
             <tr class="<%= cycle('row-even', 'row-odd') %>">
                 <td><%= attribute.name %> </td>
                 <% update_parent = false %>
@@ -83,7 +83,7 @@
                     <%= raw  render(:partial => "shared/edit_cell", :object => edit_cell) %>
                 </td>
             </tr>
-        <% end %>    
+            
     <% end %>
 </table>
 

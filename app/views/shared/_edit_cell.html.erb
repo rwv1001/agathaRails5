@@ -21,7 +21,7 @@
   <% onblur_str = "\"editBlur('#{attribute.name}','#{data_type}',false);return false;\"" %>
     
  
-  <% eval_str = "current_object.#{attribute.name}" %>
+  <% eval_str = %Q(current_object.#{attribute.name}) %>
   <% column_width = 80 %>
   <% not_set_const = 1 %>
   <% case data_type
