@@ -45,7 +45,7 @@
             
             jQuery('<%= j render(:partial => "shared/search_results_row_button", :object =>new_row )%>').insertAfter('#<%="#{results_table_name}"%> tr:last');
         }else{            
-            jQuery('#<%="search_results_#{table_name}"%>').replaceWith('<%= j render(:partial => "shared/search_results" , :object => search_results)%>');
+            jQuery('#<%="search_results_#{table_name}"%>').html('<%= j render(:partial => "shared/search_results" , :object => search_results)%>');
             
             resizeX();              
         }
